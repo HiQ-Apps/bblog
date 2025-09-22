@@ -20,34 +20,28 @@ export const POSTS: Post[] = [
     id: "apothecary-diaries-1",
     title: "Apothecary Diaries #1",
     date: "09-21-2025",
-    intro: `
-      Many store-bought soaps labeled “antibacterial” or “deep cleaning” can hide harsh chemicals. 
-      Here’s what to watch out for—and a simple castile soap recipe.
-    `,
+    intro: `Many store bought soaps labeled ”antibacterial” or “deep cleaning” can come with hidden trade offs. They’re loaded with synthetic fragrances, preservatives, and harsh chemicals that aren’t as healthy as we think. The more I read about them, the scarier they seemed. Growing up, it was normal to have brightly covered soaps and different scents. As a broke teenager,  I frequently shopped at places like Bath & Body Works, where they always had so many scents at unbeatable prices. `,
     tags: ["nontoxic", "soap", "home", "natural", "DIY"],
-    disclosure: `
-      This post may contain affiliate links. 
-      As an Amazon Associate, I earn from qualifying purchases at no extra cost to you.
-    `,
+    disclosure: `This post may contain affiliate links. As an Amazon Associate, I earn from qualifying purchases at no extra cost to you.`,
     sections: [
       {
-        heading: "Why I started rethinking soap",
-        content: `
-          Many store-bought soaps labeled “antibacterial” or “deep cleaning” can come with hidden trade-offs. 
-          They’re often loaded with synthetic fragrances, preservatives, and harsh chemicals. 
-          Growing up I loved the colorful scents, but the more I read, the less comfortable I felt with what was inside.
-        `,
+        heading: "Fragrances don't always mean clean",
+        content: `Soaps get their signature fresh or floral scents from synthetic fragrance blends. Many of these blends contain phthalates and other chemicals that are linked to allergic reactions, hormone disruption, and even skin irritation. The American Lung Association warns about fragrance exposure indoors. “Fragrance” is a generic term on ingredient lists, but some fragrances can have up to 200 components. There’s no way to accurately decode what is in each one. Fragrance is the number one cause of contact allergy for cosmetics. According to the European Commission, people with sensitive skin should avoid heavily scented items.`,
       },
       {
-        heading: "Fragrances don't always mean clean",
-        content: `
-          Soaps get their signature fresh or floral scents from synthetic fragrance blends. 
-          Many include phthalates and other chemicals linked to allergic reactions, hormone disruption, and skin irritation. 
-          “Fragrance” on an ingredient label can represent a blend with hundreds of components. 
-          If you have sensitive skin, avoiding heavily scented products is a safe bet.
+        heading: "Antibacterial doesn’t always mean better.",
+        content: `The FDA says that over-the-counter antibacterial soaps with chemicals such as triclosan are no more effective than plain soap and water. Overuse can even lead to antibiotic resistance. The conclusion was drawn because manufacturers usually don’t provide enough data necessary to show that these ingredients are safe enough for daily or long term use.`,
+      },
+      {
+        heading: "Skin Barrier",
+        content: `Soaps and detergents can be harsh and can strip your skin’s natural oils, leaving it more dry and itchy. Some detergents have been shown to reduce lipid synthesis and damage the skin barrier’s function. 3 Plant based soaps such as castile soap cleanses just as well without affecting your skin’s microbiome.`,
+      },
+      {
+        heading: "Environmental Impact",
+        content: `Heavily fragranced or brightly colored soaps often include petroleum-based ingredients and synthetic dyes, some of which contribute to pollution and microplastic contamination. Plant based soaps, such as castile soaps are gentle, biodegradable, and better for the environment.
+        \nThus, today I will teach you how to mix your own castile soap blend. By doing this, you can skip unnecessary additives and get a cleaner product that is safe for your body and your home. It’s customizable with essential oils, easy to refill, and sustainable for the long term.
         `,
       },
-      // … more sections here …
     ],
     supplies: [
       {
@@ -86,7 +80,6 @@ export const POSTS: Post[] = [
           Mix in one tsp of aloe vera gel for extra skin hydration. However, aloe tends to separate, so make sure to gently swish before using.`,
         affiliateUrl: "https://amzn.to/3VszBx2",
       },
-      // … more supplies here …
     ],
     directions: [
       "Fill your bottle ~¾ full with distilled water (water first minimizes foaming).",
@@ -115,7 +108,7 @@ export const POSTS: Post[] = [
         url: "https://www.sciencedirect.com/science/article/abs/pii/S0738081X11002252",
       },
       {
-        name: "Natural soap is clinically effective and more biodegradable than synthetic detergents",
+        name: "Natural soap is clinically effective and more biodegradable than synthetic detergents - NIH Study",
         url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12176228/",
       },
     ],

@@ -6,7 +6,8 @@ type Props = {
 };
 
 export default function PostPage({ params }: Props) {
-  const post = POSTS.find((p) => p.id === params.id);
+  const id = params?.id;
+  const post = POSTS.find((p) => p.id === id);
 
   if (!post) return notFound();
 
@@ -27,10 +28,8 @@ export default function PostPage({ params }: Props) {
 
       {post.sections?.map((section, idx) => (
         <section key={idx} className="mt-8">
-          <h2 className="font-lora text-2xl font-bold mb-2">
-            {section.heading}
-          </h2>
-          <p>{section.content}</p>
+          <h2 className="font-lora text-2xl font-bold">{section.heading}</h2>
+          <p className="whitespace-pre-line">{section.content}</p>
         </section>
       ))}
 
