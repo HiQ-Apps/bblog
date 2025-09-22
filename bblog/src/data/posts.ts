@@ -26,44 +26,39 @@ export const POSTS: Post[] = [
     sections: [
       {
         heading: "Fragrances don't always mean clean",
-        content: `Soaps get their signature fresh or floral scents from synthetic fragrance blends. Many of these blends contain phthalates and other chemicals that are linked to allergic reactions, hormone disruption, and even skin irritation. The American Lung Association warns about fragrance exposure indoors. “Fragrance” is a generic term on ingredient lists, but some fragrances can have up to 200 components. There’s no way to accurately decode what is in each one. Fragrance is the number one cause of contact allergy for cosmetics. According to the European Commission, people with sensitive skin should avoid heavily scented items.`,
+        content: `Soaps get their signature fresh or floral scents from synthetic fragrance blends. Many of these blends contain phthalates and other chemicals that are linked to allergic reactions, hormone disruption, and even skin irritation. The American Lung Association warns about fragrance exposure indoors. “Fragrance” is a generic term on ingredient lists, but some fragrances can have up to 200 components. There’s no way to accurately decode what is in each one. Fragrance is the number one cause of contact allergy for cosmetics. According to the European Commission, people with sensitive skin should avoid heavily scented items[1].`,
       },
       {
         heading: "Antibacterial doesn’t always mean better.",
-        content: `The FDA says that over-the-counter antibacterial soaps with chemicals such as triclosan are no more effective than plain soap and water. Overuse can even lead to antibiotic resistance. The conclusion was drawn because manufacturers usually don’t provide enough data necessary to show that these ingredients are safe enough for daily or long term use.`,
+        content: `The FDA says that over-the-counter antibacterial soaps with chemicals such as triclosan are no more effective than plain soap and water[2]. Overuse can even lead to antibiotic resistance. The conclusion was drawn because manufacturers usually don’t provide enough data necessary to show that these ingredients are safe enough for daily or long term use.`,
       },
       {
         heading: "Skin Barrier",
-        content: `Soaps and detergents can be harsh and can strip your skin’s natural oils, leaving it more dry and itchy. Some detergents have been shown to reduce lipid synthesis and damage the skin barrier’s function. 3 Plant based soaps such as castile soap cleanses just as well without affecting your skin’s microbiome.`,
+        content: `Soaps and detergents can be harsh and can strip your skin’s natural oils, leaving it more dry and itchy. Some studies of detergents have been shown to reduce lipid synthesis and damage the skin barrier’s function[3]. 3 Plant based soaps such as castile soap cleanses just as well without affecting your skin’s microbiome.`,
       },
       {
         heading: "Environmental Impact",
-        content: `Heavily fragranced or brightly colored soaps often include petroleum-based ingredients and synthetic dyes, some of which contribute to pollution and microplastic contamination. Plant based soaps, such as castile soaps are gentle, biodegradable, and better for the environment.
-        \nThus, today I will teach you how to mix your own castile soap blend. By doing this, you can skip unnecessary additives and get a cleaner product that is safe for your body and your home. It’s customizable with essential oils, easy to refill, and sustainable for the long term.
+        content: `Most brightly colored or heavily fragranced soaps are made with petroleum-based ingredients, synthetic surfactants, and dyes — many of which contribute to water pollution and even microplastic contamination. This NIH study discusses how natural soap compounds are considered readily biodegradable and unlikely to produce hazardous waste, while artificial detergents are comprised mainly of synthetic surfactants, binders, plasticizers, and additives[4].
+        \n Today I will teach you how to mix your own castile soap blend. By doing this, you can skip unnecessary additives and get a cleaner product that is safe for your body and your home. It’s customizable with essential oils, easy to refill, and sustainable for the long term.
         `,
       },
     ],
     supplies: [
       {
         name: "Castile Soap",
-        reason: `
-          I recommend Dr. Bronner’s. Choose unscented if you’ll add your own essential oils.
+        reason: `I recommend Dr. Bronner’s regular castile soap. They have several naturally scented variations, but since we're adding our own scents, they have an unscented baby soap.
         `,
         affiliateUrl: "https://amzn.to/46xYDzY",
       },
       {
         name: "16oz Glass Bottle + Pump",
-        reason: `
-          Amber glass helps protect essential oils from light degradation if you choose to add a scent.
+        reason: `You can find 16oz glass bottles on amazon. If you decide to use essential oils for scent, I recommend an amber colored one, as light rays break down essential oils. 
         `,
         affiliateUrl: "https://amzn.to/4gIlFc8",
       },
       {
         name: "Essential Oils (optional)",
-        reason: `
-          Amazon has a few great starter sets that comes with different fragrances, including frankincense, peppermint, eucalyptus. 
-          There are so many uses for essential oils, and I will talk about them in later blog posts. 
-          Some of my favorite combinations are lavender + orange and eucalyptus + peppermint.
+        reason: `Amazon  has a few great starter sets that comes with different fragrances, including frankincense, peppermint, eucalyptus. There are so many uses for essential oils, and I will talk about them in later blog posts. Some of my favorite combinations are lavender + orange and eucalyptus + peppermint.
         `,
         affiliateUrl: "https://amzn.to/4nIF1Aa",
       },
@@ -96,19 +91,19 @@ export const POSTS: Post[] = [
     `,
     sources: [
       {
-        name: "How is the general public exposed to fragrance allergens? — European Commission",
+        name: "[1] How is the general public exposed to fragrance allergens? — European Commission",
         url: "https://ec.europa.eu/health/scientific_committees/opinions_layman/perfume-allergies/en/l-3/5-exposure-public.htm",
       },
       {
-        name: "Skip the Antibacterial Soap; Use Plain Soap and Water — FDA",
+        name: "[2] Skip the Antibacterial Soap; Use Plain Soap and Water — FDA",
         url: "https://www.fda.gov/consumers/consumer-updates/skip-antibacterial-soap-use-plain-soap-and-water",
       },
       {
-        name: "Effect of soaps and detergents on epidermal barrier function — ScienceDirect",
+        name: "[3] Effect of soaps and detergents on epidermal barrier function — ScienceDirect",
         url: "https://www.sciencedirect.com/science/article/abs/pii/S0738081X11002252",
       },
       {
-        name: "Natural soap is clinically effective and more biodegradable than synthetic detergents - NIH Study",
+        name: "[4] Natural soap is clinically effective and more biodegradable than synthetic detergents - NIH Study",
         url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12176228/",
       },
     ],
