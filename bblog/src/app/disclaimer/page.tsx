@@ -1,9 +1,7 @@
 const DisclaimerPage = () => {
   return (
     <div className="lg:mx-30 sm:mx-8 px-4 py-12">
-      <h1 className="font-lora text-3xl mb-4 underline underline-offset-8">
-        Disclaimer
-      </h1>
+      <h1 className="font-lora text-3xl mb-4">Disclaimer</h1>
       <p className="font-mont text-lg mb-4">
         <strong>The Good Standard</strong> is a personal blog that shares my
         tips, research, and opinions about living a more sustainable and healthy
@@ -21,9 +19,7 @@ const DisclaimerPage = () => {
         any losses, injuries, or damages from the use of the information or
         products mentioned on the site.
       </p>
-      <h2 className="font-lora text-3xl mt-8 mb-4 underline underline-offset-6">
-        Privacy Policy
-      </h2>
+      <h2 className="font-lora text-3xl mt-8 mb-4">Privacy Policy</h2>
       <p className="font-mont text-lg">
         At <strong>The Good Standard</strong>, I respect your privacy.
       </p>
