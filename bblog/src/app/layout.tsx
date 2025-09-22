@@ -1,11 +1,10 @@
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 import { Montserrat, Playfair_Display, Lora } from "next/font/google";
 import "./globals.css";
 
 import AppSidebar from "@/components/composite/appSidebar";
 import HomeBanner from "@/components/composite/homeBanner";
-import MobileNavbar from "@/components/composite/mobileNavbar";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
