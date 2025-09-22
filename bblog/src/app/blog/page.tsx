@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { POSTS } from "@/data/posts";
+import Image from "next/image";
 
 export default function BlogPage() {
   return (
@@ -12,6 +13,12 @@ export default function BlogPage() {
                 {post.title}
               </Link>
             </h2>
+            <Image
+              src={post.thumbnailUrl as string}
+              alt={`Thumbnail for ${post.title}`}
+              width={400}
+              height={100}
+            />
             <p className="text-sm text-gray-500">{post.date}</p>
             <p className="mt-2 text-gray-700">{post.intro.slice(0, 50)}...</p>
             <div className="mt-2 flex gap-2 flex-wrap">
