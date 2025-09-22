@@ -2,38 +2,44 @@ const AboutPage = () => {
   return (
     <section className="lg:mx-30 sm:mx-8 px-4 py-12">
       <h1 className="font-lora text-4xl font-bold mb-6 text-center">
-        Hello, I&apos;m Ana
+        Hi, I&apos;m Ana
       </h1>
       <div className="font-mont space-y-5 text-lg leading-relaxed text-gray-800">
         <p>
-          Welcome to my little corner of the internet. The idea for this blog
-          originated a few years ago when I started my quest for health. I kept
-          running into a huge problem&mdash;so many of the products I&apos;ve
-          been using since growing up in my parent&apos;s house were filled with
-          hidden microplastics and wasteful materials.
+          Welcome to my little corner of the web. This blog started a few years
+          ago when I began my quest for better health in my early 30s. The more
+          I read, the more I realized that many of the products I grew up with
+          in my parents&apos; house — soaps, cleaners, even food packaging —
+          were full of hidden microplastics and harmful materials. It was
+          eye-opening.
         </p>
         <p>
-          The more I researched, the more I realized consumerism wasn&apos;t
-          just hurting our planet, it weighed on my physical and mental health
-          as well. This space is a way for me and you to rethink our everyday
-          choices. Here, you can find some simple upgrades in your home,
-          lifestyle, and routine that you can also make to cut down on waste,
-          reuse what you already have, and discover &quot;buy it for life&quot;
-          or eco-friendly products that truly last.
+          As I kept digging, I saw how all this waste and consumerism was not
+          only destroying our planet, its ecosystems, and its people, but was
+          also weighing heavily on my own physical and mental health. That
+          realization was the turning point: I wanted to stop just consuming and
+          start questioning, learning, and making small changes that actually
+          mattered.
         </p>
         <p>
-          It&apos;s progress, not perfection. If you&apos;ve ever felt
-          overwhelmed by all the information out there, just know you&apos;re
-          not alone. I&apos;m not here to fearmonger&mdash;because we don&apos;t
-          know what we don&apos;t know. Just because we grew up believing these
-          materials were not harmful doesn&apos;t make them any less so.
+          For me, curiosity has become one of the greatest joys of being human.
+          Learning about both the beauty and the dangers in this world has given
+          me fresh perspectives every day. Writing here is my creative outlet
+          and my way of sharing that journey with you.
         </p>
         <p>
-          &quot;Sustainable living&quot; is a journey, and the more we learn,
-          the more intentional we can be. Within these pages you will find some
-          simple guides, research, and a personal thought or two&mdash;all
-          shared with the hope that you will be comforted and inspired to slow
-          down, simplify, and choose well.
+          At <strong>The Good Standard</strong>, you&apos;ll find simple
+          upgrades for your home, lifestyle, and daily routines. Some are as
+          small as reusing what you already have in new ways; others involve
+          finding eco-friendly, “buy it for life” products that actually last.
+          None of it is about being perfect — it&apos;s about choosing better,
+          little by little.
+        </p>
+        <p>
+          Sustainable living is a journey, not a finish line. The more we learn,
+          the more empowered we become. My hope is that this space comforts you,
+          sparks curiosity, and inspires you to slow down, simplify, and choose
+          well. Thanks for stopping by. I&apos;m so glad you&apos;re here.
         </p>
         <p>Thanks for stopping by, I&apos;m so glad you&apos;re here!</p>
       </div>

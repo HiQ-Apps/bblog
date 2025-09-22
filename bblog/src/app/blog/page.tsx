@@ -33,7 +33,7 @@ export default function BlogPage() {
                 <Image
                   src={post.thumbnailUrl as string}
                   alt={`Thumbnail for ${post.title}`}
-                  width={500}
+                  width={1200}
                   height={100}
                 />
                 <CardDescription>
