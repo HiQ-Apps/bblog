@@ -1,10 +1,10 @@
 const DisclaimerPage = () => {
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="lg:mx-30 sm:mx-8 px-4 py-12">
       <h1 className="font-lora text-3xl mb-4 underline underline-offset-8">
         Disclaimer
       </h1>
-      <p className="font-mont text-md mb-4">
+      <p className="font-mont text-lg mb-4">
         <strong>The Good Standard</strong> is a personal blog that shares my
         tips, research, and opinions about living a more sustainable and healthy
         lifestyle. The information I’ve provided here is for general
@@ -12,7 +12,7 @@ const DisclaimerPage = () => {
         Any reliance you place on the information found on this site is strictly
         at your own risk.
       </p>
-      <p className="font-mont text-md mb-4">
+      <p className="font-mont text-lg mb-4">
         Some blog posts may contain affiliate links. This means that if you
         click on a link and decide to ultimately make the purchase, the blog may
         receive a small commission. This is at no extra cost to you. I only
@@ -21,13 +21,13 @@ const DisclaimerPage = () => {
         any losses, injuries, or damages from the use of the information or
         products mentioned on the site.
       </p>
-      <h2 className="font-lora text-xl mt-8 mb-4 underline underline-offset-6">
+      <h2 className="font-lora text-3xl mt-8 mb-4 underline underline-offset-6">
         Privacy Policy
       </h2>
-      <p className="font-mont text-md">
+      <p className="font-mont text-lg">
         At <strong>The Good Standard</strong>, I respect your privacy.
       </p>
-      <ul className="font-mont text-md list-disc pl-5">
+      <ul className="font-mont text-lg list-disc pl-5">
         <li>
           <strong>Data Collection:</strong> This website may automatically
           collect non-personal information such as cookies, IP addresses, and

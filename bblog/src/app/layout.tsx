@@ -44,15 +44,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserrat.variable} ${playfair.variable} ${lora.variable} antialiased`}
+        className={`${montserrat.variable} ${playfair.variable} ${lora.variable} bg-primary antialiased`}
       >
         <SidebarProvider defaultOpen={true}>
           {/* {<MobileNavbar />} */}
-          <AppSidebar />
-          <SidebarInset className="min-h-dvh flex flex-1 flex-col">
+          <div className="flex w-full flex-col items-center">
             <HomeBanner />
-            {children}
-          </SidebarInset>
+            <div className="flex w-full flex-row relative">
+              <AppSidebar />
+              {children}
+            </div>
+          </div>
         </SidebarProvider>
       </body>
     </html>

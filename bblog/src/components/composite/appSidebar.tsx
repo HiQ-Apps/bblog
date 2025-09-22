@@ -10,43 +10,38 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
+import NavLink from "./navLink";
 import Image from "next/image";
 
 const AppSidebar = () => {
   return (
-    <Sidebar className="font-playfair" variant="inset">
-      <SidebarHeader className="flex items-center justify-center p-4">
-        <Image
-          src="/LOGO.png"
-          alt="The Good Standard"
-          width={160}
-          height={160}
-        />
-      </SidebarHeader>
-      <SidebarContent>
+    <Sidebar
+      className="font-playfair absolute left-0 border-none"
+      variant="sidebar"
+    >
+      <SidebarContent className="border-r border-sidebar-border">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton className="justify-center">
-                  <Link href="/">Home</Link>
+                  <NavLink href="/">Home</NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton className="justify-center">
-                  <Link href="/blog">Blog</Link>
+                  <NavLink href="/blog">Blog</NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton className="justify-center">
-                  <Link href="/about">About</Link>
+                  <NavLink href="/about">About</NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton className="justify-center">
-                <Link href="/disclaimer">Disclaimer</Link>
+                <NavLink href="/disclaimer">Disclaimer</NavLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarGroupContent>

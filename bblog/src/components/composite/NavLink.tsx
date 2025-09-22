@@ -1,11 +1,10 @@
-// components/nav-link.tsx
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 
-type Props = {
+type NavLinkProps = {
   href: string;
   children: React.ReactNode;
   exact?: boolean; // exact match for "/" etc.
@@ -13,13 +12,13 @@ type Props = {
   prefetch?: boolean;
 };
 
-export default function NavLink({
+const NavLink = ({
   href,
   children,
   exact,
   className,
   prefetch,
-}: Props) {
+}: NavLinkProps) => {
   const pathname = usePathname();
   const normalize = (p: string) =>
     p.endsWith("/") && p !== "/" ? p.slice(0, -1) : p;
@@ -38,9 +37,9 @@ export default function NavLink({
       prefetch={prefetch}
       aria-current={isActive ? "page" : undefined}
       className={clsx(
-        "inline-flex items-center rounded-md px-3 py-2 text-sm transition-colors",
+        "hover:bg-primary inline-flex items-center rounded-md px-3 py-2 text-lg transition-colors",
         isActive
-          ? "bg-secondary text-secondary-foreground"
+          ? "underline underline-offset-4 font-bold text-foreground"
           : "text-muted-foreground hover:text-foreground",
         className
       )}
@@ -48,4 +47,6 @@ export default function NavLink({
       {children}
     </Link>
   );
-}
+};
+
+export default NavLink;
