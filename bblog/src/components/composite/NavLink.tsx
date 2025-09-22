@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { clsx } from "clsx";
+import clsx from "clsx";
 
 type NavLinkProps = {
   href: string;
   children: React.ReactNode;
-  exact?: boolean; // exact match for "/" etc.
+  exact?: boolean;
   className?: string;
   prefetch?: boolean;
 };
@@ -20,8 +20,10 @@ const NavLink = ({
   prefetch,
 }: NavLinkProps) => {
   const pathname = usePathname();
+
   const normalize = (p: string) =>
     p.endsWith("/") && p !== "/" ? p.slice(0, -1) : p;
+
   const cur = normalize(pathname);
   const dest = normalize(href);
 

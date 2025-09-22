@@ -11,7 +11,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import NavLink from "./navLink";
-import Image from "next/image";
 
 const AppSidebar = () => {
   return (
