@@ -3,12 +3,16 @@ const DisclaimerPage = () => {
     <div className="lg:mx-30 sm:mx-8 px-4 py-12">
       <h1 className="font-lora text-3xl mb-4">Disclaimer</h1>
       <p className="font-mont text-lg mb-4">
-        <strong>The Good Standard</strong> is a personal blog that shares my
-        tips, research, and opinions about living a more sustainable and healthy
-        lifestyle. The information I’ve provided here is for general
-        informational purposes only—it should not be taken as financial advice.
-        Any reliance you place on the information found on this site is strictly
-        at your own risk.
+        <strong>The Good Standard</strong> is a personal blog that shares tips,
+        research, and opinions about living a more sustainable and healthy
+        lifestyle. The content provided here is for general informational
+        purposes only and should not be considered medical, financial, or
+        professional advice. Any reliance you place on the information found on
+        this site is strictly at your own risk. Always consult with a qualified
+        healthcare provider before making any changes to your diet, lifestyle,
+        or use of products—especially if you have medical conditions or known
+        allergies. Everybody is different, what works for me may or may not work
+        for you.
       </p>
       <p className="font-mont text-lg mb-4">
         Some blog posts may contain affiliate links. This means that if you
@@ -50,7 +54,7 @@ const DisclaimerPage = () => {
           with outside parties.
         </li>
       </ul>
-      <p>
+      <p className="font-mont">
         If you have any questions about this disclaimer or privacy policy, you
         can reach me at{" "}
         <a
