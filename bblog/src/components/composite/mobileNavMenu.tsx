@@ -20,12 +20,12 @@ const MobileNavMenu = () => {
       </NavigationMenuItem>
       <NavigationMenuItem>
         <NavigationMenuLink asChild>
-          <Link href="/about">About</Link>
+          <Link href="/disclaimer">Disclaimer</Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
       <NavigationMenuItem>
         <NavigationMenuLink asChild>
-          <Link href="/disclaimer">Disclaimer</Link>
+          <Link href="/about">About</Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
     </NavigationMenu>
