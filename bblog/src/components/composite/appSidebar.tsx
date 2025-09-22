@@ -5,12 +5,11 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import NavLink from "./navLink";
+import NavLink from "@/components/composite/navLink";
 
 const AppSidebar = () => {
   return (
