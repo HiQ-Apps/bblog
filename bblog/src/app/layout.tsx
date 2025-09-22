@@ -4,6 +4,7 @@ import { Montserrat, Playfair_Display, Lora } from "next/font/google";
 import "./globals.css";
 
 import AppSidebar from "@/components/composite/appSidebar";
+import MobileNavbar from "@/components/composite/mobileNavMenu";
 import HomeBanner from "@/components/composite/homeBanner";
 
 const playfair = Playfair_Display({
@@ -12,14 +13,12 @@ const playfair = Playfair_Display({
   display: "swap",
   weight: ["400", "700"],
 });
-
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
   display: "swap",
   weight: ["400", "700"],
 });
-
 const lora = Lora({
   subsets: ["latin"],
   variable: "--font-lora",
@@ -30,27 +29,31 @@ const lora = Lora({
 export const metadata: Metadata = {
   title: "The Good Standard",
   description: "A blog about the things that make life good.",
-  icons: {
-    icon: "/LOGO.png",
-  },
+  icons: { icon: "/LOGO.png" },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
         className={`${montserrat.variable} ${playfair.variable} ${lora.variable} bg-primary antialiased`}
       >
-        <SidebarProvider defaultOpen={true}>
-          {/* {<MobileNavbar />} */}
+        <SidebarProvider defaultOpen>
           <div className="flex w-full flex-col items-center">
             <HomeBanner />
+            {/* Mobile nav only on screens < md */}
+            <div className="w-full flex justify-center items-center md:hidden">
+              <MobileNavbar />
+            </div>
             <div className="flex w-full flex-row relative">
-              <AppSidebar />
+              {/* Hide sidebar on small screens, show ≥ md */}
+              <div className="hidden md:block">
+                <AppSidebar />
+              </div>
               {children}
             </div>
           </div>

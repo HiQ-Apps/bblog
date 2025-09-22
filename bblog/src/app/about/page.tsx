@@ -2,7 +2,7 @@ const AboutPage = () => {
   return (
     <section className="lg:mx-30 sm:mx-8 px-4 py-12">
       <h1 className="font-lora text-4xl font-bold mb-6 text-center">
-        Hello, I&apos;m Lisa
+        Hello, I&apos;m Ana
       </h1>
       <div className="font-mont space-y-5 text-lg leading-relaxed text-gray-800">
         <p>

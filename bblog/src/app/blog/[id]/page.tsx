@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { POSTS } from "@/data/posts";
 
+import Image from "next/image";
+
 type Props = {
   params: { id: string };
 };
@@ -12,11 +14,21 @@ export default function PostPage({ params }: Props) {
   if (!post) return notFound();
 
   return (
-    <main className="font-mont text-lg mx-auto p-6 prose">
-      <h1 className="font-lora text-5xl font-bold mb-2 underline underline-offset-8">
-        {post.title}
-      </h1>
+    <main className="font-mont max-w-4xl text-lg mx-auto p-6 prose">
+      <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
       <p className="font-mont text-sm">Date Published: {post.date}</p>
+
+      <div className="flex w-full justify-center">
+        {post.thumbnailUrl && (
+          <Image
+            src={post.thumbnailUrl}
+            alt={`Thumbnail for ${post.title}`}
+            className="mt-4 mb-2 rounded-lg"
+            width={900}
+            height={200}
+          />
+        )}
+      </div>
 
       {post.disclosure && (
         <p className="bg-secondary text-primary text-sm p-3 rounded border mt-4">

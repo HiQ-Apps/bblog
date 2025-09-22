@@ -2,6 +2,7 @@ export type Post = {
   id: string;
   title: string;
   date: string; // ISO yyyy-mm-dd
+  thumbnailUrl?: string;
   intro: string; // short preview for cards/SEO
   tags: string[];
   disclosure?: string;
@@ -20,6 +21,7 @@ export const POSTS: Post[] = [
     id: "apothecary-diaries-1",
     title: "Apothecary Diaries #1",
     date: "09-21-2025",
+    thumbnailUrl: "/posts/apothecary-diaries-1/cover.png",
     intro: `Many store bought soaps labeled ”antibacterial” or “deep cleaning” can come with hidden trade offs. They’re loaded with synthetic fragrances, preservatives, and harsh chemicals that aren’t as healthy as we think. The more I read about them, the scarier they seemed. Growing up, it was normal to have brightly covered soaps and different scents. As a broke teenager,  I frequently shopped at places like Bath & Body Works, where they always had so many scents at unbeatable prices. `,
     tags: ["nontoxic", "soap", "home", "natural", "DIY"],
     disclosure: `This post may contain affiliate links. As an Amazon Associate, I earn from qualifying purchases at no extra cost to you.`,
