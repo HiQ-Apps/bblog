@@ -4,8 +4,6 @@ import { POSTS } from "@/data/posts";
 export default function BlogPage() {
   return (
     <main className="max-w-3xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-8">Blog</h1>
-
       <ul className="space-y-8">
         {POSTS.map((post) => (
           <li key={post.id} className="border-b pb-6">
