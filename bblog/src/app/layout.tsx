@@ -5,7 +5,7 @@ import "./globals.css";
 
 import AppSidebar from "@/components/composite/appSidebar";
 import MobileNavbar from "@/components/composite/mobileNavMenu";
-import HomeBanner from "@/components/composite/homeBanner";
+import HomeBanner from "@/components/composite/logoBanner";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],

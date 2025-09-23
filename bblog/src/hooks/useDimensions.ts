@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-export function useDimensions() {
+const useDimensions = () => {
   const [dimensions, setDimensions] = useState({
     width: 0,
     height: 0,
@@ -32,4 +32,6 @@ export function useDimensions() {
   }, []);
 
   return dimensions;
-}
+};
+
+export default useDimensions;

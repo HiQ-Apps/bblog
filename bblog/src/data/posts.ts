@@ -3,9 +3,10 @@ export type MerchantType = "Amazon" | "Awin";
 export type Post = {
   id: string;
   title: string;
-  date: string; // ISO yyyy-mm-dd
+  // m-d-y
+  date: string;
   thumbnailUrl?: string;
-  intro: string; // short preview for cards/SEO
+  intro: string;
   tags: string[];
   disclosure?: string;
   sections: { heading: string; content: string }[];

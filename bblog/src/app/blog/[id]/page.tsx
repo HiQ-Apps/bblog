@@ -61,7 +61,7 @@ export default function PostPage({ params }: Props) {
                     <a
                       href={supply.affiliateUrl as string}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="noopener"
                       className="text-blue-600"
                     >
                       <CardContent className="flex flex-col items-center">
@@ -112,7 +112,7 @@ export default function PostPage({ params }: Props) {
                 <a
                   href={src.url}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener"
                   className="text-blue-600 underline"
                 >
                   {src.name}
