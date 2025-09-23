@@ -1,6 +1,15 @@
+import Image from "next/image";
+
 const AboutPage = () => {
   return (
-    <section className="lg:mx-30 sm:mx-8 px-4 py-12">
+    <section className="xl:mx-30 sm:mx-8 px-3 py-12">
+      <Image
+        src="/about_me.png"
+        alt="Picture of Ana"
+        width={200}
+        height={200}
+        className="mx-auto mb-6 rounded-full"
+      />
       <h1 className="font-lora text-4xl font-bold mb-6 text-center">
         Hi, I&apos;m Ana
       </h1>

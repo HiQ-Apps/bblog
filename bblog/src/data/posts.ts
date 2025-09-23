@@ -1,3 +1,5 @@
+export type MerchantType = "Amazon" | "Awin";
+
 export type Post = {
   id: string;
   title: string;
@@ -7,7 +9,13 @@ export type Post = {
   tags: string[];
   disclosure?: string;
   sections: { heading: string; content: string }[];
-  supplies?: { name: string; reason?: string; affiliateUrl?: string | null }[];
+  supplies?: {
+    name: string;
+    images: string[];
+    reason?: string;
+    affiliateUrl?: string | null;
+    merchant: MerchantType;
+  }[];
   directions?: string[];
   conclusion?: string;
   sources?: {
@@ -50,32 +58,42 @@ export const POSTS: Post[] = [
         name: "Castile Soap",
         reason: `I recommend Dr. Bronner’s regular castile soap. They have several naturally scented variations, but since we're adding our own scents, they have an unscented baby soap.
         `,
+        images: ["/posts/apothecary-diaries-1/castile_soap.png"],
         affiliateUrl: "https://amzn.to/46xYDzY",
+        merchant: "Amazon",
       },
       {
         name: "16oz Glass Bottle + Pump",
         reason: `You can find 16oz glass bottles on amazon. If you decide to use essential oils for scent, I recommend an amber colored one, as light rays break down essential oils. 
         `,
+        images: ["/posts/apothecary-diaries-1/amber_glass_pump_bottles.png"],
         affiliateUrl: "https://amzn.to/4gIlFc8",
+        merchant: "Amazon",
       },
       {
         name: "Essential Oils (optional)",
         reason: `Amazon  has a few great starter sets that comes with different fragrances, including frankincense, peppermint, eucalyptus. There are so many uses for essential oils, and I will talk about them in later blog posts. Some of my favorite combinations are lavender + orange and eucalyptus + peppermint.
         `,
+        images: ["/posts/apothecary-diaries-1/essential_oils.png"],
         affiliateUrl: "https://amzn.to/4nIF1Aa",
+        merchant: "Amazon",
       },
       {
         name: "Distilled Water",
         reason: `
           Using distilled water helps extend shelf life by minimizing bacteria growth.
         `,
+        images: ["/posts/apothecary-diaries-1/water.jpg"],
         affiliateUrl: null,
+        merchant: "Amazon",
       },
       {
         name: "Aloe Vera Gel (optional)",
         reason: `
           Mix in one tsp of aloe vera gel for extra skin hydration. However, aloe tends to separate, so make sure to gently swish before using.`,
+        images: ["/posts/apothecary-diaries-1/cold_pressed_aloe.png"],
         affiliateUrl: "https://amzn.to/3VszBx2",
+        merchant: "Amazon",
       },
     ],
     directions: [

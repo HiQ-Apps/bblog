@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { POSTS } from "@/data/posts";
 
 import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
 
 type Props = {
   params: { id: string };
@@ -50,17 +51,33 @@ export default function PostPage({ params }: Props) {
           <h2 className="font-lora text-2xl font-bold mb-2">Supplies</h2>
           <ul>
             {post.supplies.map((supply, idx) => (
-              <li key={idx}>
-                <strong>{supply.name}</strong> — {supply.reason}{" "}
+              <li key={idx} className="flex flex-col">
+                <p>
+                  <strong>{supply.name}</strong> — {supply.reason}
+                </p>
+                {/* Multi images possible, just map out when we get there */}
                 {supply.affiliateUrl && (
-                  <a
-                    href={supply.affiliateUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline"
-                  >
-                    Buy
-                  </a>
+                  <Card className="flex bg-secondary mt-2 mb-8">
+                    <a
+                      href={supply.affiliateUrl as string}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600"
+                    >
+                      <CardContent className="flex flex-col items-center">
+                        {supply.images.length > 0 && (
+                          <Image
+                            src={supply.images[0]}
+                            alt={supply.name}
+                            width={200}
+                            height={100}
+                            className="inline-block mr-2"
+                          />
+                        )}
+                        Redirect to {supply.merchant} Store
+                      </CardContent>
+                    </a>
+                  </Card>
                 )}
               </li>
             ))}
