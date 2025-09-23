@@ -98,7 +98,6 @@ export default function PostPage({ params }: Props) {
 
       {post.conclusion && (
         <section className="mt-8">
-          <h2 className="font-lora text-2xl font-bold mb-2">Conclusion</h2>
           <p>{post.conclusion}</p>
         </section>
       )}
