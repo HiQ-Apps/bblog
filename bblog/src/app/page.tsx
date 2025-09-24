@@ -1,11 +1,16 @@
+"use client";
+
+import { useState } from "react";
 import HomeHero from "@/components/composite/homeHero";
-import RecentCarousel from "@/components/composite/recentCarousel";
+import HomeCarousel from "@/components/composite/homeCarousel";
 
 export default function Home() {
+  const [heroReady, setHeroReady] = useState(false);
+
   return (
-    <div className="flex w-full flex-col items-center space-y-4 md:space-y-8">
-      <HomeHero />
-      <RecentCarousel />
-    </div>
+    <main className="flex w-full flex-col items-center space-y-6 md:space-y-10">
+      <HomeHero onReady={() => setHeroReady(true)} />
+      <HomeCarousel heroReady={heroReady} />
+    </main>
   );
 }

@@ -3,8 +3,6 @@ import { POSTS } from "@/data/posts";
 import Image from "next/image";
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardDescription,
   CardFooter,
   CardContent,
@@ -22,7 +20,7 @@ export default function BlogPage() {
           >
             <Card
               key={post.id}
-              className="flex justify-center items-center border-b pb-6"
+              className="flex justify-center items-center border-b pb-6 hover:shadow-lg transition-shadow hover:bg-gray-200"
             >
               <div className="text-2xl font-lora font-semibold">
                 <h1 className="mx-8 transition-transform hover:-translate-y-0.5 inline-block">

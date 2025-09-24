@@ -15,7 +15,7 @@ const LogoBanner = () => {
               src="/LOGO.png"
               alt="The Good Standard"
               width={140}
-              height={140}
+              height={94}
             />
           )}
           <div className="flex flex-col">

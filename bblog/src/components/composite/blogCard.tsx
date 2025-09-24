@@ -18,15 +18,9 @@ export type BlogCardProps = {
 
 const BlogCard = ({ title, body, coverImageUrl }: BlogCardProps) => {
   return (
-    <Card>
-      <CardContent>
-        <Image
-          src={coverImageUrl}
-          alt={title}
-          layout="responsive"
-          width={100}
-          height={100}
-        />
+    <Card className="hover:shadow-lg transition-shadow h-full hover:bg-gray-200">
+      <CardContent className="space-y-2 justify-cente">
+        <Image src={coverImageUrl} alt={title} width={400} height={200} />
         <CardHeader>
           <CardTitle>{title}</CardTitle>
         </CardHeader>
