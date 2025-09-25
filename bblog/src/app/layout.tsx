@@ -1,3 +1,4 @@
+import Script from "next/script"
 import { SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 import { Montserrat, Playfair_Display, Lora } from "next/font/google";
@@ -39,6 +40,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+          <head>
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-8FK103BLYZ"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-8FK103BLYZ');
+          `}
+        </Script>
+      </head>
       <body
         className={`${montserrat.variable} ${playfair.variable} ${lora.variable} bg-primary antialiased`}
       >
