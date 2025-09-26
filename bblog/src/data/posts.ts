@@ -129,4 +129,98 @@ export const POSTS: Post[] = [
       },
     ],
   },
+  {
+    id: "healthy-kitchen-swaps",
+    title: "5 Healthy Kitchen Swaps You Can Start Today",
+    date: "09-24-2025",
+    thumbnailUrl: "/posts/healthy-kitchen-swaps/cover.png",
+    disclosure:
+      "This post may contain affiliate links. Please read my entire disclaimer here.",
+    intro:
+      "Growing up at my grandparents’ house, they spent hours in the kitchen creating meals and memories for me. I remember them fondly. To save money, they used anything they could get their hands on, which often turned out to be cheap and plastic.  The tools we use to create nourishing meals should be safe for us and our loved ones. From cookware, to cleaning, most items today are designed to be plastic heavy, disposable, and to be replaced often.\n\nBy slowly replacing a few everyday products with some more sustainable alternatives, you’ll reduce waste, avoid hidden toxins, and save money over time. In this post, I’ll share some of the no brainer changes I’ve made in my own kitchen, and guide you to upgrade yours today. Most of these alternatives are affordable and easy to find at your local store or Amazon.",
+    tags: ["kitchen", "health", "eco-friendly", "non-toxic", "sustainability"],
+    sections: [
+      {
+        heading: "Plastic Food Containers",
+        content:
+          "As tempting and convenient as it is to reuse plastic take out containers and food containers, Bisphenol-A (BPAs) and other microplastics can leach into our food, especially when they’re exposed to heat and acidic compounds [1]. Growing up in an immigrant household, my parents collected out plastic takeout containers, washed, reused, and hoarded them as if there were no tomorrow.\nConsider switching to glass containers, which can withstand heat, don’t warp, and are easy to wash. Best of all, they don’t retain odor and stains. You can safely reheat food in glass containers as they don’t release chemicals.\nhttps://amzn.to/46jT7lF\nRubbermaid glass containers\nhttps://amzn.to/46sEawc\nCaraway also makes some lovely looking sets of glass containers. I personally use them to store items such as flour and sugar. They’ve held up nicely over a few years and stack neatly to save space.",
+      },
+      {
+        heading: "Plastic Cutting Boards",
+        content:
+          "At one point in my life, I was working as a bartender. We would be required to cut fresh fruits for garnishes daily, and the owners bought the bar a thick plastic cutting board.. After just a few months of use, you could see the black cut marks where the knife scraped off the plastic. Within 3 years, the board, now littered with slash marks, had to be replaced.  Plastic cutting boards wear quickly and release microscopic plastic shavings into your food. Overtime, these microplastics end up in your meals and inside your body.[2]\n\nAn alternative to plastic, cutting boards made with wood or bamboo are more durable. Natural materials are also naturally antimicrobial and safer for us.  Studies show that bacteria survive longer on plastic cutting boards, while wood naturally reduces contamination. After 12 hours, bacteria on wood were almost completely gone. [3] Don’t assume that natural materials are fragile - many of them are dishwasher safe as well.\n\nhttps://amzn.to/4ni2rfL",
+      },
+      {
+        heading: "Teflon coated pans",
+        content:
+          "Did you know?\nTeflon was accidentally discovered in the 30s when Dr. Roy Plunkett realized polytetrafluoroethylene (PTFE), allowed things to slide off of very easily. That’s why food doesn’t stick to Teflon pans, and why many industries use it to coat surfaces that need to resist sticking or buildup. [4] Teflon’s “slipperiness” is what makes it so famous in cookware, but these same properties also mean it doesn’t break down easily in the environment. This incredible durability raises concerns about microplastics and forever chemicals (PFAS) allowed into our homes and our food.\n\nScratched or overheated PTFE-coated pans release toxic fumes, which have been linked to environmental pollution and health risks, including Polymer Fumer Fever (a flu-like illness)[5]. PTFE fragments may also contaminate food as they degrade over time.“The researchers used metal and wooden utensils with both old and new nonstick cookware … they all caused tiny abrasions to the coating, which released PTFE particles.” [6] Experts now recommend stainless steel, cast iron, or ceramic as safer alternatives to nonstick.\n\nStainless steel pans are a strong alternative to nonstick. They’re virtually indestructible and dont release particles into our food. I did suffer a steep learning curve while using them (especially around heat control), but your body - and your kitchen environment - will thank you. Stainless steel is generally considered safe and stable under normal cooking conditions [7].\n\nAlso consider cast iron skillets and ceramic cookware to cook.\nCast iron that is prepared and properly seasoned is free of PTFE and phthalates. Many home cooks say it ages very well.\nCeramic-coated cookware is also a great PFAS free alternative. It doesn't rely on fluoropolymers like Teflon, so it avoids the particle concerns associated with PTFE. [8]\n\n\nhttps://amzn.to/46B5xVe\nCuisinart is a great beginner’s stainless steel pan. I like this one because it doesn’t break the bank, and the cooler handle helps me avoid burns.\nhttps://amzn.to/3VwIh5C\nI use these small cast iron skillets to make my delicious shakshouka brunch every few weeks. (recipe coming soon!)",
+      },
+      {
+        heading: "Bleached parchment paper",
+        content:
+          "I love baking banana bread. It’s decadent, moist, and makes the kitchen smell wonderful for hours. But the cheap, bleached parchment paper at the store? Skip that. Chlorine-bleached parchment can release small amounts of chemicals when it’s heated, and worst of all, it’s a single use product. A better option would be reusable silicone baking mats that can be reused hundreds of times.[9]. Another great alternative would be to use unbleached parchment paper made from sustainably sourced fibers, such as hemp, bamboo, wood pulp, or recycled paper fibers.\nhttps://amzn.to/3VwIh5C\nAmazon Basics Silicone Baking Mat\n\nOr unbleached parchment paper such as those made by If You Care.\nhttps://amzn.to/3VwIh5C",
+      },
+      {
+        heading: "Dish Soap",
+        content:
+          "Dawn produced some commercials in the 90s where the wildlife rescue workers cleaned wildlife stained with oil using their dish soap. This marketing campaign convinced me it was gentle enough to wash my pets with. Reality is, mainstream soaps such as Dawn contain synthetic fragrances, dyes, and surfactants. Surfactants are great for degreasing, but are so harsh on our skin, pipes, and waterways. Recent studies also show that common detergent chemicals can damage the gut barrier, which raises concerns about long-term health effects. [11].\n\nDon’t sacrifice cheap for safety. Eco-friendly soaps use biodegradable and plant-based ingredients and many of them come in refillable options. The Environmental Working Group (EWG) verifies all these ingredients for safety. Their website has a wealth of information and a great database of products with chemicals listed.\n\nhttps://amzn.to/4nIOW8y\nAspenClean dishwashing pods (EWG certified)\nhttps://amzn.to/3KBZt7h\nBranch Basics Dishwasher Tablets  (EWG certified)\nhttps://amzn.to/47WH0w7\nAspenclean Dish soap and refill.(EWG certified)\n\nAll this information can get overwhelming - I’ve been there.  I believe that many of us continue to use harmful products because we’re just unaware of the truth, or we believe that healthy options are just too expensive. Start with just one or two swaps - maybe a stainless steel pan to fry your eggs or by switching to a EWG verified cleaner, and build from there. Over time, these changes will add up to a healthier home and a smaller eco-footprint.\n\nLiving in the 21st century, we’re uniquely blessed to have so much information at our fingertips. The research is constantly evolving - we can stay responsible for ourselves and our families when we choose better options for everyday life.",
+      },
+    ],
+    sources: [
+      {
+        name: "[1]https://pmc.ncbi.nlm.nih.gov/articles/PMC9552567/",
+        url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9552567/",
+      },
+      {
+        name: "[2]https://pubmed.ncbi.nlm.nih.gov/37220346/",
+        url: "https://pubmed.ncbi.nlm.nih.gov/37220346/",
+      },
+      {
+        name: "[3]https://pubmed.ncbi.nlm.nih.gov/31113021/",
+        url: "https://pubmed.ncbi.nlm.nih.gov/31113021/",
+      },
+      {
+        name: "[4]https://www.teflon.com/en/news-events/history",
+        url: "https://www.teflon.com/en/news-events/history",
+      },
+      {
+        name: "[5]https://www.ewg.org/research/canaries-kitchen",
+        url: "https://www.ewg.org/research/canaries-kitchen",
+      },
+      {
+        name: "[6]https://www.medicalnewstoday.com/articles/are-nonstick-pans-toxic",
+        url: "https://www.medicalnewstoday.com/articles/are-nonstick-pans-toxic",
+      },
+      {
+        name: "[7]https://nutritionfacts.org/blog/is-stainless-steel-or-cast-iron-cookware-best-is-teflon-safe/",
+        url: "https://nutritionfacts.org/blog/is-stainless-steel-or-cast-iron-cookware-best-is-teflon-safe/",
+      },
+      {
+        name: "[8]https://www.foodandwine.com/lifestyle/kitchen/best-non-toxic-cookware",
+        url: "https://www.foodandwine.com/lifestyle/kitchen/best-non-toxic-cookware",
+      },
+      {
+        name: "[9]https://www.sciencedirect.com/science/article/pii/S0048969724027232",
+        url: "https://www.sciencedirect.com/science/article/pii/S0048969724027232",
+      },
+      {
+        name: "[10]https://www.jacionline.org/article/S0091-6749%2822%2901477-4/fulltext",
+        url: "https://www.jacionline.org/article/S0091-6749%2822%2901477-4/fulltext",
+      },
+      {
+        name: "[11]https://pubmed.ncbi.nlm.nih.gov/14728695/",
+        url: "https://pubmed.ncbi.nlm.nih.gov/14728695/",
+      },
+    ],
+  },
 ];
+
+// Empty placeholder post
+// {
+//   id: "",
+//   title: "",
+//   date: "",
+//   intro: "",
+//   tags: [],
+//   sections: [],
+// }
