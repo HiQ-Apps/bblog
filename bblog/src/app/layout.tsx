@@ -1,4 +1,8 @@
-import Script from "next/script"
+import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity/visual-editing";
+import { SanityLive } from "@/sanity/the-good-standard/lib/live";
+
+import Script from "next/script";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 import { Montserrat, Playfair_Display, Lora } from "next/font/google";
@@ -33,14 +37,16 @@ export const metadata: Metadata = {
   icons: { icon: "/LOGO.png" },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { isEnabled } = await draftMode();
+
   return (
     <html lang="en">
-          <head>
+      <head>
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-8FK103BLYZ"
@@ -73,7 +79,9 @@ export default function RootLayout({
               {children}
             </div>
           </div>
+          {isEnabled && <VisualEditing />}
         </SidebarProvider>
+        <SanityLive />
       </body>
     </html>
   );
