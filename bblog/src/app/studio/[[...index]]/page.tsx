@@ -1,9 +1,13 @@
 "use client";
 
-import { NextStudio } from "next-sanity/studio";
-// adjust the relative path if needed (this assumes sanity.config.ts is in the project root)
+import dynamic from "next/dynamic";
 import config from "@/sanity/the-good-standard/sanity.config";
 
+const Studio = dynamic(
+  () => import("next-sanity/studio").then((m) => m.NextStudio),
+  { ssr: false }
+);
+
 export default function StudioPage() {
-  return <NextStudio config={config} />;
+  return <Studio config={config} />;
 }

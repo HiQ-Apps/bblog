@@ -12,6 +12,6 @@ export async function GET(req: NextRequest) {
 
   // Redirect to the slug route (no query param)
   return NextResponse.redirect(
-    new URL(`/post/${encodeURIComponent(slug)}`, req.nextUrl)
+    new URL(`/blog/${encodeURIComponent(slug)}`, req.nextUrl)
   );
 }
