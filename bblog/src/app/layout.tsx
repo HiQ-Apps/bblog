@@ -79,8 +79,8 @@ export default async function RootLayout({
               {children}
             </div>
           </div>
-          {isEnabled && <VisualEditing />}
         </SidebarProvider>
+        {isEnabled && <VisualEditing />}
         <SanityLive />
       </body>
     </html>

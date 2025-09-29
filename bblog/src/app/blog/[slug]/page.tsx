@@ -4,9 +4,8 @@ import Image from "next/image";
 import groq from "groq";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
 
-import { POSTS } from "@/data/posts";
 import { sanityFetch } from "@/sanity/the-good-standard/lib/live"; // ← uses defineLive()
-import { Card, CardContent } from "@/components/ui/card";
+import Disclosure from "@/components/composite/disclosureCard";
 
 type PageProps = { params: { id: string } };
 
@@ -71,6 +70,9 @@ const ptComponents: PortableTextComponents = {
     },
   },
   block: {
+    normal: ({ children }) => (
+      <p className="font-mont text-xl my-4">{children}</p>
+    ),
     h2: ({ children }) => (
       <h2 className="font-lora text-3xl font-bold mt-8">{children}</h2>
     ),
@@ -78,7 +80,7 @@ const ptComponents: PortableTextComponents = {
       <h3 className="font-lora text-2xl font-bold mt-6">{children}</h3>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 pl-4 italic my-4">
+      <blockquote className="font-mont text-xl border-l-4 pl-4 italic my-4">
         {children}
       </blockquote>
     ),
@@ -95,15 +97,6 @@ function View({ post }: { post: any }) {
 
   const heroUrl: string | null =
     post.heroImage?.asset?.url ?? post.thumbnailUrl ?? null;
-
-  const supplies = post.supplies?.map((s: any) => ({
-    name: s?.name ?? "",
-    reason: s?.reason ?? "",
-    merchant: s?.merchant ?? "",
-    affiliateUrl: s?.affiliateUrl ?? null,
-    images:
-      s?.images?.map((i: any) => i?.asset?.url ?? i)?.filter(Boolean) ?? [],
-  }));
 
   return (
     <main className="font-mont max-w-4xl text-lg mx-auto p-6 prose">
@@ -128,84 +121,24 @@ function View({ post }: { post: any }) {
 
       {post.content?.length ? (
         <section className="mt-6">
+          <Disclosure />
           <PortableText value={post.content} components={ptComponents} />
         </section>
       ) : (
         <>
-          {post.disclosure && (
-            <p className="bg-secondary text-primary text-sm p-3 rounded border mt-4">
-              {post.disclosure}
-            </p>
-          )}
-
           {post.intro && <p className="mt-4">{post.intro}</p>}
-
           {post.sections?.length > 0 &&
             post.sections.map((section: any, idx: number) => (
               <section key={idx} className="mt-8">
                 <h2 className="font-lora text-2xl font-bold">
                   {section.heading}
                 </h2>
-                <p className="whitespace-pre-line">{section.content}</p>
+                <p className="font-mont whitespace-pre-line">
+                  {section.content}
+                </p>
               </section>
             ))}
         </>
-      )}
-
-      {supplies?.length > 0 && (
-        <section className="mt-8">
-          <h2 className="font-lora text-2xl font-bold mb-2">Supplies</h2>
-          <ul>
-            {supplies.map((s: any, idx: number) => (
-              <li key={idx} className="flex flex-col">
-                <p>
-                  <strong>{s.name}</strong>
-                  {s.reason ? <> — {s.reason}</> : null}
-                </p>
-                {s.affiliateUrl && (
-                  <Card className="flex bg-secondary mt-2 mb-8">
-                    <a
-                      href={s.affiliateUrl}
-                      target="_blank"
-                      rel="noopener"
-                      className="text-blue-600"
-                    >
-                      <CardContent className="flex flex-col items-center">
-                        {s.images?.[0] && (
-                          <Image
-                            src={s.images[0]}
-                            alt={s.name}
-                            width={200}
-                            height={100}
-                            className="inline-block mr-2"
-                          />
-                        )}
-                        Redirect to {s.merchant || "Merchant"} Store
-                      </CardContent>
-                    </a>
-                  </Card>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {post.directions?.length > 0 && (
-        <section className="mt-8">
-          <h2 className="font-lora text-2xl font-bold mb-2">Directions</h2>
-          <ol className="list-decimal list-inside">
-            {post.directions.map((step: string, idx: number) => (
-              <li key={idx}>{step}</li>
-            ))}
-          </ol>
-        </section>
-      )}
-
-      {post.conclusion && (
-        <section className="mt-8">
-          <p>{post.conclusion}</p>
-        </section>
       )}
 
       {post.sources?.length > 0 && (
@@ -255,12 +188,6 @@ export default async function PostPage({
     params: { slug: params.slug },
   });
 
-  // Optional: keep your local fallback working by slug
-  const local = POSTS.find(
-    (p: any) => p.slug === params.slug || p.id === params.slug
-  );
-  const post = sanityPost ?? local;
-
-  if (!post) return notFound();
-  return <View post={post} />;
+  if (!sanityPost) return notFound();
+  return <View post={sanityPost} />;
 }

@@ -1,6 +1,14 @@
 "use client";
 import { useEffect, useRef, useState, useMemo } from "react";
-import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+  type Variants,
+  cubicBezier,
+} from "framer-motion";
 
 type HomeHeroProps = {
   onReady?: () => void;
@@ -12,7 +20,13 @@ type HomeHeroProps = {
 const HomeHero = ({
   onReady,
   marqueeWord = "ELEVATE",
-  taglines = ["your standards", "your future", "your life", "your choices", "your knowledge"],
+  taglines = [
+    "your standards",
+    "your future",
+    "your life",
+    "your choices",
+    "your knowledge",
+  ],
   background = "#c89b83",
 }: HomeHeroProps) => {
   const [introDone, setIntroDone] = useState(false);
@@ -20,16 +34,22 @@ const HomeHero = ({
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
   const wordY = useTransform(scrollYProgress, [0, 1], [0, -40]);
-  const { scrollYProgress: pageY } = useScroll(); 
-  const glowOpacity = useTransform(pageY, [0, 0.3], [0.18, 0.04]); 
+  const { scrollYProgress: pageY } = useScroll();
+  const glowOpacity = useTransform(pageY, [0, 0.3], [0.18, 0.04]);
 
   useEffect(() => {
     if (!taglines.length) return;
     const fade = reduceMotion ? 0 : 300;
     const hold = 2000;
-    const id = setInterval(() => setTagIndex((i) => (i + 1) % taglines.length), fade * 2 + hold);
+    const id = setInterval(
+      () => setTagIndex((i) => (i + 1) % taglines.length),
+      fade * 2 + hold
+    );
     return () => clearInterval(id);
   }, [taglines.length, reduceMotion]);
 
@@ -38,15 +58,27 @@ const HomeHero = ({
   }, [introDone, onReady]);
 
   const letters = useMemo(() => marqueeWord.split(""), [marqueeWord]);
-  const lettersContainer = {
+  const lettersContainer: Variants = {
     hidden: {},
-    show: { transition: { staggerChildren: reduceMotion ? 0 : 0.15, when: "beforeChildren" } },
-  };
-  const letterUp = {
-    hidden: { opacity: 0, y: 28 },
-    show: { opacity: 1, y: 0, transition: { duration: reduceMotion ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] } },
+    show: {
+      transition: {
+        staggerChildren: reduceMotion ? 0 : 0.15,
+        when: "beforeChildren",
+      },
+    },
   };
 
+  const letterUp: Variants = {
+    hidden: { opacity: 0, y: 28 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: reduceMotion ? 0 : 0.5,
+        ease: cubicBezier(0.22, 1, 0.36, 1),
+      },
+    },
+  };
   return (
     <section
       ref={sectionRef}
@@ -55,16 +87,21 @@ const HomeHero = ({
         flex items-center justify-center
         min-h-[28svh] sm:min-h-[34svh] md:min-h-[42svh] lg:min-h-[48svh]
         "
-      style={{ background: background.startsWith("bg-") ? undefined : background }}
+      style={{
+        background: background.startsWith("bg-") ? undefined : background,
+      }}
     >
-      {background.startsWith("bg-") && <div className={`${background} absolute inset-0`} />}
+      {background.startsWith("bg-") && (
+        <div className={`${background} absolute inset-0`} />
+      )}
 
       {/* soft radial glow */}
       <motion.div
         aria-hidden
         className="pointer-events-none absolute -inset-[15%] rounded-[999px]"
         style={{
-          background: "radial-gradient(60% 60% at 50% 50%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 60%)",
+          background:
+            "radial-gradient(60% 60% at 50% 50%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 60%)",
           opacity: glowOpacity,
         }}
       />
@@ -89,8 +126,16 @@ const HomeHero = ({
             onAnimationComplete={() => setIntroDone(true)}
           >
             {letters.map((ch, i) => (
-              <motion.span key={`${ch}-${i}`} className="inline-block" variants={letterUp}>
-                {ch === " " ? <span style={{ width: "0.35em", display: "inline-block" }} /> : ch}
+              <motion.span
+                key={`${ch}-${i}`}
+                className="inline-block"
+                variants={letterUp}
+              >
+                {ch === " " ? (
+                  <span style={{ width: "0.35em", display: "inline-block" }} />
+                ) : (
+                  ch
+                )}
               </motion.span>
             ))}
           </motion.span>
