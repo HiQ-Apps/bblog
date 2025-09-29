@@ -7,3 +7,25 @@ export type PostCard = {
   thumbnailUrl?: string;
   tags?: string[];
 };
+
+export type Post = {
+  _id: string;
+  id: string;
+  title: string;
+  publishedAt: string;
+  date: string;
+  canonicalUrl?: string;
+  thumbnailUrl?: string;
+  preview: string;
+  heroImage?: {
+    asset: {
+      url: string;
+      metadata: { dimensions: { width: number; height: number } };
+    };
+    alt?: string;
+    caption?: string;
+  };
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  sections: any[];
+  tags?: string[];
+};

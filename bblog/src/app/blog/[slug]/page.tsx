@@ -4,13 +4,11 @@ import Image from "next/image";
 import groq from "groq";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
 
-import { sanityFetch } from "@/sanity/the-good-standard/lib/live"; // ← uses defineLive()
+import { sanityFetch } from "@/sanity/the-good-standard/lib/live";
 import Disclosure from "@/components/composite/disclosureCard";
+import { Post } from "@/types/Post";
 
-type PageProps = { params: { id: string } };
-
-export const dynamic = "force-dynamic"; // this page will be server-side rendered on every request
-
+export const dynamic = "force-dynamic";
 const POST_BY_SLUG = groq`*[_type == "post" && slug.current == $slug][0]{
   _id,
   title,
@@ -88,6 +86,7 @@ const ptComponents: PortableTextComponents = {
 };
 
 // Reusable view (works for both Sanity docs and local POSTS shape)
+/* eslint-disable @typescript-eslint/no-explicit-any */
 function View({ post }: { post: any }) {
   if (!post) return notFound();
 
@@ -128,6 +127,7 @@ function View({ post }: { post: any }) {
         <>
           {post.intro && <p className="mt-4">{post.intro}</p>}
           {post.sections?.length > 0 &&
+            /* eslint-disable @typescript-eslint/no-explicit-any */
             post.sections.map((section: any, idx: number) => (
               <section key={idx} className="mt-8">
                 <h2 className="font-lora text-2xl font-bold">
@@ -145,6 +145,7 @@ function View({ post }: { post: any }) {
         <section className="mt-8">
           <h2 className="font-lora text-2xl font-bold">Sources</h2>
           <ul>
+            {/* eslint-disable @typescript-eslint/no-explicit-any */}
             {post.sources.map((src: any, idx: number) => (
               <li key={idx}>
                 <a

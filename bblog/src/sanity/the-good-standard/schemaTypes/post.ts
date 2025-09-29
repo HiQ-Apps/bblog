@@ -25,63 +25,67 @@ export default defineType({
       type: "datetime",
     }),
     defineField({
-      name: 'preview',
-      title: 'Excerpt (for cards/SEO)',
-      type: 'text', 
+      name: "preview",
+      title: "Excerpt (for cards/SEO)",
+      type: "text",
       rows: 3,
     }),
     defineField({
-      name: 'heroImage',
-      title: 'Hero image',
-      type: 'image',
-      options: {hotspot: true},
+      name: "heroImage",
+      title: "Hero image",
+      type: "image",
+      options: { hotspot: true },
       fields: [
-        {name: 'alt', type: 'string', title: 'Alt text'},
-        {name: 'caption', type: 'string', title: 'Caption'},
+        { name: "alt", type: "string", title: "Alt text" },
+        { name: "caption", type: "string", title: "Caption" },
       ],
     }),
     defineField({
-      name: 'content',
-      title: 'Content',
-      type: 'array',
+      name: "content",
+      title: "Content",
+      type: "array",
       of: [
         {
-          type: 'block',
+          type: "block",
           styles: [
-            {title: 'Normal', value: 'normal'},
-            {title: 'H2', value: 'h2'},
-            {title: 'H3', value: 'h3'},
-            {title: 'Quote', value: 'blockquote'},
+            { title: "Normal", value: "normal" },
+            { title: "H2", value: "h2" },
+            { title: "H3", value: "h3" },
+            { title: "Quote", value: "blockquote" },
           ],
           lists: [
-            {title: 'Bullet', value: 'bullet'},
-            {title: 'Numbered', value: 'number'},
+            { title: "Bullet", value: "bullet" },
+            { title: "Numbered", value: "number" },
           ],
           marks: {
             annotations: [
               {
-                name: 'link',
-                type: 'object',
-                title: 'Link',
+                name: "link",
+                type: "object",
+                title: "Link",
                 fields: [
                   {
-                    name: 'href',
-                    type: 'url',
-                    validation: r => r.uri({scheme: ['http', 'https', 'mailto', 'tel']}),
+                    name: "href",
+                    type: "url",
+                    validation: (r) =>
+                      r.uri({ scheme: ["http", "https", "mailto", "tel"] }),
                   },
-                  {name: 'nofollow', type: 'boolean', title: 'nofollow/sponsored'},
+                  {
+                    name: "nofollow",
+                    type: "boolean",
+                    title: "nofollow/sponsored",
+                  },
                 ],
               },
             ],
           },
         },
         {
-          type: 'image',
-          options: {hotspot: true},
-          fields: 
-          [
-            {name: 'alt', type: 'string', title: 'Alt text'},
-            {name: 'link', type: 'string', title: 'Optional Link'}
+          type: "image",
+          options: { hotspot: true },
+          fields: [
+            { name: "alt", type: "string", title: "Alt text" },
+            { name: "link", type: "string", title: "Optional Link" },
           ],
         },
       ],
@@ -94,8 +98,13 @@ export default defineType({
       of: [{ type: "string" }],
       validation: (Rule) => Rule.required(),
     }),
-    defineField({name: 'metaImage', title: 'Social share image', type: 'image', options: {hotspot: true}}),
-    defineField({name: 'canonicalUrl', type: 'url'}),
+    defineField({
+      name: "metaImage",
+      title: "Social share image",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({ name: "canonicalUrl", type: "url" }),
     defineField({
       name: "sources",
       title: "Sources",
@@ -110,9 +119,8 @@ export default defineType({
         },
       ],
     }),
-    
   ],
-    preview: {
-    select: {title: 'title', media: 'heroImage'},
+  preview: {
+    select: { title: "title", media: "heroImage" },
   },
 });

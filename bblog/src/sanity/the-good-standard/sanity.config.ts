@@ -5,6 +5,7 @@ import {visionTool} from '@sanity/vision'
 import {schema} from './schemaTypes'
 import resolveProductionUrl from './lib/resolveProductionUrl'
 import {projectId, dataset, apiVersion} from '../env'
+import { SanityDocument } from 'next-sanity'
 
 export default defineConfig({
   name: 'default',
@@ -18,7 +19,7 @@ export default defineConfig({
 
   document: {
     productionUrl: async (prev, {document}) => {
-      const url = resolveProductionUrl(document as any)
+      const url = resolveProductionUrl(document as SanityDocument)
       return url ?? prev
     },
   },
