@@ -15,8 +15,9 @@ import Image from "next/image";
 import { allPostPaginatedQuery } from "@/lib/queries";
 import { type PostCard } from "@/types/Post";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import {} from "@/queries/Post";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 120;
 
 type Paginated = { items: PostCard[]; total: number };
 
