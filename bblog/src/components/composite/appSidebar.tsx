@@ -31,8 +31,8 @@ const SimpleNavLink = ({ href, children, exact }: SimpleNavLinkProps) => {
   const isActive = exact
     ? cur === dest
     : dest === "/"
-    ? cur === "/"
-    : cur.startsWith(dest);
+      ? cur === "/"
+      : cur.startsWith(dest);
 
   return (
     <Link

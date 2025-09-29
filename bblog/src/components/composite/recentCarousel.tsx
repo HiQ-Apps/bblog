@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion, Variants, useInView } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+import { motion, useInView, type Variants } from "framer-motion";
 import Autoplay from "embla-carousel-autoplay";
 import Link from "next/link";
 import {
@@ -11,8 +11,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { POSTS } from "@/data/posts";
 import BlogCard from "./blogCard";
+import type { PostCard } from "@/types/Post";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -23,28 +24,49 @@ const parent: Variants = {
     transition: { delayChildren: 0.05, staggerChildren: 0.12 },
   },
 };
-
 const child: Variants = {
   hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 2.2, ease: EASE },
-  },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
 };
 
-export default function HomeCarousel({ heroReady }: { heroReady: boolean }) {
+export default function RecentPostsCarousel({
+  heroReady,
+  limit = 6,
+}: {
+  heroReady: boolean;
+  limit?: number;
+}) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const inView = useInView(sectionRef, { once: true, amount: 0.4 });
-  const autoplay = useRef(Autoplay({ delay: 8000, playOnInit: false }));
+
+  // Create the plugin instance once
+  const autoplay = useRef(
+    Autoplay({ delay: 8000, playOnInit: true, stopOnInteraction: false })
+  );
+
+  const [posts, setPosts] = useState<PostCard[]>([]);
+  useEffect(() => {
+    let alive = true;
+    fetch(`/api/posts?limit=${limit}`)
+      .then((r) => r.json())
+      .then((data: PostCard[]) => {
+        if (alive) setPosts(data);
+      })
+      .catch(() => {
+        if (alive) setPosts([]);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [limit]);
+
+  const enableAuto = heroReady && inView; // only autoplay when hero is ready & section in view
 
   return (
     <section ref={sectionRef} className="w-full h-auto mb-4">
       <motion.h2
         initial={{ opacity: 0, y: 48 }}
-        animate={
-          heroReady && inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 48 }
-        }
+        animate={enableAuto ? { opacity: 1, y: 0 } : { opacity: 0, y: 48 }}
         transition={{ duration: 0.7, ease: EASE }}
         className="font-lora text-4xl px-8 mb-4"
       >
@@ -54,17 +76,18 @@ export default function HomeCarousel({ heroReady }: { heroReady: boolean }) {
       <motion.div
         variants={parent}
         initial="hidden"
-        animate={heroReady && inView ? "visible" : "hidden"}
+        animate={enableAuto ? "visible" : "hidden"}
       >
         <Carousel
+          key={enableAuto ? "auto" : "manual"} // force re-init when toggling plugin
           opts={{ align: "start", loop: true }}
-          plugins={[autoplay.current]}
+          plugins={enableAuto ? [autoplay.current] : []} // mount plugin only when ready/in-view
           className="w-full"
         >
           <CarouselContent className="-ml-4">
-            {POSTS.map((post) => (
+            {posts.map((post) => (
               <CarouselItem
-                key={post.id}
+                key={post._id}
                 className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
               >
                 <motion.div variants={child} whileHover={{ y: -4 }}>
@@ -74,8 +97,17 @@ export default function HomeCarousel({ heroReady }: { heroReady: boolean }) {
                   >
                     <BlogCard
                       title={post.title}
-                      body={post.intro.slice(0, 100) + "..."}
-                      coverImageUrl={post.thumbnailUrl as string}
+                      body={
+                        <div>
+                          <p className="text-xs">
+                            Published on{" "}
+                            {new Date(post.date).toLocaleDateString()}
+                          </p>
+                          {(post.intro ?? "").split(" ").slice(0, 7).join(" ") +
+                            "..."}
+                        </div>
+                      }
+                      coverImageUrl={post.thumbnailUrl ?? ""}
                     />
                   </Link>
                 </motion.div>

@@ -21,10 +21,10 @@ const BlogCard = ({ title, body, coverImageUrl }: BlogCardProps) => {
     <Card className="hover:shadow-lg transition-shadow h-full hover:bg-gray-200">
       <CardContent className="space-y-2 justify-cente">
         <Image src={coverImageUrl} alt={title} width={400} height={200} />
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
+        <CardHeader className="font-lora w-full px-0 mb-0">
+          <CardTitle className="">{title}</CardTitle>
         </CardHeader>
-        <CardDescription>{body}</CardDescription>
+        <CardDescription className="font-mont">{body}</CardDescription>
       </CardContent>
     </Card>
   );
