@@ -19,7 +19,7 @@ import {} from "@/queries/Post";
 
 export const revalidate = 120;
 
-type Paginated = { items: PostCard[]; total: number };
+// type Paginated = { items: PostCard[]; total: number };
 
 export default async function BlogPage({
   searchParams,
