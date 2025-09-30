@@ -76,3 +76,11 @@ export const mostRecentPostsQuery = groq`
   tags
 }
 `;
+
+export const allPostSlugsQuery = groq`
+*[_type == "post" && defined(slug.current)]{
+  "slug": slug.current,
+  // prefer system timestamp, fall back to your fields
+  "updatedAt": coalesce(_updatedAt, publishedAt, date)
+}
+`;
