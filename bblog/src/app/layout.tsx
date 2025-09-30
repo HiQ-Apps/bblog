@@ -4,6 +4,12 @@ import type { Metadata } from "next";
 import { Montserrat, Playfair_Display, Lora } from "next/font/google";
 import "./globals.css";
 
+import {
+  SITE_NAME,
+  SITE_URL,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+} from "@/lib/seo";
 import AppSidebar from "@/components/composite/appSidebar";
 import MobileNavbar from "@/components/composite/mobileNavMenu";
 import HomeBanner from "@/components/composite/logoBanner";
@@ -28,8 +34,18 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  title: "The Good Standard",
-  description: "A blog about the things that make life good.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: SITE_NAME, template: `%s | ${SITE_NAME}` },
+  description: DEFAULT_DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    title: SITE_NAME,
+    url: SITE_URL,
+    description: DEFAULT_DESCRIPTION,
+    siteName: SITE_NAME,
+    images: [DEFAULT_OG_IMAGE],
+  },
   icons: { icon: "/LOGO.png" },
 };
 
@@ -40,6 +56,7 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
+      <meta name="p:domain_verify" content="e1aca7c406dc455725e10268ffc8105a" />
       <head>
         {/* Google Analytics */}
         <Script

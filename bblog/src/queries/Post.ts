@@ -1,11 +1,11 @@
 import "server-only";
 
-import useSWR from "swr";
 import { sanityFetch } from "@/sanity/the-good-standard/lib/live";
 import {
   allPostPaginatedQuery,
   mostRecentPostsQuery,
   postBySlugQuery,
+  allPostSlugsQuery,
 } from "@/lib/queries";
 import { PostCard } from "@/types/Post";
 
@@ -41,4 +41,13 @@ export async function getPostBySlug(slug: string) {
     params: { slug },
   });
   return data;
+}
+
+export async function getAllPostSlugs() {
+  const { data } = await sanityFetch({
+    query: allPostSlugsQuery,
+    perspective: "published",
+    stega: false,
+  });
+  return data as { slug: string; updatedAt?: string }[];
 }
