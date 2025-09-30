@@ -1,4 +1,6 @@
 import "server-only";
+
+import useSWR from "swr";
 import { sanityFetch } from "@/sanity/the-good-standard/lib/live";
 import {
   allPostPaginatedQuery,

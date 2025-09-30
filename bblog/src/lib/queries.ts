@@ -63,8 +63,7 @@ export const mostRecentPostsQuery = groq`
 *[
   _type == "post" &&
   defined(slug.current) &&
-  !(_id in path("drafts.**")) &&
-  coalesce(publishedAt, _createdAt) <= now()
+  coalesce(publishedAt, dateTime(date), _createdAt) <= now()
 ]
 | order(coalesce(publishedAt, dateTime(date), _createdAt) desc, _createdAt desc)
 [0...$limit]{

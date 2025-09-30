@@ -174,7 +174,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
 function CarouselPrevious({
   className,
   variant = "outline",
-  size = "icon",
+  size = "default",
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
@@ -185,17 +185,17 @@ function CarouselPrevious({
       variant={variant}
       size={size}
       className={cn(
-        "absolute size-8 h-full",
-        orientation === "horizontal"
-          ? "top-1/2 left-0 -translate-y-1/2"
-          : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+        "inline-flex items-center justify-center gap-2",
+        "h-10 px-4 rounded-full border bg-background/80 backdrop-blur",
+        "shadow-md hover:shadow-lg transition",
+        "disabled:opacity-50 disabled:cursor-not-allowed",
         className
       )}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}
     >
-      <ArrowLeft />
+      <ArrowLeft className={cn(orientation === "vertical" && "rotate-90")} />
       <span className="sr-only">Previous slide</span>
     </Button>
   );
@@ -204,7 +204,7 @@ function CarouselPrevious({
 function CarouselNext({
   className,
   variant = "outline",
-  size = "icon",
+  size = "default",
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
@@ -215,17 +215,17 @@ function CarouselNext({
       variant={variant}
       size={size}
       className={cn(
-        "absolute size-8 h-full",
-        orientation === "horizontal"
-          ? "top-1/2 right-0 -translate-y-1/2"
-          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+        "inline-flex items-center justify-center gap-2",
+        "h-10 px-4 rounded-full border bg-background/80 backdrop-blur",
+        "shadow-md hover:shadow-lg transition",
+        "disabled:opacity-50 disabled:cursor-not-allowed",
         className
       )}
       disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}
     >
-      <ArrowRight />
+      <ArrowRight className={cn(orientation === "vertical" && "rotate-90")} />
       <span className="sr-only">Next slide</span>
     </Button>
   );

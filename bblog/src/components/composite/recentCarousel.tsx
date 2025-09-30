@@ -166,8 +166,24 @@ export default function RecentPostsCarousel({
             )}
           </CarouselContent>
 
-          <CarouselPrevious className="left-2 top-1/2 -translate-y-1/2 rounded-none border-none" />
-          <CarouselNext className="right-2 top-1/2 -translate-y-1/2 rounded-none border-none" />
+          <div className="w-full flex justify-center mt-2">
+            <div className="flex items-center gap-3">
+              <CarouselPrevious
+                className="static translate-x-0 translate-y-0 rotate-0
+                   h-11 px-5 rounded-full border bg-background/80 backdrop-blur
+                   shadow-md hover:shadow-lg transition disabled:opacity-50"
+                size="default"
+                variant="outline"
+              />
+              <CarouselNext
+                className="static translate-x-0 translate-y-0 rotate-0
+                   h-11 px-5 rounded-full border bg-background/80 backdrop-blur
+                   shadow-md hover:shadow-lg transition disabled:opacity-50"
+                size="default"
+                variant="outline"
+              />
+            </div>
+          </div>
         </Carousel>
       </motion.div>
     </section>
