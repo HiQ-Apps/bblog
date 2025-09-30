@@ -1,3 +1,4 @@
+import "server-only";
 import Link from "next/link";
 import {
   Card,
@@ -10,33 +11,30 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { sanityFetch } from "@/sanity/the-good-standard/lib/live";
 import Image from "next/image";
-import { allPostPaginatedQuery } from "@/lib/queries";
 import { type PostCard } from "@/types/Post";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import {} from "@/queries/Post";
+import { baseUrl } from "@/sanity/env";
+import { notFound } from "next/navigation";
+import customFetch from "@/utils/fetch";
+import { getAllPostsPaginated } from "@/queries/Post";
 
-export const revalidate = 120;
+const revalidate = 120;
 
-// type Paginated = { items: PostCard[]; total: number };
+type BlogPageProps = {
+  searchParams?: Promise<{ page?: string }>;
+};
 
-export default async function BlogPage({
-  searchParams,
-}: {
-  searchParams?: { page?: string };
-}) {
+export default async function BlogPage({ searchParams }: BlogPageProps) {
   const PAGE_SIZE = 8;
-  const page = Math.max(1, Number(searchParams?.page ?? 1));
-  const offset = (page - 1) * PAGE_SIZE;
-  const end = offset + PAGE_SIZE - 1;
 
-  const { data } = await sanityFetch({
-    query: allPostPaginatedQuery,
-    params: { offset, end },
-  });
-  const posts = data.items;
-  const total = data.total;
+  const params = (await searchParams) ?? {};
+  const rawPage = params.page;
+  const page = Math.max(1, Number(rawPage ?? 1));
+  const offset = (page - 1) * PAGE_SIZE;
+
+  const { items, total } = await getAllPostsPaginated(offset, PAGE_SIZE);
+  if (!items) return notFound();
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const hasPrev = page > 1;
@@ -47,17 +45,21 @@ export default async function BlogPage({
   return (
     <div className="w-full mx-auto p-6">
       <ul className="list-none grid grid-cols-1 md:grid-cols-2 gap-4">
-        {posts.map((post: PostCard) => (
+        {items.map((post: PostCard) => (
           <li key={post._id}>
-            <Link href={`/blog/${post.id}`} className="no-underline">
-              <Card className="flex justify-center items-center border-b pb-6 hover:shadow-lg transition-shadow hover:bg-gray-200">
+            <Card className="flex items-center border-b pb-6 hover:shadow-lg transition-shadow hover:bg-gray-200">
+              {/* Left: everything that navigates */}
+              <Link
+                href={`/blog/${post.id}`}
+                className="no-underline flex-1 flex flex-col items-center"
+              >
                 <div className="text-2xl font-lora font-semibold">
                   <h1 className="mx-8 transition-transform hover:-translate-y-0.5 inline-block">
                     {post.title}
                   </h1>
                 </div>
 
-                <CardContent className="flex flex-col justify-center items-center ">
+                <CardContent className="flex flex-col justify-center items-center">
                   {post.thumbnailUrl && (
                     <Image
                       src={post.thumbnailUrl}
@@ -81,40 +83,39 @@ export default async function BlogPage({
                       </p>
                     )}
                   </CardDescription>
-
-                  <CardFooter className="w-full flex justify-start px-0">
-                    <div className="mt-2 flex flex-row gap-2 items-center flex-wrap font-mont">
-                      {/* {post.tags?.map((tag: string) => (
-                        <span
-                          key={tag}
-                          className="text-xs bg-gray-200 px-2 py-1 rounded"
-                        >
-                          {tag}
-                        </span>
-                      ))} */}
-                      <p className="text-sm">Tags: </p>
-                      <HoverCard>
-                        <HoverCardTrigger>
-                          <DotsHorizontalIcon />
-                        </HoverCardTrigger>
-
-                        <HoverCardContent className="w-72">
-                          <ul className="list-none flex flex-wrap gap-2">
-                            {post.tags?.map((tag: string) => (
-                              <li key={tag}>
-                                <span className="inline-flex items-center rounded bg-gray-200 px-2 py-1 text-xs">
-                                  {tag}
-                                </span>
-                              </li>
-                            ))}
-                          </ul>
-                        </HoverCardContent>
-                      </HoverCard>
-                    </div>
-                  </CardFooter>
                 </CardContent>
-              </Card>
-            </Link>
+              </Link>
+
+              {/* Right: NON-link controls (separate from the anchor) */}
+              <CardFooter className="flex justify-end w-full">
+                <div className="mt-2 flex flex-row gap-2 items-center w-full font-mont">
+                  <p className="text-sm">Tags:</p>
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      {/* Use a button to avoid anchors inside anchors */}
+                      <button
+                        type="button"
+                        aria-label="Show tags"
+                        className="inline-flex hover:pointer hover:bg-secondary px-2 py-1 rounded-sm"
+                      >
+                        <DotsHorizontalIcon />
+                      </button>
+                    </HoverCardTrigger>
+                    <HoverCardContent className="w-72">
+                      <ul className="list-none flex flex-wrap gap-2">
+                        {post.tags?.map((tag: string) => (
+                          <li key={tag}>
+                            <span className="inline-flex items-center rounded bg-gray-200 px-2 py-1 text-xs">
+                              {tag}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </HoverCardContent>
+                  </HoverCard>
+                </div>
+              </CardFooter>
+            </Card>
           </li>
         ))}
       </ul>

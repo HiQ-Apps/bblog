@@ -1,42 +1,24 @@
 // app/post/[id]/page.tsx
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import groq from "groq";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
-
-import { sanityFetch } from "@/sanity/the-good-standard/lib/live";
 import Disclosure from "@/components/composite/disclosureCard";
 import { Post } from "@/types/Post";
+import { baseUrl } from "@/sanity/env";
 
-export const dynamic = "force-dynamic";
-const POST_BY_SLUG = groq`*[_type == "post" && slug.current == $slug][0]{
-  _id,
-  title,
-  "slug": slug.current,
-  publishedAt,
-  preview,
-  heroImage{ asset->{ url, metadata { dimensions { width, height } } }, alt, caption },
-  content[]{
-    ...,
-    _type == "image" => {
-      asset->{ url, metadata { dimensions { width, height } } },
-      alt,
-      link
-    }
-  },
-  tags,
-  metaImage{ asset->{ url, metadata { dimensions { width, height } } } },
-  canonicalUrl,
-  sources[]{ name, url }
-}`;
-
+const revalidate = 120;
 // Portable Text renderers
 const ptComponents: PortableTextComponents = {
   marks: {
     link: ({ children, value }) => {
       const rel = value?.nofollow ? "nofollow sponsored" : "noopener";
       return (
-        <a href={value?.href} target="_blank" rel={rel}>
+        <a
+          className="text-mont text-accent underline underline-accent"
+          href={value?.href}
+          target="_blank"
+          rel={rel}
+        >
           {children}
         </a>
       );
@@ -179,16 +161,18 @@ function View({ post }: { post: any }) {
   );
 }
 
-export default async function PostPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const { data: sanityPost } = await sanityFetch({
-    query: POST_BY_SLUG,
-    params: { slug: params.slug },
-  });
+type PageProps = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
 
-  if (!sanityPost) return notFound();
-  return <View post={sanityPost} />;
+export default async function PostPage({ params }: PageProps) {
+  const { slug } = await params;
+  const data = await fetch(`${baseUrl}/api/posts/by-slug/${slug}`);
+  if (!data.ok) {
+    return notFound();
+  }
+  const post: Post = await data.json();
+
+  return <View post={post} />;
 }

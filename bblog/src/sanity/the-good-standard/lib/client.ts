@@ -1,21 +1,19 @@
-import {createClient} from 'next-sanity'
-
-import {apiVersion, dataset, projectId, sanityReadToken} from '../../env'
+import { createClient } from "next-sanity";
 
 export const client = createClient({
-  apiVersion,
-  projectId,
-  dataset,
+  projectId: process.env.SANITY_PROJECT_ID!,
+  dataset: process.env.SANITY_DATASET || "production",
+  apiVersion: process.env.SANITY_API_VERSION || "2025-09-27",
   useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
-})
+});
 
 export const previewClient = createClient({
-  apiVersion,
-  projectId,
-  dataset,
+  projectId: process.env.SANITY_PROJECT_ID!,
+  dataset: process.env.SANITY_DATASET || "production",
+  apiVersion: process.env.SANITY_API_VERSION || "2025-09-27",
   useCdn: false,
-  token: sanityReadToken,
-  perspective: 'previewDrafts',
-})
+  token: process.env.SANITY_API_READ_TOKEN,
+});
 
-export const getClient = (preview: boolean) => (preview ? previewClient : client)
+export const getClient = (preview: boolean) =>
+  preview ? previewClient : client;

@@ -1,0 +1,24 @@
+{
+  "name": "the-good-standard",
+  "version": "1.0.0",
+  "main": "postcss.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@sanity/icons": "^3.7.4",
+    "@sanity/vision": "^4.10.1",
+    "sanity": "^4.10.1",
+    "styled-components": "^6.1.19"
+  }
+}

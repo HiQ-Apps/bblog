@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/carousel";
 import BlogCard from "./blogCard";
 import type { PostCard } from "@/types/Post";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -41,32 +40,46 @@ export default function RecentPostsCarousel({
 
   // Create the plugin instance once
   const autoplay = useRef(
-    Autoplay({ delay: 8000, playOnInit: true, stopOnInteraction: false })
+    Autoplay({ delay: 8000, stopOnInteraction: false, playOnInit: false })
   );
 
   const [posts, setPosts] = useState<PostCard[]>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    let alive = true;
-    fetch(`/api/posts?limit=${limit}`)
-      .then((r) => r.json())
-      .then((data: PostCard[]) => {
-        if (alive) setPosts(data);
-      })
-      .catch(() => {
-        if (alive) setPosts([]);
-      });
-    return () => {
-      alive = false;
-    };
+    const controller = new AbortController();
+    (async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/posts/recent?limit=${limit}`, {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data: PostCard[] = await res.json();
+        setPosts(data);
+      } catch (err: any) {
+        if (err?.name !== "AbortError")
+          console.error("fetch recent posts:", err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+    return () => controller.abort();
   }, [limit]);
 
-  const enableAuto = heroReady && inView; // only autoplay when hero is ready & section in view
+  useEffect(() => {
+    const plugin = autoplay.current;
+    if (!plugin) return;
+    if (heroReady && inView) plugin.play();
+    else plugin.stop();
+  }, [heroReady, inView]);
 
   return (
     <section ref={sectionRef} className="w-full h-auto mb-4">
       <motion.h2
         initial={{ opacity: 0, y: 48 }}
-        animate={enableAuto ? { opacity: 1, y: 0 } : { opacity: 0, y: 48 }}
+        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 48 }}
         transition={{ duration: 0.7, ease: EASE }}
         className="font-lora text-4xl px-8 mb-4"
       >
@@ -76,43 +89,52 @@ export default function RecentPostsCarousel({
       <motion.div
         variants={parent}
         initial="hidden"
-        animate={enableAuto ? "visible" : "hidden"}
+        animate={posts.length ? "visible" : "hidden"}
       >
         <Carousel
-          key={enableAuto ? "auto" : "manual"} // force re-init when toggling plugin
           opts={{ align: "start", loop: true }}
-          plugins={enableAuto ? [autoplay.current] : []} // mount plugin only when ready/in-view
-          className="w-full"
+          plugins={[autoplay.current]}
+          className="w-full will-change-transform"
         >
           <CarouselContent className="-ml-4">
-            {posts.map((post) => (
-              <CarouselItem
-                key={post._id}
-                className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
-              >
-                <motion.div variants={child} whileHover={{ y: -4 }}>
-                  <Link
-                    href={`/blog/${post.id}`}
-                    className="no-underline block"
-                  >
-                    <BlogCard
-                      title={post.title}
-                      body={
-                        <div>
-                          <p className="text-xs">
-                            Published on{" "}
-                            {new Date(post.date).toLocaleDateString()}
-                          </p>
-                          {(post.intro ?? "").split(" ").slice(0, 7).join(" ") +
-                            "..."}
-                        </div>
-                      }
-                      coverImageUrl={post.thumbnailUrl ?? ""}
-                    />
-                  </Link>
-                </motion.div>
-              </CarouselItem>
-            ))}
+            {(loading ? Array.from({ length: Math.min(3, limit) }) : posts).map(
+              (post, i) => (
+                <CarouselItem
+                  key={loading ? `skeleton-${i}` : (post as PostCard)._id}
+                  className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                >
+                  <motion.div variants={child} whileHover={{ y: -4 }}>
+                    {loading ? (
+                      <div className="h-48 rounded-lg bg-gray-200 animate-pulse" />
+                    ) : (
+                      <Link
+                        href={`/blog/${(post as PostCard).id}`}
+                        className="no-underline block"
+                      >
+                        <BlogCard
+                          title={(post as PostCard).title}
+                          body={
+                            <div>
+                              <p className="text-xs">
+                                Published on{" "}
+                                {new Date(
+                                  (post as PostCard).date
+                                ).toLocaleDateString()}
+                              </p>
+                              {((post as PostCard).intro ?? "")
+                                .split(" ")
+                                .slice(0, 7)
+                                .join(" ") + "..."}
+                            </div>
+                          }
+                          coverImageUrl={(post as PostCard).thumbnailUrl ?? ""}
+                        />
+                      </Link>
+                    )}
+                  </motion.div>
+                </CarouselItem>
+              )
+            )}
           </CarouselContent>
 
           <CarouselPrevious className="left-2 top-1/2 -translate-y-1/2 rounded-none border-none" />
