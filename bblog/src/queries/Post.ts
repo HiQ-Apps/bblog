@@ -27,6 +27,7 @@ export async function getAllPostsPaginated(offset: number, limit: number) {
     params: { offset, end },
   });
   // data = { items, total }
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   return data as { items: any[]; total: number };
 }
 

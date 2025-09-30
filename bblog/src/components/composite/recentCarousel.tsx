@@ -42,7 +42,6 @@ export default function RecentPostsCarousel({
   const [posts, setPosts] = useState<PostCard[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch posts
   useEffect(() => {
     const controller = new AbortController();
     (async () => {
@@ -55,6 +54,7 @@ export default function RecentPostsCarousel({
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data: PostCard[] = await res.json();
         setPosts(data);
+        //* eslint-disable @typescript-eslint/no-explicit-any */
       } catch (err: any) {
         if (err?.name !== "AbortError")
           console.error("fetch recent posts:", err);
@@ -65,7 +65,6 @@ export default function RecentPostsCarousel({
     return () => controller.abort();
   }, [limit]);
 
-  // 🔧 Re-init after content changes so Embla recalculates slide sizes
   useEffect(() => {
     if (!api) return;
     api.reInit();
@@ -130,7 +129,6 @@ export default function RecentPostsCarousel({
               (post, i) => (
                 <CarouselItem
                   key={loading ? `skeleton-${i}` : (post as PostCard)._id}
-                  // ✅ ensure slides don't overflow & widths apply
                   className="min-w-0 shrink-0 pl-4 basis-full md:basis-1/2 lg:basis-1/3"
                 >
                   <motion.div variants={child} whileHover={{ y: -4 }}>
