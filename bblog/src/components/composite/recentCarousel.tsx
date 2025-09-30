@@ -2,7 +2,6 @@
 
 import { useRef, useEffect, useState } from "react";
 import { motion, useInView, type Variants } from "framer-motion";
-import Autoplay from "embla-carousel-autoplay";
 import Link from "next/link";
 import {
   Carousel,
@@ -10,6 +9,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import BlogCard from "./blogCard";
 import type { PostCard } from "@/types/Post";
@@ -38,14 +38,11 @@ export default function RecentPostsCarousel({
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const inView = useInView(sectionRef, { once: true, amount: 0.4 });
 
-  // Create the plugin instance once
-  const autoplay = useRef(
-    Autoplay({ delay: 8000, stopOnInteraction: false, playOnInit: false })
-  );
-
+  const [api, setApi] = useState<CarouselApi | null>(null);
   const [posts, setPosts] = useState<PostCard[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch posts
   useEffect(() => {
     const controller = new AbortController();
     (async () => {
@@ -68,12 +65,44 @@ export default function RecentPostsCarousel({
     return () => controller.abort();
   }, [limit]);
 
+  // 🔧 Re-init after content changes so Embla recalculates slide sizes
   useEffect(() => {
-    const plugin = autoplay.current;
-    if (!plugin) return;
-    if (heroReady && inView) plugin.play();
-    else plugin.stop();
-  }, [heroReady, inView]);
+    if (!api) return;
+    api.reInit();
+  }, [api, posts.length]);
+
+  // Simple autoplay (unchanged)
+  useEffect(() => {
+    if (!api) return;
+
+    const enabled = heroReady && inView;
+    let paused = false;
+    let id: number | undefined;
+
+    const tick = () => {
+      if (paused || !enabled) return;
+      if (api.canScrollNext()) api.scrollNext();
+      else api.scrollTo(0);
+    };
+
+    const onPointerDown = () => {
+      paused = true;
+    };
+    const onPointerUp = () => {
+      paused = false;
+    };
+
+    api.on("pointerDown", onPointerDown);
+    api.on("pointerUp", onPointerUp);
+
+    if (enabled) id = window.setInterval(tick, 8000);
+
+    return () => {
+      if (id) window.clearInterval(id);
+      api.off("pointerDown", onPointerDown);
+      api.off("pointerUp", onPointerUp);
+    };
+  }, [api, heroReady, inView]);
 
   return (
     <section ref={sectionRef} className="w-full h-auto mb-4">
@@ -92,8 +121,8 @@ export default function RecentPostsCarousel({
         animate={posts.length ? "visible" : "hidden"}
       >
         <Carousel
+          setApi={setApi}
           opts={{ align: "start", loop: true }}
-          plugins={[autoplay.current]}
           className="w-full will-change-transform"
         >
           <CarouselContent className="-ml-4">
@@ -101,7 +130,8 @@ export default function RecentPostsCarousel({
               (post, i) => (
                 <CarouselItem
                   key={loading ? `skeleton-${i}` : (post as PostCard)._id}
-                  className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                  // ✅ ensure slides don't overflow & widths apply
+                  className="min-w-0 shrink-0 pl-4 basis-full md:basis-1/2 lg:basis-1/3"
                 >
                   <motion.div variants={child} whileHover={{ y: -4 }}>
                     {loading ? (
