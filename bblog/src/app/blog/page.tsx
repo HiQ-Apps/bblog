@@ -1,22 +1,9 @@
 import "server-only";
 import Link from "next/link";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardContent,
-} from "@/components/ui/card";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { Card, CardDescription } from "@/components/ui/card";
 import Image from "next/image";
 import { type PostCard } from "@/types/Post";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { baseUrl } from "@/sanity/env";
 import { notFound } from "next/navigation";
-import customFetch from "@/utils/fetch";
 import { getAllPostsPaginated } from "@/queries/Post";
 
 const revalidate = 120;
@@ -44,77 +31,72 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <div className="w-full mx-auto p-6">
-      <ul className="list-none grid grid-cols-1 md:grid-cols-2 gap-4">
+      <ul className="list-none grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
         {items.map((post: PostCard) => (
-          <li key={post._id}>
-            <Card className="flex items-center border-b pb-6 hover:shadow-lg transition-shadow hover:bg-gray-200">
-              {/* Left: everything that navigates */}
+          <li key={post._id} className="min-w-0">
+            <Card className="py-0 w-full my-0 min-w-0 overflow-hidden hover:shadow-xl transition-shadow">
               <Link
                 href={`/blog/${post.id}`}
-                className="no-underline flex-1 flex flex-col items-center"
+                className="group block w-full min-w-0"
               >
-                <div className="text-2xl font-lora font-semibold">
-                  <h1 className="mx-8 transition-transform hover:-translate-y-0.5 inline-block">
-                    {post.title}
-                  </h1>
-                </div>
-
-                <CardContent className="flex flex-col justify-center items-center">
-                  {post.thumbnailUrl && (
+                <div className="relative w-full min-w-0 h-72 xl:h-80 2xl:h-96 rounded-md overflow-hidden">
+                  {post.thumbnailUrl ? (
                     <Image
                       src={post.thumbnailUrl}
                       alt={`Thumbnail for ${post.title}`}
-                      width={1200}
-                      height={630}
+                      fill
+                      className="object-cover transform-gpu transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-105"
+                      sizes="(min-width:1536px) 33vw, (min-width:1280px) 50vw, 100vw"
+                      priority={false}
                     />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200" />
                   )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/20 pointer-events-none" />
+                  <div className="absolute inset-0 grid place-items-center p-8">
+                    <div className="inline-flex max-w-[min(65ch,100%)] flex-col items-center gap-2 rounded-xl bg-white/70 backdrop-blur-sm px-4 py-3 md:px-6 md:py-4 shadow-md text-center">
+                      <h2 className="font-lora text-lg md:text-xl leading-tight">
+                        {post.title}
+                      </h2>
 
-                  <CardDescription className="w-full">
-                    {post.date && (
-                      <p className="mt-2 text-gray-500 font-mont text-xs">
-                        Published on {new Date(post.date).toLocaleDateString()}
-                      </p>
-                    )}
-                    {post.intro && (
-                      <p className="mt-2 text-gray-700 font-mont">
-                        {post.intro.length > 100
-                          ? `${post.intro.slice(0, 100)}…`
-                          : post.intro}
-                      </p>
-                    )}
-                  </CardDescription>
-                </CardContent>
-              </Link>
+                      <CardDescription className="font-mont text-black/80">
+                        {post.date && (
+                          <p className="mt-1 text-xs text-gray-600">
+                            Published on{" "}
+                            {new Date(post.date).toLocaleDateString()}
+                          </p>
+                        )}
+                        {post.intro && (
+                          <p className="mt-2">
+                            {post.intro.length > 120
+                              ? `${post.intro.slice(0, 120)}…`
+                              : post.intro}
+                          </p>
+                        )}
+                      </CardDescription>
 
-              {/* Right: NON-link controls (separate from the anchor) */}
-              <CardFooter className="flex justify-end w-full">
-                <div className="mt-2 flex flex-row gap-2 items-center w-full font-mont">
-                  <p className="text-sm">Tags:</p>
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      {/* Use a button to avoid anchors inside anchors */}
-                      <button
-                        type="button"
-                        aria-label="Show tags"
-                        className="inline-flex hover:pointer hover:bg-secondary px-2 py-1 rounded-sm"
-                      >
-                        <DotsHorizontalIcon />
-                      </button>
-                    </HoverCardTrigger>
-                    <HoverCardContent className="w-72">
-                      <ul className="list-none flex flex-wrap gap-2">
-                        {post.tags?.map((tag: string) => (
-                          <li key={tag}>
-                            <span className="inline-flex items-center rounded bg-gray-200 px-2 py-1 text-xs">
-                              {tag}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </HoverCardContent>
-                  </HoverCard>
+                      {post.tags?.length ? (
+                        <ul className="mt-2 flex flex-wrap justify-center gap-2">
+                          {post.tags.slice(0, 8).map((tag: string) => (
+                            <li key={tag}>
+                              <span className="inline-flex items-center rounded-full bg-gray-900/80 text-white px-2.5 py-0.5 text-[11px] leading-5">
+                                {tag}
+                              </span>
+                            </li>
+                          ))}
+                          {post.tags.length > 8 && (
+                            <li>
+                              <span className="inline-flex items-center rounded-full bg-gray-300 text-gray-800 px-2.5 py-0.5 text-[11px] leading-5">
+                                +{post.tags.length - 8} more
+                              </span>
+                            </li>
+                          )}
+                        </ul>
+                      ) : null}
+                    </div>
+                  </div>
                 </div>
-              </CardFooter>
+              </Link>
             </Card>
           </li>
         ))}
