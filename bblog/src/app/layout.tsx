@@ -1,7 +1,3 @@
-import { draftMode } from "next/headers";
-import { VisualEditing } from "next-sanity/visual-editing";
-import { SanityLive } from "@/sanity/the-good-standard/lib/live";
-
 import Script from "next/script";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
@@ -42,8 +38,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isEnabled } = await draftMode();
-
   return (
     <html lang="en">
       <head>
@@ -80,8 +74,6 @@ export default async function RootLayout({
             </div>
           </div>
         </SidebarProvider>
-        {isEnabled && <VisualEditing />}
-        <SanityLive />
       </body>
     </html>
   );
