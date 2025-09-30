@@ -55,9 +55,11 @@ export default function RecentPostsCarousel({
         const data: PostCard[] = await res.json();
         setPosts(data);
         //* eslint-disable @typescript-eslint/no-explicit-any */
-      } catch (err: any) {
-        if (err?.name !== "AbortError")
-          console.error("fetch recent posts:", err);
+      } catch (err) {
+        const e = err as Error;
+        if (e.name !== "AbortError") {
+          console.error("fetch recent posts:", e);
+        }
       } finally {
         setLoading(false);
       }
