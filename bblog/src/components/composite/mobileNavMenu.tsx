@@ -40,7 +40,7 @@ const MobileNavMenu = () => {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Contact Us</NavigationMenuTrigger>
+          <NavigationMenuTrigger>Contact</NavigationMenuTrigger>
           <NavigationMenuContent className="p-0 z-20 flex bg-primary">
             <ContactCard />
           </NavigationMenuContent>
