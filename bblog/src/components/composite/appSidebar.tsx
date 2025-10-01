@@ -8,10 +8,13 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import ContactCard from "./contactCard";
 
 type SimpleNavLinkProps = {
   href: string;
@@ -86,6 +89,9 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <div className="fixed bottom-0 flex justify-center align-center">
+        <ContactCard />
+      </div>
     </Sidebar>
   );
 };

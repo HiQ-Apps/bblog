@@ -69,7 +69,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                         {post.intro && (
                           <p className="mt-2">
                             {post.intro.length > 120
-                              ? `${post.intro.slice(0, 120)}…`
+                              ? `${post.intro.split(" ").slice(0, 10).join(" ")}…`
                               : post.intro}
                           </p>
                         )}
