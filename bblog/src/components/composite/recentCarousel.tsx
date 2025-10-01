@@ -170,14 +170,14 @@ export default function RecentPostsCarousel({
             <div className="flex items-center gap-3">
               <CarouselPrevious
                 className="static translate-x-0 translate-y-0 rotate-0
-                   h-11 px-5 rounded-full border bg-background/80 backdrop-blur
+                   h-11 px-5 rounded-full border border-secondary bg-secondary/40 backdrop-blur
                    shadow-md hover:shadow-lg transition disabled:opacity-50"
                 size="default"
                 variant="outline"
               />
               <CarouselNext
                 className="static translate-x-0 translate-y-0 rotate-0
-                   h-11 px-5 rounded-full border bg-background/80 backdrop-blur
+                   h-11 px-5 rounded-full border border-secondary bg-secondary/40 backdrop-blur
                    shadow-md hover:shadow-lg transition disabled:opacity-50"
                 size="default"
                 variant="outline"

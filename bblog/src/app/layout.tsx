@@ -56,8 +56,13 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <meta name="p:domain_verify" content="e1aca7c406dc455725e10268ffc8105a" />
       <head>
+        {/* Pinterest domain verify (moved into <head>) */}
+        <meta
+          name="p:domain_verify"
+          content="e1aca7c406dc455725e10268ffc8105a"
+        />
+
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-8FK103BLYZ"
@@ -78,19 +83,52 @@ export default async function RootLayout({
         <SidebarProvider defaultOpen>
           <div className="flex w-full flex-col items-center">
             <HomeBanner />
+
             {/* Mobile nav only on screens < md */}
             <div className="w-full flex justify-center items-center md:hidden">
               <MobileNavbar />
             </div>
-            <div className="flex w-full flex-row relative">
+
+            <main
+              id="main-content"
+              className="flex w-full flex-row relative"
+              role="main"
+            >
               {/* Hide sidebar on small screens, show ≥ md */}
               <div className="hidden md:block">
                 <AppSidebar />
               </div>
               {children}
-            </div>
+            </main>
           </div>
         </SidebarProvider>
+
+        {/* Sitewide JSON-LD */}
+        <Script
+          id="ld-website"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: SITE_NAME,
+              url: SITE_URL,
+            }),
+          }}
+        />
+        <Script
+          id="ld-org"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: SITE_NAME,
+              url: SITE_URL,
+              logo: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
+            }),
+          }}
+        />
       </body>
     </html>
   );

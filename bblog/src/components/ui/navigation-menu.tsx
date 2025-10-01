@@ -59,7 +59,7 @@ function NavigationMenuItem({
 }
 
 const navigationMenuTriggerStyle = cva(
-  "group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground focus:bg-secondary focus:text-secondary-foreground disabled:pointer-events-none disabled:opacity-50 data-[state=open]:hover:bg-secondary data-[state=open]:text-secondary-foreground data-[state=open]:focus:bg-secondary data-[state=open]:bg-secondary/50 focus-visible:ring-ring/50 outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1"
+  "group inline-flex h-9 w-max items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground focus:bg-secondary focus:text-secondary-foreground disabled:pointer-events-none disabled:opacity-50 data-[state=open]:hover:bg-secondary data-[state=open]:text-secondary-foreground data-[state=open]:focus:bg-secondary data-[state=open]:bg-secondary/50 focus-visible:ring-ring/50 outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1"
 );
 
 function NavigationMenuTrigger({
@@ -75,7 +75,7 @@ function NavigationMenuTrigger({
     >
       {children}{" "}
       <ChevronDownIcon
-        className="relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180"
+        className="bg-primary relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180"
         aria-hidden="true"
       />
     </NavigationMenuPrimitive.Trigger>
@@ -90,8 +90,33 @@ function NavigationMenuContent({
     <NavigationMenuPrimitive.Content
       data-slot="navigation-menu-content"
       className={cn(
-        "data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 top-0 left-0 w-full p-2 pr-2.5 md:absolute md:w-auto",
-        "group-data-[viewport=false]/navigation-menu:bg-popover group-data-[viewport=false]/navigation-menu:text-popover-foreground group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:top-full group-data-[viewport=false]/navigation-menu:mt-1.5 group-data-[viewport=false]/navigation-menu:overflow-hidden group-data-[viewport=false]/navigation-menu:rounded-md group-data-[viewport=false]/navigation-menu:border group-data-[viewport=false]/navigation-menu:shadow group-data-[viewport=false]/navigation-menu:duration-200 **:data-[slot=navigation-menu-link]:focus:ring-0 **:data-[slot=navigation-menu-link]:focus:outline-none",
+        // motion
+        "data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52",
+
+        // FLOAT under the trigger when viewport is disabled
+        "group-data-[viewport=false]/navigation-menu:absolute",
+        "group-data-[viewport=false]/navigation-menu:top-[calc(100%+8px)]",
+        "group-data-[viewport=false]/navigation-menu:right-0",
+        "group-data-[viewport=false]/navigation-menu:z-50",
+
+        // SIZE to content (don’t crush)
+        "group-data-[viewport=false]/navigation-menu:w-fit",
+        "group-data-[viewport=false]/navigation-menu:min-w-fit",
+        "group-data-[viewport=false]/navigation-menu:shrink-0",
+        "group-data-[viewport=false]/navigation-menu:max-w-[calc(100vw-1rem)]", // safety on tiny screens
+
+        // look & feel
+        "group-data-[viewport=false]/navigation-menu:rounded-md",
+        "group-data-[viewport=false]/navigation-menu:border",
+        "group-data-[viewport=false]/navigation-menu:bg-primary/50",
+        "group-data-[viewport=false]/navigation-menu:text-popover-foreground",
+        "group-data-[viewport=false]/navigation-menu:shadow-md",
+        "group-data-[viewport=false]/navigation-menu:p-2",
+        "group-data-[viewport=false]/navigation-menu:overflow-visible",
+
+        // keep your descendant focus tweaks
+        "**:data-[slot=navigation-menu-link]:focus:ring-0 **:data-[slot=navigation-menu-link]:focus:outline-none",
+
         className
       )}
       {...props}
