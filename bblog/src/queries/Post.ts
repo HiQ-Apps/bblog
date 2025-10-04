@@ -32,7 +32,7 @@ export async function getAllPostsPaginated(offset: number, limit: number) {
     stega: false,
     params: { offset, end },
   });
-  //* eslint-disable @typescript-eslint/no-explicit-any */
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   return data as { items: any[]; total: number };
 }
 
@@ -80,7 +80,7 @@ export async function getAllTagsWithCount() {
 }
 
 export async function getPostsByTag(tag: string, offset = 0, limit = 24) {
-  //* eslint-disable @typescript-eslint/no-explicit-any */
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const params = { tag, offset, end: offset + limit } as any;
   const { data } = await sanityFetch({
     query: postsByTagQuery,

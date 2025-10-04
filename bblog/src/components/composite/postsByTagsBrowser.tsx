@@ -241,7 +241,6 @@ export default function PostsByTagsBrowser({
       setItems((prev) => (reset ? data : [...prev, ...data]));
       setOffset(nextOffset + data.length);
       setHasMore(data.length === pageSize);
-      //* eslint-disable @typescript-eslint/no-explicit-any */
     } catch (err: unknown) {
       if (isAbortError(err) || ac.signal.aborted) return;
       setError(
