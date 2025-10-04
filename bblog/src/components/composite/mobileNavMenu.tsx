@@ -24,9 +24,23 @@ const MobileNavMenu = () => {
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/blog">Blog</Link>
-          </NavigationMenuLink>
+          <NavigationMenuTrigger className="flex p-2 justify-center align-center">
+            Blog
+          </NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul>
+              <li>
+                <NavigationMenuLink asChild>
+                  <Link href="/blog">Posts</Link>
+                </NavigationMenuLink>
+              </li>
+              <li>
+                <NavigationMenuLink asChild>
+                  <Link href="/blog/tags">Tags</Link>
+                </NavigationMenuLink>
+              </li>
+            </ul>
+          </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
@@ -40,7 +54,7 @@ const MobileNavMenu = () => {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Contact</NavigationMenuTrigger>
+          <NavigationMenuTrigger className="p-2">Contact</NavigationMenuTrigger>
           <NavigationMenuContent className="p-0 z-20 flex bg-primary">
             <ContactCard />
           </NavigationMenuContent>
