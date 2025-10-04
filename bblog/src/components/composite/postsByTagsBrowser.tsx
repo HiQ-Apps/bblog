@@ -6,6 +6,7 @@ import { TagsWrapper } from "@/components/composite/tagsWrapper";
 import useDebounce from "@/hooks/useDebounce";
 import type { PostCard } from "@/types/Post";
 import { UpdateIcon, TrashIcon } from "@radix-ui/react-icons";
+import { isAbortError } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -240,9 +241,12 @@ export default function PostsByTagsBrowser({
       setItems((prev) => (reset ? data : [...prev, ...data]));
       setOffset(nextOffset + data.length);
       setHasMore(data.length === pageSize);
-      // @ts-ignore
-    } catch (e: any) {
-      if (e.name !== "AbortError") setError(e.message ?? "Failed to load");
+      //* eslint-disable @typescript-eslint/no-explicit-any */
+    } catch (err: unknown) {
+      if (isAbortError(err) || ac.signal.aborted) return;
+      setError(
+        err instanceof Error && err.message ? err.message : "Failed to load"
+      );
     } finally {
       setLoading(false);
     }
