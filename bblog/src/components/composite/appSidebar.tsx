@@ -6,52 +6,19 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
-  SidebarFooter,
+  SidebarMenuButton,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import clsx from "clsx";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
+import SimpleNavLink from "./simpleNavLink";
 import ContactCard from "./contactCard";
-
-type SimpleNavLinkProps = {
-  href: string;
-  children: React.ReactNode;
-  exact?: boolean;
-};
-
-const SimpleNavLink = ({ href, children, exact }: SimpleNavLinkProps) => {
-  const pathname = usePathname();
-
-  const normalize = (p: string) =>
-    p.endsWith("/") && p !== "/" ? p.slice(0, -1) : p;
-
-  const cur = normalize(pathname);
-  const dest = normalize(href);
-
-  const isActive = exact
-    ? cur === dest
-    : dest === "/"
-      ? cur === "/"
-      : cur.startsWith(dest);
-
-  return (
-    <Link
-      href={href}
-      aria-current={isActive ? "page" : undefined}
-      className={clsx(
-        "hover:bg-primary inline-flex items-center rounded-md px-3 py-2 px-8 text-lg transition-colors justify-center",
-        isActive
-          ? "underline underline-offset-4 font-bold text-foreground"
-          : "text-muted-foreground hover:text-foreground"
-      )}
-    >
-      {children}
-    </Link>
-  );
-};
 
 const AppSidebar = () => {
   return (
@@ -63,6 +30,7 @@ const AppSidebar = () => {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* Home */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <SimpleNavLink href="/" exact>
@@ -70,16 +38,45 @@ const AppSidebar = () => {
                   </SimpleNavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <SimpleNavLink href="/blog">Blog</SimpleNavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <SimpleNavLink href="/about">About</SimpleNavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+
+              <Accordion
+                type="single"
+                collapsible
+                defaultValue="blog"
+                className="w-full"
+              >
+                <AccordionItem value="blog" className="border-none">
+                  <AccordionTrigger
+                    className="
+                      px-0 items-center
+                    "
+                  >
+                    <SidebarMenuButton
+                      asChild
+                      className="flex w-full items-center justify-between text-black/60 hover:text-black"
+                    >
+                      <div className="flex w-full items-center justify-between">
+                        <p className="text-xl">Blog</p>
+                      </div>
+                    </SidebarMenuButton>
+                  </AccordionTrigger>
+
+                  <AccordionContent className="px-2 pb-2">
+                    <SidebarMenuSub>
+                      <SidebarMenuSubItem>
+                        <SimpleNavLink href="/blog" exact>
+                          Posts
+                        </SimpleNavLink>
+                      </SidebarMenuSubItem>
+                      <SidebarMenuSubItem>
+                        <SimpleNavLink href="/blog/tags">Tags</SimpleNavLink>
+                      </SidebarMenuSubItem>
+                    </SidebarMenuSub>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+
+              {/* Disclaimer */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <SimpleNavLink href="/disclaimer">Disclaimer</SimpleNavLink>
@@ -89,7 +86,8 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <div className="fixed bottom-0 flex justify-center align-center">
+
+      <div className="fixed bottom-0 left-0 flex justify-center items-center px-1">
         <ContactCard />
       </div>
     </Sidebar>

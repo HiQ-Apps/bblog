@@ -1,4 +1,4 @@
-import groq from "groq";
+import { groq } from "next-sanity";
 
 export const postBySlugQuery = groq`
 *[
@@ -82,5 +82,61 @@ export const allPostSlugsQuery = groq`
   "slug": slug.current,
   // prefer system timestamp, fall back to your fields
   "updatedAt": coalesce(_updatedAt, publishedAt, date)
+}
+`;
+
+export const allTagsQuery = groq`
+  array::unique(*[
+    _type == "post" &&
+    defined(tags) &&
+    defined(slug.current) &&
+    !(_id in path("drafts.**")) &&
+    coalesce(publishedAt, dateTime(date), _createdAt) <= now()
+  ].tags[])
+  | order(@ asc)
+`;
+
+export const postsByTagQuery = groq`
+*[
+  _type == "post" &&
+  defined(slug.current) &&
+  $tag in tags &&
+  !(_id in path("drafts.**")) &&
+  coalesce(publishedAt, dateTime(date), _createdAt) <= now()
+]
+| order(coalesce(publishedAt, dateTime(date), _createdAt) desc, _createdAt desc)
+[$offset...$end]{
+  _id,
+  "id": slug.current,
+  title,
+  "date": string(coalesce(publishedAt, dateTime(date), _createdAt)),
+  "intro": coalesce(preview, ""),
+  "thumbnailUrl": heroImage.asset->url,
+  tags
+}
+`;
+
+export const postsByTagsQuery = groq`
+*[
+  _type == "post" &&
+  defined(slug.current) &&
+  !(_id in path("drafts.**")) &&
+  coalesce(publishedAt, dateTime(date), _createdAt) <= now() &&
+
+  // Toggle between ANY vs ALL using $requireAll (boolean)
+  (
+    ($requireAll == true  && count((tags[])[@ in $tags]) == count($tags)) ||
+    ($requireAll != true && count((tags[])[@ in $tags]) > 0)
+  )
+]
+| order(coalesce(publishedAt, dateTime(date), _createdAt) desc, _createdAt desc)
+[$offset...$end]{
+  _id,
+  "id": slug.current,
+  title,
+  "date": string(coalesce(publishedAt, dateTime(date), _createdAt)),
+  "intro": coalesce(preview, ""),
+  "thumbnailUrl": heroImage.asset->url,
+  tags
 }
 `;

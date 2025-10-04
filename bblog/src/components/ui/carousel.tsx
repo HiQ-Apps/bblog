@@ -185,7 +185,7 @@ function CarouselPrevious({
       variant={variant}
       size={size}
       className={cn(
-        "inline-flex items-center justify-center gap-2",
+        "inline-flex items-center justify-center gap-2 z-50",
         "h-10 px-4 rounded-full border bg-background/80 backdrop-blur",
         "shadow-md hover:shadow-lg transition",
         "disabled:opacity-50 disabled:cursor-not-allowed",
@@ -215,7 +215,7 @@ function CarouselNext({
       variant={variant}
       size={size}
       className={cn(
-        "inline-flex items-center justify-center gap-2",
+        "inline-flex items-center justify-center gap-2 z-50",
         "h-10 px-4 rounded-full border bg-background/80 backdrop-blur",
         "shadow-md hover:shadow-lg transition",
         "disabled:opacity-50 disabled:cursor-not-allowed",

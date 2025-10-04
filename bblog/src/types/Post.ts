@@ -2,7 +2,9 @@ export type PostCard = {
   _id: string;
   id: string;
   title: string;
+  preview: string;
   date: string;
+  publishedAt: string;
   intro: string;
   thumbnailUrl?: string;
   tags?: string[];
