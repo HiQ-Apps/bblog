@@ -240,6 +240,7 @@ export default function PostsByTagsBrowser({
       setItems((prev) => (reset ? data : [...prev, ...data]));
       setOffset(nextOffset + data.length);
       setHasMore(data.length === pageSize);
+      // @ts-ignore
     } catch (e: any) {
       if (e.name !== "AbortError") setError(e.message ?? "Failed to load");
     } finally {
