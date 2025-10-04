@@ -17,7 +17,7 @@ function parseTags(url: URL): string[] {
   );
 }
 
-export default async function GET(req: Request) {
+export async function GET(req: Request) {
   const url = new URL(req.url);
   const tags = parseTags(url);
   if (tags.length === 0) {

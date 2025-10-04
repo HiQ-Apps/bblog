@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getPostsByTag } from "@/queries/Post";
 
-export default async function GET(request: Request) {
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const tag = searchParams.get("tag");
   const offset = Number(searchParams.get("offset")) || 0;
