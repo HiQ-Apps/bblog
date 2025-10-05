@@ -37,7 +37,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: SITE_NAME, template: `%s | ${SITE_NAME}` },
   description: DEFAULT_DESCRIPTION,
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     title: SITE_NAME,
@@ -57,13 +56,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Pinterest domain verify (moved into <head>) */}
         <meta
           name="p:domain_verify"
           content="e1aca7c406dc455725e10268ffc8105a"
         />
-
-        {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-8FK103BLYZ"
           strategy="afterInteractive"
