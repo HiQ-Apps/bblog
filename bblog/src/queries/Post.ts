@@ -26,6 +26,8 @@ export async function getPostBySlug(slug: string, isDraft = false) {
 export async function getMostRecentPosts(limit = 6) {
   const { data } = await sanityFetch({
     query: mostRecentPostsQuery,
+    perspective: "published",
+    stega: false,
     params: { limit },
   });
   return data;
