@@ -1,13 +1,63 @@
 // app/post/[id]/page.tsx
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
 import Disclosure from "@/components/composite/disclosureCard";
 import { Post } from "@/types/Post";
 import { baseUrl } from "@/sanity/env";
+import { SITE_URL, DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo";
 
-const revalidate = 120;
-// Portable Text renderers
+export const revalidate = 120;
+
+async function fetchPost(slug: string): Promise<Post | null> {
+  const res = await fetch(`${baseUrl}/api/posts/by-slug/${slug}`, {
+    next: { revalidate },
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
+
+export async function generateMetadata(
+   { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
+  const post = await fetchPost((await params).slug);
+  if (!post) return {};
+
+  const title = post.seoTitle?.trim() || post.title;
+  const description = post.seoDescription?.trim() || post.preview?.trim() || DEFAULT_DESCRIPTION;
+
+  const ogImage =
+    post.ogImage?.url ||
+    post.heroImage?.asset?.url ||
+    post.thumbnailUrl ||
+    DEFAULT_OG_IMAGE;
+
+  const canonicalPath = post.canonicalUrl
+    ? new URL(post.canonicalUrl).pathname
+    : `/blog/${(await params).slug}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: canonicalPath },
+    openGraph: {
+      type: "article",
+      url: canonicalPath,
+      siteName: SITE_NAME,
+      title,
+      description,
+      images: [{ url: ogImage }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
+  };
+}
+
 const ptComponents: PortableTextComponents = {
   marks: {
     link: ({ children, value }) => {
@@ -109,7 +159,6 @@ function View({ post }: { post: any }) {
         <>
           {post.intro && <p className="mt-4">{post.intro}</p>}
           {post.sections?.length > 0 &&
-            /* eslint-disable @typescript-eslint/no-explicit-any */
             post.sections.map((section: any, idx: number) => (
               <section key={idx} className="mt-8">
                 <h2 className="font-lora text-2xl font-bold">
@@ -127,7 +176,6 @@ function View({ post }: { post: any }) {
         <section className="mt-8">
           <h2 className="font-lora text-2xl font-bold">Sources</h2>
           <ul>
-            {/* eslint-disable @typescript-eslint/no-explicit-any */}
             {post.sources.map((src: any, idx: number) => (
               <li key={idx}>
                 <a

@@ -16,7 +16,14 @@ export type Post = {
   title: string;
   publishedAt: string;
   date: string;
+  updatedAt?: string;
+  slug?: string;
+
   canonicalUrl?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: { url?: string };
+
   thumbnailUrl?: string;
   preview: string;
   heroImage?: {
