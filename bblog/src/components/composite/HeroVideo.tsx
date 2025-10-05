@@ -45,7 +45,7 @@ export default function HeroVideo({ onReady }: { onReady?: () => void }) {
           className="relative"
         >
           <h1 className="text-[#347262] text-center text-2xl md:text-4xl font-semibold drop-shadow-[0_1px_2px_rgba(0,0,0,0.12)]">
-            {["Raise", "Your", "Standards."].map((word, i) => (
+            {["Raise", "Your", "Standard"].map((word, i) => (
               <motion.span
                 key={word}
                 initial={{ opacity: 0, y: 20 }}
@@ -55,7 +55,7 @@ export default function HeroVideo({ onReady }: { onReady?: () => void }) {
                   delay: 0.5 + i * 0.15,
                   ease: EASE,
                 }}
-                className="inline-block mr-[0.3em] last:mr-0"
+                className="inline-block mr-[0.3em] last:mr-0 font-playfair"
               >
                 {word}
               </motion.span>
