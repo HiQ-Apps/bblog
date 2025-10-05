@@ -34,7 +34,7 @@ export type Post = {
     alt?: string;
     caption?: string;
   };
-
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   sections: any[];
   tags?: string[];
 };
