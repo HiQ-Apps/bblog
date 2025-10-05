@@ -14,7 +14,7 @@ import ContactCard from "./contactCard";
 const MobileNavMenu = () => {
   return (
     <NavigationMenu
-      viewport={false} // <<< important
+      viewport={false}
       className="w-full bg-primary border-b border-sidebar-border font-playfair justify-center"
     >
       <NavigationMenuList className="mx-auto flex gap-2 py-2">

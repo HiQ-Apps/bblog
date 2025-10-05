@@ -48,7 +48,7 @@ const AppSidebar = () => {
                 <AccordionItem value="blog" className="border-none">
                   <AccordionTrigger
                     className="
-                      px-0 items-center
+                      px-0 items-center py-1.5
                     "
                   >
                     <SidebarMenuButton
@@ -61,7 +61,7 @@ const AppSidebar = () => {
                     </SidebarMenuButton>
                   </AccordionTrigger>
 
-                  <AccordionContent className="px-2 pb-2">
+                  <AccordionContent className="px-2 pb-0">
                     <SidebarMenuSub>
                       <SidebarMenuSubItem>
                         <SimpleNavLink href="/blog" exact>
