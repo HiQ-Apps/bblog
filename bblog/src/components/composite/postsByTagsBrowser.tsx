@@ -7,6 +7,7 @@ import useDebounce from "@/hooks/useDebounce";
 import type { PostCard } from "@/types/Post";
 import { UpdateIcon, TrashIcon } from "@radix-ui/react-icons";
 import { isAbortError } from "@/lib/utils";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -538,49 +539,51 @@ export default function PostsByTagsBrowser({
         {items.map((p, i) => {
           const matches = p.tags?.filter((t) => headingTags.includes(t)) ?? [];
           return (
-            <li
-              key={p._id}
-              className="group relative overflow-hidden rounded-lg border bg-background min-w-0"
-            >
-              <div className="relative aspect-[3/2]">
-                {!!p.thumbnailUrl && (
-                  <Image
-                    src={p.thumbnailUrl}
-                    alt={p.title}
-                    fill
-                    priority={i < 6}
-                    sizes="(min-width:1280px) 25vw, (min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                  />
-                )}
-                <div className="pointer-events-none absolute inset-0 bg-black/60 transition-colors duration-300 group-hover:bg-black/50" />
-                <div className="absolute inset-0 flex items-center justify-center p-3">
-                  <div className="text-center text-white max-w-[90%] drop-shadow">
-                    {matches.length > 0 && (
-                      <div className="mb-2 flex flex-wrap justify-center gap-1">
-                        {matches.map((tag) => (
-                          <span
-                            key={tag}
-                            className="px-2 py-0.5 rounded-sm bg-accent border border-accent/70 text-sm shadow-lg"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+            <Link key={p._id} href={`/blog/${p.id}`} className="no-underline">
+              <li
+                key={p._id}
+                className="group relative overflow-hidden rounded-lg border bg-background min-w-0"
+              >
+                <div className="relative aspect-[3/2]">
+                  {!!p.thumbnailUrl && (
+                    <Image
+                      src={p.thumbnailUrl}
+                      alt={p.title}
+                      fill
+                      priority={i < 6}
+                      sizes="(min-width:1280px) 25vw, (min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    />
+                  )}
+                  <div className="pointer-events-none absolute inset-0 bg-black/60 transition-colors duration-300 group-hover:bg-black/50" />
+                  <div className="absolute inset-0 flex items-center justify-center p-3">
+                    <div className="text-center text-white max-w-[90%] drop-shadow">
+                      {matches.length > 0 && (
+                        <div className="mb-2 flex flex-wrap justify-center gap-1">
+                          {matches.map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-2 py-0.5 rounded-sm bg-accent border border-accent/70 text-sm shadow-lg"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <h4 className="font-semibold line-clamp-2">{p.title}</h4>
+                      <div className="text-xs opacity-90">
+                        {new Date(p.date).toLocaleDateString()}
                       </div>
-                    )}
-                    <h4 className="font-semibold line-clamp-2">{p.title}</h4>
-                    <div className="text-xs opacity-90">
-                      {new Date(p.date).toLocaleDateString()}
+                      {p.intro && (
+                        <p className="text-xs mt-2 line-clamp-3 opacity-90">
+                          {p.intro.split(" ").slice(0, 10).join(" ") + "..."}
+                        </p>
+                      )}
                     </div>
-                    {p.intro && (
-                      <p className="text-xs mt-2 line-clamp-3 opacity-90">
-                        {p.intro.split(" ").slice(0, 10).join(" ") + "..."}
-                      </p>
-                    )}
                   </div>
                 </div>
-              </div>
-            </li>
+              </li>
+            </Link>
           );
         })}
       </ul>
