@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import HomeHero from "@/components/composite/homeHero";
+import HeroVideo from "@/components/composite/HeroVideo";
 import RecentPostsCarousel from "@/components/composite/recentCarousel";
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <main className="flex w-full flex-col items-center space-y-6 md:space-y-10">
-      <HomeHero onReady={() => setHeroReady(true)} />
+      <HeroVideo onReady={() => setHeroReady(true)} />
       <RecentPostsCarousel heroReady={heroReady} limit={6} />
     </main>
   );
