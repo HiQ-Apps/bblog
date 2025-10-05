@@ -32,6 +32,37 @@ export const postBySlugQuery = groq`
 }
 `;
 
+// Draft posts (removes the draft and date filters)
+export const postBySlugDraftQuery = groq`
+*[
+  _type == "post" &&
+  slug.current == $slug
+][0]{
+  _id,
+  title,
+  "slug": slug.current,
+  publishedAt,
+  preview,
+  heroImage{
+    asset->{ url, metadata{ dimensions{ width, height } } },
+    alt,
+    caption
+  },
+  content[]{
+    ...,
+    _type == "image" => {
+      asset->{ url, metadata{ dimensions{ width, height } } },
+      alt,
+      link
+    }
+  },
+  tags,
+  canonicalUrl,
+  metaImage{ asset->{ url, metadata{ dimensions{ width, height } } } },
+  sources[]{ name, url }
+}
+`;
+
 export const allPostPaginatedQuery = groq`
 {
   "items": *[

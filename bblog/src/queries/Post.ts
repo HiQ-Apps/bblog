@@ -9,19 +9,18 @@ import {
   allTagsQuery,
   postsByTagQuery,
   postsByTagsQuery,
+  postBySlugDraftQuery,
 } from "@/lib/queries";
-import { PostCard } from "@/types/Post";
 import { QueryParams } from "next-sanity";
 
-export async function getMostRecentPosts(limit = 6) {
-  const safeLimit = Math.min(Math.max(1, limit), 50);
+export async function getPostBySlug(slug: string, isDraft = false) {
   const { data } = await sanityFetch({
-    query: mostRecentPostsQuery,
-    params: { limit: safeLimit },
-    perspective: "published",
+    query: isDraft ? postBySlugDraftQuery : postBySlugQuery,
+    perspective: isDraft ? "previewDrafts" : "published",
     stega: false,
+    params: { slug },
   });
-  return data as PostCard[];
+  return data;
 }
 
 export async function getAllPostsPaginated(offset: number, limit: number) {
@@ -34,16 +33,6 @@ export async function getAllPostsPaginated(offset: number, limit: number) {
   });
   /* eslint-disable @typescript-eslint/no-explicit-any */
   return data as { items: any[]; total: number };
-}
-
-export async function getPostBySlug(slug: string) {
-  const { data } = await sanityFetch({
-    query: postBySlugQuery,
-    perspective: "published",
-    stega: false,
-    params: { slug },
-  });
-  return data;
 }
 
 export async function getAllPostSlugs() {
