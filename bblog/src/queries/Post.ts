@@ -23,6 +23,14 @@ export async function getPostBySlug(slug: string, isDraft = false) {
   return data;
 }
 
+export async function getMostRecentPosts(limit = 6) {
+  const { data } = await sanityFetch({
+    query: mostRecentPostsQuery,
+    params: { limit },
+  });
+  return data;
+}
+
 export async function getAllPostsPaginated(offset: number, limit: number) {
   const end = offset + limit;
   const { data } = await sanityFetch({
