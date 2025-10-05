@@ -121,6 +121,17 @@ export default defineType({
     }),
   ],
   preview: {
-    select: { title: "title", media: "heroImage" },
+    select: {
+      title: "title",
+      media: "heroImage",
+      slug: "slug.current",
+    },
+    prepare({ title, media, slug }) {
+      return {
+        title,
+        media,
+        subtitle: slug ? `/${slug}` : "No slug set",
+      };
+    },
   },
 });
