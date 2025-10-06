@@ -32,7 +32,7 @@ export const postBySlugQuery = groq`
 }
 `;
 
-// Draft posts (removes the draft and date filters)
+// src/lib/queries.ts
 export const postBySlugDraftQuery = groq`
 *[
   _type == "post" &&
