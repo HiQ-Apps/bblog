@@ -32,7 +32,6 @@ export const postBySlugQuery = groq`
 }
 `;
 
-// src/lib/queries.ts
 export const postBySlugDraftQuery = groq`
 *[
   _type == "post" &&

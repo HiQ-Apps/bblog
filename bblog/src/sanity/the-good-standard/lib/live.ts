@@ -5,8 +5,9 @@ import { dataset, projectId, apiVersion, sanityReadToken } from "../../env";
 
 export const client = createClient({
   projectId: projectId,
-  dataset: dataset,
-  apiVersion: apiVersion,
+  dataset: dataset || "production",
+  apiVersion: apiVersion || "2025-09-27",
+  perspective: "raw",
   useCdn: false,
   token: sanityReadToken,
   stega: { studioUrl: "/studio" },

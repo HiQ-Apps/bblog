@@ -14,26 +14,17 @@ import {
 import { QueryParams } from "next-sanity";
 
 export async function getPostBySlug(slug: string, isDraft = false) {
-  console.log("=== getPostBySlug ===");
-  console.log("slug:", slug);
-  console.log("isDraft:", isDraft);
-
   if (isDraft) {
-    console.log("Fetching with client.fetch (draft mode)");
     const data = await client.fetch(postBySlugDraftQuery, { slug });
-    console.log("data returned:", !!data);
     return data;
   }
 
-  console.log("Fetching with sanityFetch (published)");
   const { data } = await sanityFetch({
     query: postBySlugQuery,
-    perspective: "published",
     stega: false,
     params: { slug },
   });
 
-  console.log("data returned:", !!data);
   return data;
 }
 
@@ -122,6 +113,8 @@ export async function getPostsByTags(
   const { data } = await sanityFetch({
     query: postsByTagsQuery,
     params,
+    perspective: "published",
+    stega: false,
   });
 
   return data;
