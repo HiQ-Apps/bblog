@@ -17,15 +17,15 @@ const DisclaimerPage = () => {
       <p className="font-mont text-lg mb-4">
         Some blog posts may contain affiliate links. This means that if you
         click on a link and decide to ultimately make the purchase, the blog may
-        receive a small commission. This is at no extra cost to you. I only
-        recommend products that I believe are genuinely useful, but please do
-        your own research before making any purchase. I am not responsible for
+        receive a small commission. This is at no extra cost to you. We only
+        recommend products that we believe are genuinely useful, but please do
+        your own research before making any purchase. The Good Standard is not responsible for
         any losses, injuries, or damages from the use of the information or
         products mentioned on the site.
       </p>
       <h2 className="font-lora text-3xl mt-8 mb-4">Privacy Policy</h2>
       <p className="font-mont text-lg">
-        At <strong>The Good Standard</strong>, I respect your privacy.
+        At <strong>The Good Standard</strong>, we respect your privacy.
       </p>
       <ul className="font-mont text-lg list-disc pl-5">
         <li>
@@ -46,22 +46,22 @@ const DisclaimerPage = () => {
         </li>
         <li>
           <strong>Children’s Privacy:</strong> This website is not intended for
-          children under 13, and I do not knowingly collect information from
+          children under 13, and we do not knowingly collect information from
           children.
         </li>
         <li>
-          I do <strong>NOT</strong> sell, trade, or share your personal data
+          We do <strong>NOT</strong> sell, trade, or share your personal data
           with outside parties.
         </li>
       </ul>
       <p className="font-mont">
         If you have any questions about this disclaimer or privacy policy, you
-        can reach me at{" "}
+        can reach us at{" "}
         <a
           className="font-mont underline text-blue-600"
-          href="mailto:thegoodstandard.company@gmail.com"
+          href="mailto:contact@thegoodstandard.org"
         >
-          thegoodstandard.company@gmail.com
+          contact@thegoodstandard.org
         </a>
         .
       </p>
