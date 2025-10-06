@@ -60,6 +60,10 @@ const AboutPage = () => {
         >
           contact@thegoodstandard.org
         </a>
+        <p className="text-sm text-gray-600 mt-2">
+Disclosures: Some articles may include affiliate links. Editorial
+coverage remains independent and unsponsored unless clearly noted.
+</p>
       </div>
     </section>
   );
