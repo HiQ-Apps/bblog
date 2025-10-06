@@ -14,15 +14,22 @@ import {
 import { QueryParams } from "next-sanity";
 
 export async function getPostBySlug(slug: string, isDraft = false) {
+  console.log("=== getPostBySlug ===");
+  console.log("slug:", slug);
+  console.log("isDraft:", isDraft);
+
   const { data } = await sanityFetch({
     query: isDraft ? postBySlugDraftQuery : postBySlugQuery,
     perspective: isDraft ? "previewDrafts" : "published",
     stega: false,
     params: { slug },
   });
+
+  console.log("data returned:", !!data);
+  console.log("===================");
+
   return data;
 }
-
 export async function getMostRecentPosts(limit = 6) {
   const { data } = await sanityFetch({
     query: mostRecentPostsQuery,
