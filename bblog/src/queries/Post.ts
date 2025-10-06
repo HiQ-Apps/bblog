@@ -1,6 +1,6 @@
 import "server-only";
 
-import { sanityFetch } from "@/sanity/the-good-standard/lib/live";
+import { client, sanityFetch } from "@/sanity/the-good-standard/lib/live";
 import {
   allPostPaginatedQuery,
   mostRecentPostsQuery,
@@ -18,18 +18,25 @@ export async function getPostBySlug(slug: string, isDraft = false) {
   console.log("slug:", slug);
   console.log("isDraft:", isDraft);
 
+  if (isDraft) {
+    console.log("Fetching with client.fetch (draft mode)");
+    const data = await client.fetch(postBySlugDraftQuery, { slug });
+    console.log("data returned:", !!data);
+    return data;
+  }
+
+  console.log("Fetching with sanityFetch (published)");
   const { data } = await sanityFetch({
-    query: isDraft ? postBySlugDraftQuery : postBySlugQuery,
-    perspective: isDraft ? "previewDrafts" : "published",
+    query: postBySlugQuery,
+    perspective: "published",
     stega: false,
     params: { slug },
   });
 
   console.log("data returned:", !!data);
-  console.log("===================");
-
   return data;
 }
+
 export async function getMostRecentPosts(limit = 6) {
   const { data } = await sanityFetch({
     query: mostRecentPostsQuery,
