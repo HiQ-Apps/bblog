@@ -1,12 +1,20 @@
 // app/post/[id]/page.tsx
 import { notFound } from "next/navigation";
+import { client } from "@/sanity/the-good-standard/lib/live";
+import { postBySlugDraftQuery } from "@/lib/queries";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
 import Disclosure from "@/components/composite/disclosureCard";
 import { Post } from "@/types/Post";
 import { baseUrl } from "@/sanity/env";
-import { SITE_URL, DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo";
+import {
+  SITE_URL,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+} from "@/lib/seo";
+import { draftMode } from "next/headers";
 
 export const revalidate = 120;
 
@@ -18,14 +26,17 @@ async function fetchPost(slug: string): Promise<Post | null> {
   return res.json();
 }
 
-export async function generateMetadata(
-   { params }: { params: Promise<{ slug: string }> }
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const post = await fetchPost((await params).slug);
   if (!post) return {};
 
   const title = post.seoTitle?.trim() || post.title;
-  const description = post.seoDescription?.trim() || post.preview?.trim() || DEFAULT_DESCRIPTION;
+  const description =
+    post.seoDescription?.trim() || post.preview?.trim() || DEFAULT_DESCRIPTION;
 
   const ogImage =
     post.ogImage?.url ||
@@ -216,11 +227,19 @@ type PageProps = {
 
 export default async function PostPage({ params }: PageProps) {
   const { slug } = await params;
-  const data = await fetch(`${baseUrl}/api/posts/by-slug/${slug}`);
-  if (!data.ok) {
-    return notFound();
+  const { isEnabled } = await draftMode();
+
+  let post;
+
+  if (isEnabled) {
+    post = await client.fetch(postBySlugDraftQuery, { slug });
+  } else {
+    const response = await fetch(`${baseUrl}/api/posts/by-slug/${slug}`);
+    if (!response.ok) return notFound();
+    post = await response.json();
   }
-  const post: Post = await data.json();
+
+  if (!post) return notFound();
 
   return <View post={post} />;
 }
