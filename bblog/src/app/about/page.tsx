@@ -3,69 +3,63 @@ import Image from "next/image";
 const AboutPage = () => {
   return (
     <section className="xl:mx-30 sm:mx-8 px-3 py-12">
-      <Image
-        src="/about_me.png"
-        alt="Picture of Ana"
+      {/* <Image
+        src="/about.png"
+        alt="A flat lay of sustainable materials including wood, linen, and cotton"
         width={200}
         height={200}
-        className="mx-auto mb-6 rounded-full"
-      />
+        className="mx-auto mb-6 roudned-md"
+      /> */}
       <h1 className="font-lora text-4xl font-bold mb-6 text-center">
-        Hi, I&apos;m Ana — welcome to my little corner of the web.
+        Welcome to The Good Standard
       </h1>
       <div className="font-mont space-y-5 text-lg leading-relaxed text-gray-800">
         <p>
-          I spent a great deal of my youth partying and being careless of what I
-          put into my body. I don&apos;t have a time machine, but I did stumble
-          across a concept called neuroplasticity that opened my eyes to the
-          incredible resilience of the human body. As I reached my 30s, I began
-          a quest for better health, and to erase the damage I&apos;d done. Changing
-          my habits meant changing my choices, and I learned that many of the
-          products I grew up with in my parents&apos; house — soaps, cleaners, even
-          food packaging — were full of hidden microplastics and harmful
-          materials. It was eye-opening.
+          <strong>The Good Standard</strong> is an independent editorial
+          exploring sustainable living, ethical fashion, and natural design. We
+          believe in thoughtful consumption, natural materials, and quiet,
+          enduring style.
         </p>
         <p>
-          As I kept digging, I saw how all this waste and consumerism was not
-          only destroying our planet, its ecosystems, and its people, but was
-          also weighing heavily on my own physical and mental health. That
-          realization was the turning point: I wanted to stop just consuming and
-          start questioning, learning, and making small changes that actually
-          mattered.
+          Our focus is on practical upgrades you can feel good about. This means
+          repairing, reusing, and choosing long-lasting pieces made from wool,
+          linen, cotton, wood, glass, and steel. No fearmongering, no
+          perfectionism—just clear, useful guidance to help you make better
+          choices, little by little.
         </p>
         <p>
-          For me, curiosity and resilience are two of the greatest joys of being
-          human. Learning about both the beauty and the dangers in this world
-          gives me fresh perspectives on how I continue to live my life. Writing
-          here is my creative outlet and my way of sharing that journey with
-          you. I&apos;m still shaping my writing voice, but to me, that&apos;s part of the
-          fun — growing, reflecting, and finding new ways to connect. Over time,
-          see me as your quirky guardian angel that reminds you to think harder
-          about choices. I&apos;m really delighted that you&apos;re spending your precious
-          time with me!
+          You&apos;ll find seasonal guides, product roundups, and simple rituals
+          for a healthier home. When we recommend products, it&apos;s because
+          they align with our criteria: natural or recycled materials where
+          possible, transparent sourcing, and design that&apos;s built to last.
         </p>
         <p>
-          On <strong>The Good Standard</strong>, you&apos;ll find simple upgrades for
-          your home, lifestyle, and daily routines. Some are as small as reusing
-          what you already have in new ways; others involve finding
-          eco-friendly, “buy it for life” products that actually last. None of
-          it is about being perfect — it&apos;s about choosing better, little by
-          little.
+          On The Good Standard, you&apos;ll find simple
+          upgrades for your home, lifestyle, and daily routines. Some are as
+          small as reusing what you already have in new ways; others involve
+          finding eco-friendly, “buy it for life” products that actually last.
+          None of it is about being perfect — it&apos;s about choosing better,
+          little by little.
         </p>
         <p>
-          If you&apos;ve ever felt overwhelmed by all the noise out there, please
-          know you&apos;re not alone. I&apos;m not here to fearmonger or shame anyone —
-          after all, we didn&apos;t grow up knowing these things were harmful. But
-          now that we do, we can be more intentional.
+          You&apos;ll find seasonal guides, product roundups, and simple rituals
+          for a healthier home. When we recommend products, it&apos;s because
+          they align with our criteria: natural or recycled materials where
+          possible, transparent sourcing, and design that&apos;s built to last.
         </p>
-
         <p>
-          Sustainable, intentional, natural living is a journey that lasts a
-          lifetime. The more we learn, the more empowered we are in our choices.
-          My hope is that this space comforts you, sparks curiosity, and
-          inspires you to slow down, simplify, and choose well.
+          If you&apos;re new here, start with our latest features on natural
+          fabrics, low-waste home basics, and slow wardrobe building. Settle in
+          with a cup of tea, browse, and take what serves you. Ssutainable,
+          natural, and intentional living is a lifetime journey.
         </p>
-        <p>Thanks for stopping by, I&apos;m so glad you&apos;re here!</p>
+        📩 For partnerships or inquiries:{" "}
+        <a
+          href="mailto:contact@thegoodstandard.org"
+          className="underline underline-offset-4 hover:opacity-80 text-blue-600"
+        >
+          contact@thegoodstandard.org
+        </a>
       </div>
     </section>
   );
