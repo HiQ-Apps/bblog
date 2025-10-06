@@ -21,7 +21,7 @@ const ContactCard = () => {
           />
         </a>
         <a
-          href="https://www.pinterest.com/thegoodstandardcompany"
+          href="https://www.pinterest.com/thegoodstandardco"
           target="_blank"
           rel="noopener"
           aria-label="Pinterest"
@@ -36,7 +36,7 @@ const ContactCard = () => {
           />
         </a>
         <a
-          href="mailto:thegoodstandard.company@gmail.com"
+          href="mailto:contact@thegoodstandard.org"
           aria-label="Email"
           className="shrink-0 hover:bg-black/20 p-3 rounded-full"
         >
