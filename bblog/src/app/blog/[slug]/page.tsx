@@ -126,6 +126,14 @@ const ptComponents: PortableTextComponents = {
       </blockquote>
     ),
   },
+  list: {
+    bullet: ({ children }) => (
+      <ul className="list-disc list-inside font-mont text-xl">{children}</ul>
+    ),
+    number: ({ children }) => (
+      <ol className="list-decimal list-inside font-mont text-xl">{children}</ol>
+    ),
+  },
 };
 
 // Reusable view (works for both Sanity docs and local POSTS shape)
