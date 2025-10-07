@@ -107,8 +107,8 @@ function NavigationMenuContent({
 
         // look & feel
         "group-data-[viewport=false]/navigation-menu:rounded-md",
-        "group-data-[viewport=false]/navigation-menu:border",
-        "group-data-[viewport=false]/navigation-menu:bg-primary/50",
+        "group-data-[viewport=false]/navigation-menu:border border-secondary",
+        "group-data-[viewport=false]/navigation-menu:bg-primary",
         "group-data-[viewport=false]/navigation-menu:text-popover-foreground",
         "group-data-[viewport=false]/navigation-menu:shadow-md",
         "group-data-[viewport=false]/navigation-menu:p-2",
