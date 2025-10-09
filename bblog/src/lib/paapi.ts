@@ -8,7 +8,7 @@ type CommonPayload = {
   PartnerTag: string; // your Associates tag
   PartnerType: "Associates";
   Marketplace: string; // e.g. www.amazon.com
-  // plus the operation-specific fields
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   [k: string]: any;
 };
 
@@ -51,6 +51,7 @@ export function getPaapiConfigFromEnv(): PaapiConfig {
  *   Resources: ["Images.Primary.Medium","ItemInfo.Title","Offers.Listings.Price"]
  * })
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export async function paapiFetch<T = any>(
   op: PaapiOperation,
   payload: Omit<CommonPayload, "PartnerTag" | "PartnerType" | "Marketplace"> & {
@@ -92,6 +93,7 @@ export async function paapiFetch<T = any>(
   });
 
   const text = await res.text();
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   let json: any;
   try {
     json = text ? JSON.parse(text) : {};
