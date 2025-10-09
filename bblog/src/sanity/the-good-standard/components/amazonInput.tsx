@@ -43,9 +43,6 @@ export default function AmazonInput(props: ObjectInputProps) {
   return (
     <Stack space={3}>
       {/* Your custom controls */}
-      <Card padding={2} tone="primary">
-        <Text>AmazonInput mounted</Text>
-      </Card>
       <TextInput
         value={raw}
         onChange={(e) => setRaw(e.currentTarget.value)}

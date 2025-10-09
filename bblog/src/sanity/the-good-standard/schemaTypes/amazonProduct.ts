@@ -22,7 +22,6 @@ export default defineType({
           { title: "US (.com)", value: "www.amazon.com" },
           { title: "UK (.co.uk)", value: "www.amazon.co.uk" },
           { title: "DE (.de)", value: "www.amazon.de" },
-          // add more if needed
         ],
       },
     }),

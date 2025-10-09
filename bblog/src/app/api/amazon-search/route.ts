@@ -98,7 +98,7 @@ export async function GET(req: Request) {
     product: {
       title,
       description,
-      image: imageUrl ? { asset: { url: imageUrl } } : null,
+      imageUrl: imageUrl ? { asset: { url: imageUrl } } : null,
       detailPageUrl,
       priceSnapshot:
         amount && currency
