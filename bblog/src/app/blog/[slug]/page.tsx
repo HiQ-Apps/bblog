@@ -7,7 +7,6 @@ import type { Metadata } from "next";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
 import Disclosure from "@/components/composite/disclosureCard";
 import { Post } from "@/types/Post";
-import { baseUrl } from "@/sanity/env";
 import {
   SITE_URL,
   DEFAULT_DESCRIPTION,
@@ -19,9 +18,12 @@ import { draftMode } from "next/headers";
 export const revalidate = 120;
 
 async function fetchPost(slug: string): Promise<Post | null> {
-  const res = await fetch(`${baseUrl}/api/posts/by-slug/${slug}`, {
-    next: { revalidate },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/by-slug/${slug}`,
+    {
+      next: { revalidate },
+    }
+  );
   if (!res.ok) return null;
   return res.json();
 }
@@ -276,7 +278,9 @@ export default async function PostPage({ params }: PageProps) {
   if (isEnabled) {
     post = await client.fetch(postBySlugDraftQuery, { slug });
   } else {
-    const response = await fetch(`${baseUrl}/api/posts/by-slug/${slug}`);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/by-slug/${slug}`
+    );
     if (!response.ok) return notFound();
     post = await response.json();
   }

@@ -1,6 +1,5 @@
 // lib/paapi.ts
 import { signPAAPI } from "./signPaapi";
-import { amazonAccessKey, amazonSecretKey } from "@/sanity/env";
 
 export type PaapiOperation = "SearchItems" | "GetItems";
 
@@ -31,8 +30,8 @@ export type PaapiConfig = {
 };
 
 export function getPaapiConfigFromEnv(): PaapiConfig {
-  const accessKey = amazonAccessKey;
-  const secretKey = amazonSecretKey;
+  const accessKey = process.env.AMAZON_ACCESS_KEY!;
+  const secretKey = process.env.AMAZON_SECRET_KEY!;
   const host = "webservices.amazon.com";
   const region = "us-east-1";
   const marketplace = "www.amazon.com";

@@ -1,20 +1,19 @@
 // sanity/the-good-standard/lib/live.ts
 import { createClient } from "next-sanity";
 import { defineLive } from "next-sanity/live";
-import { dataset, projectId, apiVersion, sanityReadToken } from "../../env";
 
 export const client = createClient({
-  projectId: projectId,
-  dataset: dataset || "production",
-  apiVersion: apiVersion || "2025-09-27",
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID!,
+  dataset: process.env.SANITY_STUDIO_DATASET || "production",
+  apiVersion: process.env.SANITY_STUDIO_API_VERSION || "2025-09-27",
   perspective: "raw",
   useCdn: false,
-  token: sanityReadToken,
+  token: process.env.SANITY_STUDIO_READ_TOKEN!,
   stega: { studioUrl: "/studio" },
 });
 
 export const { SanityLive, sanityFetch } = defineLive({
   client,
   browserToken: false,
-  serverToken: sanityReadToken,
+  serverToken: process.env.SANITY_STUDIO_READ_TOKEN!,
 });

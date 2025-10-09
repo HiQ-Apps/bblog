@@ -12,13 +12,13 @@ export const projectId = assertValue(
 );
 
 export const amazonAccessKey = assertValue(
-  process.env.NEXT_PUBLIC_AMAZON_ACCESS_KEY,
-  "Missing environment variable: NEXT_PUBLIC_AMAZON_ACCESS_KEY"
+  process.env.AMAZON_ACCESS_KEY,
+  "Missing environment variable: AMAZON_ACCESS_KEY"
 );
 
 export const amazonSecretKey = assertValue(
-  process.env.NEXT_PUBLIC_AMAZON_SECRET_KEY,
-  "Missing environment variable: NEXT_PUBLIC_AMAZON_SECRET_KEY"
+  process.env.AMAZON_SECRET_KEY,
+  "Missing environment variable: AMAZON_SECRET_KEY"
 );
 
 export const amazonPartnerTag = assertValue(
@@ -40,8 +40,8 @@ export const sanityOrigin = assertValue(
 );
 
 export const sanityReadToken = assertValue(
-  process.env.NEXT_PUBLIC_SANITY_READ_TOKEN,
-  "Missing environment variable: NEXT_PUBLIC_SANITY_READ_TOKEN"
+  process.env.SANITY_READ_TOKEN,
+  "Missing environment variable: SANITY_READ_TOKEN"
 );
 
 export const baseUrl = assertValue(

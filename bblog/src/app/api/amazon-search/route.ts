@@ -1,16 +1,8 @@
 // app/api/amazon/get-item/route.ts
 import { NextResponse } from "next/server";
 import { signPAAPI } from "@/lib/signPaapi";
-import {
-  amazonAccessKey,
-  amazonSecretKey,
-  amazonHost,
-  amazonMarketplace,
-  amazonPartnerTag,
-  amazonRegion,
-} from "@/sanity/env";
 
-const HOST = amazonHost;
+const HOST = "webservices.amazon.com";
 const PATH = "/paapi5/getitems";
 const SERVICE = "ProductAdvertisingAPI";
 
@@ -33,9 +25,9 @@ export async function GET(req: Request) {
       "Offers.Listings.Price",
       "Offers.Listings.SavingBasis",
     ],
-    PartnerTag: amazonPartnerTag,
+    PartnerTag: "thegoodstanda-20",
     PartnerType: "Associates",
-    Marketplace: amazonMarketplace,
+    Marketplace: "www.amazon.com",
   };
   const body = JSON.stringify(bodyObj);
 
@@ -44,12 +36,12 @@ export async function GET(req: Request) {
   const { headers } = signPAAPI({
     method: "POST",
     host: HOST,
-    region: amazonRegion,
+    region: "us-east-1",
     service: SERVICE,
     path: PATH,
     body,
-    accessKey: amazonAccessKey,
-    secretKey: amazonSecretKey,
+    accessKey: process.env.AMAZON_ACCESS_KEY!,
+    secretKey: process.env.AMAZON_SECRET_KEY!,
     amzTarget,
   });
 

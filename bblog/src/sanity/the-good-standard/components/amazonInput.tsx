@@ -4,7 +4,7 @@ import { set, unset } from "sanity";
 import { TextInput, Button, Stack, Card, Text } from "@sanity/ui";
 import { useState } from "react";
 
-const API_BASE = process.env.SANITY_STUDIO_BASE_URL;
+const API_BASE = process.env.NEXT_PUBLIC_BASE_URL!;
 
 export default function AmazonInput(props: ObjectInputProps) {
   const { value, onChange, renderDefault } = props;

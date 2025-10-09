@@ -22,7 +22,6 @@ export const previewClient = createClient({
   useCdn: false,
   token,
   perspective: "previewDrafts",
-
   stega: { enabled: true },
 });
 
