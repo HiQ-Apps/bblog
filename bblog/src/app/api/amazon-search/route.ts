@@ -1,4 +1,3 @@
-// app/api/amazon/get-item/route.ts
 import { NextResponse } from "next/server";
 import { signPAAPI } from "@/lib/signPaapi";
 
