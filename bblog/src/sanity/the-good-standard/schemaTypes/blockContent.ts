@@ -1,3 +1,4 @@
+// sanity/schemas/blockContent.ts
 import { defineType, defineArrayMember } from "sanity";
 
 export default defineType({
@@ -7,6 +8,7 @@ export default defineType({
   of: [
     defineArrayMember({
       type: "block",
+      title: "Amazon Product",
       styles: [
         { title: "Normal", value: "normal" },
         { title: "H2", value: "h2" },
@@ -17,12 +19,7 @@ export default defineType({
         { title: "Bullet", value: "bullet" },
         { title: "Numbered", value: "number" },
       ],
-      marks: {
-        decorators: [
-          { title: "Bold", value: "strong" },
-          { title: "Italic", value: "em" },
-          { title: "Code", value: "code" },
-        ],
+       marks: {
         annotations: [
           {
             name: "link",
@@ -32,23 +29,29 @@ export default defineType({
               {
                 name: "href",
                 type: "url",
-                title: "URL",
-                validation: (Rule) => Rule.required(),
+                validation: (r) =>
+                  r.uri({ scheme: ["http", "https", "mailto", "tel"] }),
               },
-              { name: "blank", type: "boolean", title: "Open in new tab?" },
-              { name: "nofollow", type: "boolean", title: "Add nofollow?" },
+              { name: "nofollow", type: "boolean", title: "nofollow/sponsored" },
             ],
           },
+          
         ],
       },
+      
     }),
-    // Inline/embedded image inside the rich text
+
+    defineArrayMember({
+      type: "amazonEmbed",
+    }),
+
     defineArrayMember({
       type: "image",
       options: { hotspot: true },
       fields: [
         { name: "alt", type: "string", title: "Alt text" },
         { name: "caption", type: "string", title: "Caption" },
+        { name: "link", type: "url", title: "Optional Link" },
       ],
     }),
   ],

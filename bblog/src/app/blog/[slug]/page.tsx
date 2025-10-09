@@ -7,7 +7,6 @@ import type { Metadata } from "next";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
 import Disclosure from "@/components/composite/disclosureCard";
 import { Post } from "@/types/Post";
-import { baseUrl } from "@/sanity/env";
 import {
   SITE_URL,
   DEFAULT_DESCRIPTION,
@@ -19,9 +18,12 @@ import { draftMode } from "next/headers";
 export const revalidate = 120;
 
 async function fetchPost(slug: string): Promise<Post | null> {
-  const res = await fetch(`${baseUrl}/api/posts/by-slug/${slug}`, {
-    next: { revalidate },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/by-slug/${slug}`,
+    {
+      next: { revalidate },
+    }
+  );
   if (!res.ok) return null;
   return res.json();
 }
@@ -107,6 +109,40 @@ const ptComponents: PortableTextComponents = {
         </a>
       ) : (
         img
+      );
+    },
+    amazonEmbed: ({ value }) => {
+      const p = value?.product;
+      if (!p) return null;
+      return (
+        <div className="my-4">
+          <h3 className="font-lora text-2xl font-bold">{p.title}</h3>
+          <p className="font-mont text-xl">{p.description}</p>
+          {p.imageUrl && (
+            <Image
+              src={p.imageUrl}
+              alt={p.title}
+              width={300}
+              height={300}
+              className="my-2 rounded"
+            />
+          )}
+          {p.priceSnapshot?.amount && p.priceSnapshot?.currency && (
+            <p className="font-mont text-lg font-semibold">
+              Price: {p.priceSnapshot.amount} {p.priceSnapshot.currency}
+            </p>
+          )}
+          {p.detailPageUrl && (
+            <a
+              href={p.detailPageUrl}
+              target="_blank"
+              rel="sponsored nofollow noopener"
+              className="text-blue-600 underline"
+            >
+              View on Amazon
+            </a>
+          )}
+        </div>
       );
     },
   },
@@ -242,7 +278,9 @@ export default async function PostPage({ params }: PageProps) {
   if (isEnabled) {
     post = await client.fetch(postBySlugDraftQuery, { slug });
   } else {
-    const response = await fetch(`${baseUrl}/api/posts/by-slug/${slug}`);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/by-slug/${slug}`
+    );
     if (!response.ok) return notFound();
     post = await response.json();
   }
