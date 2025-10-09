@@ -9,9 +9,9 @@ import { SanityDocument } from "next-sanity";
 export default defineConfig({
   name: "default",
   title: "The Good Standard",
-  version: process.env.SANITY_API_VERSION || "2025-09-27",
-  projectId: process.env.SANITY_PROJECT_ID || "c7t7wvdr",
-  dataset: process.env.SANITY_DATASET || "production",
+  version: process.env.SANITY_STUDIO_API_VERSION,
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID as string,
+  dataset: process.env.SANITY_STUDIO_DATASET as string,
   basePath: "/studio",
   plugins: [structureTool(), visionTool()],
   schema: { types: schema.types },

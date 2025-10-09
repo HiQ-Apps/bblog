@@ -1,3 +1,4 @@
+// sanity/schemas/blockContent.ts
 import { defineType, defineArrayMember } from "sanity";
 
 export default defineType({
@@ -17,32 +18,12 @@ export default defineType({
         { title: "Bullet", value: "bullet" },
         { title: "Numbered", value: "number" },
       ],
-      marks: {
-        decorators: [
-          { title: "Bold", value: "strong" },
-          { title: "Italic", value: "em" },
-          { title: "Code", value: "code" },
-        ],
-        annotations: [
-          {
-            name: "link",
-            type: "object",
-            title: "Link",
-            fields: [
-              {
-                name: "href",
-                type: "url",
-                title: "URL",
-                validation: (Rule) => Rule.required(),
-              },
-              { name: "blank", type: "boolean", title: "Open in new tab?" },
-              { name: "nofollow", type: "boolean", title: "Add nofollow?" },
-            ],
-          },
-        ],
-      },
     }),
-    // Inline/embedded image inside the rich text
+
+    defineArrayMember({
+      type: "amazonEmbed",
+    }),
+
     defineArrayMember({
       type: "image",
       options: { hotspot: true },
