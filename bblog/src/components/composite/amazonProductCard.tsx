@@ -80,11 +80,6 @@ export default function AmazonProductCard({ value }: AmazonProductProps) {
           ) : null}
 
           <p className="mt-2 text-xs text-gray-500">ASIN: {asin}</p>
-
-          {/* Optional tiny disclosure (good practice for affiliates) */}
-          <p className="mt-1 text-[10px] text-gray-400">
-            As an Amazon Associate, I earn from qualifying purchases.
-          </p>
         </div>
       </div>
     </div>
