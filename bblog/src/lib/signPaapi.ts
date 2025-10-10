@@ -1,4 +1,3 @@
-// lib/signPaapi.ts
 import crypto from "crypto";
 
 function sha256hex(s: string) {
@@ -9,21 +8,17 @@ function hmac(key: Buffer | string, msg: string) {
 }
 
 type SignInput = {
-  method: "POST"; // PA-API uses POST
-  host: string; // e.g. webservices.amazon.com
-  region: string; // e.g. us-east-1
+  method: "POST";
+  host: string;
+  region: string;
   service: "ProductAdvertisingAPI";
-  path: string; // e.g. /paapi5/searchitems
-  body: string; // JSON stringified
+  path: string;
+  body: string;
   accessKey: string;
   secretKey: string;
-  amzTarget: string; // e.g. com.amazon.paapi5.v1.ProductAdvertisingAPIv1.SearchItems
+  amzTarget: string;
 };
 
-/**
- * Minimal SigV4 signer for Amazon PA-API v5 (POST + JSON).
- * Returns { headers } to pass to fetch().
- */
 export function signPAAPI({
   method,
   host,
@@ -35,33 +30,33 @@ export function signPAAPI({
   secretKey,
   amzTarget,
 }: SignInput): { headers: Record<string, string> } {
-  // 1) Timestamps
-  const iso = new Date().toISOString(); // 2025-10-08T13:04:05.123Z
-  const amzDate = iso.replace(/[:-]|\.\d{3}/g, ""); // 20251008T130405Z
-  const dateStamp = amzDate.slice(0, 8); // 20251008
+  // 1) Timestamp
+  const iso = new Date().toISOString(); // 2025-10-09T...
+  const amzDate = iso.replace(/[:-]|\.\d{3}/g, ""); // 20251009T123456Z
+  const dateStamp = amzDate.slice(0, 8); // 20251009
 
   // 2) Payload hash
   const payloadHash = sha256hex(body);
 
-  // 3) Canonical headers (lowercase names, sorted later)
   const headerMap: Record<string, string> = {
     host,
     "content-type": "application/json; charset=UTF-8",
+    "content-encoding": "amz-1.0",
     "x-amz-date": amzDate,
     "x-amz-target": amzTarget,
     "x-amz-content-sha256": payloadHash,
   };
+
   const signedHeaderNames = Object.keys(headerMap).sort();
   const canonicalHeaders = signedHeaderNames
     .map((n) => `${n}:${headerMap[n].trim()}\n`)
     .join("");
   const signedHeaders = signedHeaderNames.join(";");
 
-  // 4) Canonical request
   const canonicalRequest = [
     method,
     path,
-    "", // no query string
+    "",
     canonicalHeaders,
     signedHeaders,
     payloadHash,
@@ -77,7 +72,7 @@ export function signPAAPI({
     sha256hex(canonicalRequest),
   ].join("\n");
 
-  // 6) Signing key
+  // 6) Derive signing key
   const kDate = hmac("AWS4" + secretKey, dateStamp);
   const kRegion = hmac(kDate, region);
   const kService = hmac(kRegion, service);
@@ -89,14 +84,17 @@ export function signPAAPI({
     .update(stringToSign, "utf8")
     .digest("hex");
 
-  // 8) Authorization header (final)
-  const authorization = `${algorithm} Credential=${accessKey}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
+  // 8) Authorization header
+  const authorization =
+    `${algorithm} Credential=${accessKey}/${credentialScope}, ` +
+    `SignedHeaders=${signedHeaders}, Signature=${signature}`;
 
-  // 9) Return headers with nicer casing (not required but tidy)
+  // 9) Return EXACTLY the headers you signed (any case is fine when sending)
   return {
     headers: {
       Host: host,
       "Content-Type": "application/json; charset=UTF-8",
+      "Content-Encoding": "amz-1.0",
       "X-Amz-Date": amzDate,
       "X-Amz-Target": amzTarget,
       "X-Amz-Content-Sha256": payloadHash,

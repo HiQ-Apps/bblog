@@ -5,6 +5,22 @@ import { TextInput, Button, Stack, Card, Text } from "@sanity/ui";
 import { useState } from "react";
 
 const API_BASE = process.env.NEXT_PUBLIC_BASE_URL!;
+const path = process.env.NEXT_PUBLIC_SANITY_ORIGIN!;
+
+function corsHeaders() {
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:3333", // Common Sanity Studio port
+    path, // If hosted separately
+    ,
+  ];
+
+  return {
+    "Access-Control-Allow-Origin": allowedOrigins[0], // Or check request origin
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+}
 
 export default function AmazonInput(props: ObjectInputProps) {
   const { value, onChange, renderDefault } = props;
@@ -18,7 +34,7 @@ export default function AmazonInput(props: ObjectInputProps) {
     try {
       const asin = extractAsin(raw);
       const res = await fetch(
-        `${API_BASE}/api/amazon/get-item?asin=${encodeURIComponent(asin)}`
+        `${API_BASE}/api/amazon-search?asin=${encodeURIComponent(asin)}`
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Fetch failed");
