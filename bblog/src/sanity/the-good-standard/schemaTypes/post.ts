@@ -58,16 +58,6 @@ export default defineType({
     // Use your shared Portable Text type
     defineField({ name: "content", title: "Content", type: "blockContent" }),
 
-    // Amazon products referenced in the article
-    defineField({
-      name: "amazonProduct",
-      title: "Amazon Product",
-      type: "amazonProduct",
-      components: {
-        input: AmazonInput,
-      },
-    }),
-
     defineField({
       name: "tags",
       title: "Tags",
