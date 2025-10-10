@@ -88,7 +88,6 @@ export async function paapiFetch<T = any>(
     method: "POST",
     headers,
     body,
-    // Ensure Node runtime, not edge, to use crypto (Next.js: export const runtime='nodejs' in your route)
   });
 
   const text = await res.text();
