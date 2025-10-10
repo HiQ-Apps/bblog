@@ -1,4 +1,3 @@
-// lib/signPaapi.ts
 import crypto from "crypto";
 
 function sha256hex(s: string) {
@@ -39,27 +38,25 @@ export function signPAAPI({
   // 2) Payload hash
   const payloadHash = sha256hex(body);
 
-  // 3) Canonical headers (all LOWERCASE keys)
   const headerMap: Record<string, string> = {
     host,
     "content-type": "application/json; charset=UTF-8",
-    "content-encoding": "amz-1.0", // <-- add this
+    "content-encoding": "amz-1.0",
     "x-amz-date": amzDate,
     "x-amz-target": amzTarget,
     "x-amz-content-sha256": payloadHash,
   };
 
-  const signedHeaderNames = Object.keys(headerMap).sort(); // alpha by name
+  const signedHeaderNames = Object.keys(headerMap).sort();
   const canonicalHeaders = signedHeaderNames
     .map((n) => `${n}:${headerMap[n].trim()}\n`)
     .join("");
   const signedHeaders = signedHeaderNames.join(";");
 
-  // 4) Canonical request
   const canonicalRequest = [
     method,
     path,
-    "", // query string
+    "",
     canonicalHeaders,
     signedHeaders,
     payloadHash,
@@ -97,7 +94,7 @@ export function signPAAPI({
     headers: {
       Host: host,
       "Content-Type": "application/json; charset=UTF-8",
-      "Content-Encoding": "amz-1.0", // <-- send it
+      "Content-Encoding": "amz-1.0",
       "X-Amz-Date": amzDate,
       "X-Amz-Target": amzTarget,
       "X-Amz-Content-Sha256": payloadHash,

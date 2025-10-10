@@ -1,4 +1,3 @@
-// app/api/amazon-search/route.ts
 import { NextResponse } from "next/server";
 import { signPAAPI } from "@/lib/signPaapi";
 
@@ -13,7 +12,6 @@ function corsHeaders() {
   return {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, OPTIONS",
-    // allow signed headers if you’ll call this from another origin
     "Access-Control-Allow-Headers":
       "Content-Type, Authorization, X-Amz-Date, X-Amz-Target, X-Amz-Content-Sha256",
   };
@@ -75,22 +73,14 @@ export async function GET(req: Request) {
     const resp = await fetch(`https://${HOST}${PATH}`, {
       method: "POST",
       headers: {
-        ...signed, // Host, Content-Type, Content-Encoding, X-Amz-*, Authorization
-        ...extras, // optional, not part of signature
+        ...signed,
+        ...extras,
       },
       body,
     });
 
-    // Bubble up PA-API errors with detail
     if (!resp.ok) {
       const text = await resp.text();
-      // helpful for debugging in server logs
-      console.error(
-        "PA-API Error:",
-        resp.status,
-        resp.headers.get("x-amzn-RequestId"),
-        text
-      );
       return NextResponse.json(
         { error: "paapi_error", details: text },
         { status: resp.status, headers: corsHeaders() }
@@ -137,6 +127,7 @@ export async function GET(req: Request) {
     };
 
     return NextResponse.json(normalized, { headers: corsHeaders() });
+    /* eslint-disable @typescript-eslint/no-explicit-any */
   } catch (e: any) {
     console.error("Unhandled error in /api/amazon-search:", e);
     return NextResponse.json(

@@ -1,12 +1,11 @@
-// lib/paapi.ts
 import { signPAAPI } from "./signPaapi";
 
 export type PaapiOperation = "SearchItems" | "GetItems";
 
 type CommonPayload = {
-  PartnerTag: string; // your Associates tag
+  PartnerTag: string;
   PartnerType: "Associates";
-  Marketplace: string; // e.g. www.amazon.com
+  Marketplace: string;
   /* eslint-disable @typescript-eslint/no-explicit-any */
   [k: string]: any;
 };
