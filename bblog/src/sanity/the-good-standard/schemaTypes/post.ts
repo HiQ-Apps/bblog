@@ -1,5 +1,6 @@
 // sanity/schemas/post.ts
 import { defineType, defineField } from "sanity";
+import AmazonInput from "../components/amazonInput";
 
 export default defineType({
   name: "post",
@@ -24,12 +25,25 @@ export default defineType({
       title: "Publish Date",
       type: "datetime",
     }),
+
+    // SEO
+    defineField({ name: "metaTitle", title: "Meta Title", type: "string" }),
+    defineField({
+      name: "metaDescription",
+      title: "Meta Description",
+      type: "text",
+      rows: 3,
+    }),
+
+    // Cards/SEO excerpt
     defineField({
       name: "preview",
       title: "Excerpt (for cards/SEO)",
       type: "text",
       rows: 3,
     }),
+
+    // Hero
     defineField({
       name: "heroImage",
       title: "Hero image",
@@ -40,11 +54,18 @@ export default defineType({
         { name: "caption", type: "string", title: "Caption" },
       ],
     }),
+
+    // Use your shared Portable Text type
+    defineField({ name: "content", title: "Content", type: "blockContent" }),
+
+    // Amazon products referenced in the article
     defineField({
-      name: "content",
-      title: "Content",
-      type: "blockContent",
-      
+      name: "amazonProduct",
+      title: "Amazon Product",
+      type: "amazonProduct",
+      components: {
+        input: AmazonInput,
+      },
     }),
 
     defineField({
@@ -54,6 +75,7 @@ export default defineType({
       of: [{ type: "string" }],
       validation: (Rule) => Rule.required(),
     }),
+
     defineField({
       name: "metaImage",
       title: "Social share image",
@@ -61,6 +83,7 @@ export default defineType({
       options: { hotspot: true },
     }),
     defineField({ name: "canonicalUrl", type: "url" }),
+
     defineField({
       name: "sources",
       title: "Sources",
@@ -77,17 +100,9 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {
-      title: "title",
-      media: "heroImage",
-      slug: "slug.current",
-    },
+    select: { title: "title", media: "heroImage", slug: "slug.current" },
     prepare({ title, media, slug }) {
-      return {
-        title,
-        media,
-        subtitle: slug ? `/${slug}` : "No slug set",
-      };
+      return { title, media, subtitle: slug ? `/${slug}` : "No slug set" };
     },
   },
 });

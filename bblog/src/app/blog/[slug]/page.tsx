@@ -112,7 +112,7 @@ const ptComponents: PortableTextComponents = {
         img
       );
     },
-    amazonEmbed: AmazonProductCard,
+    amazonProduct: AmazonProductCard,
   },
   block: {
     normal: ({ children }) => (
