@@ -4,24 +4,6 @@ import { set, unset } from "sanity";
 import { TextInput, Button, Stack, Card, Text } from "@sanity/ui";
 import { useState } from "react";
 
-const API_BASE = process.env.NEXT_PUBLIC_BASE_URL!;
-const path = process.env.NEXT_PUBLIC_SANITY_ORIGIN!;
-
-function corsHeaders() {
-  const allowedOrigins = [
-    "http://localhost:3000",
-    "http://localhost:3333",
-    path,
-    ,
-  ];
-
-  return {
-    "Access-Control-Allow-Origin": allowedOrigins[0],
-    "Access-Control-Allow-Methods": "GET, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  };
-}
-
 export default function AmazonInput(props: ObjectInputProps) {
   const { value, onChange, renderDefault } = props;
   const [raw, setRaw] = useState<string>(value?.asin || "");
@@ -33,23 +15,24 @@ export default function AmazonInput(props: ObjectInputProps) {
     setLoading(true);
     try {
       const asin = extractAsin(raw);
+
       const res = await fetch(
-        `https://thegoodstandard.org/api/amazon-search?asin=${encodeURIComponent(asin)}`
+        `https://www.thegoodstandard.org/api/amazon-search?asin=${encodeURIComponent(asin)}`
       );
+
       const data = await res.json();
+
       if (!res.ok) throw new Error(data?.error || "Fetch failed");
 
+      // Add _key for Sanity
       onChange(
         set({
+          _type: "amazonProduct",
+          _key: value?._key || `amazon-${asin}-${Date.now()}`,
           asin: data.asin,
-          product: {
-            ...data.product,
-            imageUrl:
-              data.product?.image?.asset?.url ?? data.product?.imageUrl ?? null,
-          },
+          product: data.product,
         })
       );
-      /* eslint-disable @typescript-eslint/no-explicit-any */
     } catch (e: any) {
       setErr(e.message ?? "Failed to fetch");
     } finally {
@@ -90,7 +73,6 @@ export default function AmazonInput(props: ObjectInputProps) {
           </Text>
         </Card>
       )}
-
       {/* Optional: also render default fields UI below your controls */}
       {renderDefault(props)}
     </Stack>

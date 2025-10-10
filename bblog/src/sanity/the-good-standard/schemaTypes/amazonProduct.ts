@@ -4,59 +4,67 @@ import { defineType, defineField } from "sanity";
 export default defineType({
   name: "amazonProduct",
   title: "Amazon Product",
-  type: "document",
+  type: "object",
   fields: [
     defineField({
       name: "asin",
       title: "ASIN",
       type: "string",
-      validation: (r) => r.required().min(10).max(10),
+      validation: (r) => r.required(),
     }),
     defineField({
-      name: "marketplace",
-      title: "Marketplace",
-      type: "string",
-      initialValue: "www.amazon.com",
-      options: {
-        list: [
-          { title: "US (.com)", value: "www.amazon.com" },
-          { title: "UK (.co.uk)", value: "www.amazon.co.uk" },
-          { title: "DE (.de)", value: "www.amazon.de" },
-        ],
-      },
-    }),
-    defineField({
-      name: "titleOverride",
-      title: "Title (override)",
-      type: "string",
-    }),
-    defineField({
-      name: "image",
-      title: "Image (snapshot)",
-      type: "image",
-      description:
-        "Optional snapshot; normally you’ll render from PA-API response",
-      options: { hotspot: true },
-    }),
-    defineField({
-      name: "priceSnapshot",
-      title: "Price (snapshot)",
+      name: "product",
+      title: "Product Details",
       type: "object",
       fields: [
-        { name: "amount", type: "number" },
-        { name: "currency", type: "string" },
-        { name: "capturedAt", type: "datetime" },
+        {
+          name: "title",
+          title: "Title",
+          type: "string",
+        },
+        {
+          name: "description",
+          title: "Description",
+          type: "text",
+        },
+        {
+          name: "imageUrl",
+          title: "Image",
+          type: "object",
+          fields: [
+            {
+              name: "asset",
+              type: "object",
+              fields: [{ name: "url", type: "url" }],
+            },
+          ],
+        },
+        {
+          name: "detailPageUrl",
+          title: "Amazon URL",
+          type: "url",
+        },
+        {
+          name: "priceSnapshot",
+          title: "Price Snapshot",
+          type: "object",
+          fields: [
+            { name: "amount", type: "number" },
+            { name: "currency", type: "string" },
+            { name: "retrievedAt", type: "datetime" },
+          ],
+        },
       ],
     }),
-    defineField({
-      name: "detailPageUrl",
-      title: "Detail Page URL",
-      type: "url",
-    }),
-    defineField({ name: "notes", title: "Notes", type: "text", rows: 2 }),
   ],
   preview: {
-    select: { title: "asin", subtitle: "marketplace", media: "image" },
-    prepare: ({ title, subtitle, media }) => ({ title, subtitle, media }),
+    select: {
+      title: "product.title",
+      subtitle: "asin",
+    },
+    prepare: ({ title, subtitle }) => ({
+      title: title || subtitle,
+      subtitle: `ASIN: ${subtitle}`,
+    }),
   },
 });

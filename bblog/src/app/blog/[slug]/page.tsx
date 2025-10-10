@@ -14,6 +14,7 @@ import {
   SITE_NAME,
 } from "@/lib/seo";
 import { draftMode } from "next/headers";
+import AmazonProductCard from "@/components/composite/amazonProductCard";
 
 export const revalidate = 120;
 
@@ -111,40 +112,7 @@ const ptComponents: PortableTextComponents = {
         img
       );
     },
-    amazonEmbed: ({ value }) => {
-      const p = value?.product;
-      if (!p) return null;
-      return (
-        <div className="my-4">
-          <h3 className="font-lora text-2xl font-bold">{p.title}</h3>
-          <p className="font-mont text-xl">{p.description}</p>
-          {p.imageUrl && (
-            <Image
-              src={p.imageUrl}
-              alt={p.title}
-              width={300}
-              height={300}
-              className="my-2 rounded"
-            />
-          )}
-          {p.priceSnapshot?.amount && p.priceSnapshot?.currency && (
-            <p className="font-mont text-lg font-semibold">
-              Price: {p.priceSnapshot.amount} {p.priceSnapshot.currency}
-            </p>
-          )}
-          {p.detailPageUrl && (
-            <a
-              href={p.detailPageUrl}
-              target="_blank"
-              rel="sponsored nofollow noopener"
-              className="text-blue-600 underline"
-            >
-              View on Amazon
-            </a>
-          )}
-        </div>
-      );
-    },
+    amazonEmbed: AmazonProductCard,
   },
   block: {
     normal: ({ children }) => (

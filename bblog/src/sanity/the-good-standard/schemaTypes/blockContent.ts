@@ -1,5 +1,6 @@
 // sanity/schemas/blockContent.ts
 import { defineType, defineArrayMember } from "sanity";
+import AmazonInput from "../components/amazonInput";
 
 export default defineType({
   name: "blockContent",
@@ -8,7 +9,6 @@ export default defineType({
   of: [
     defineArrayMember({
       type: "block",
-      title: "Amazon Product",
       styles: [
         { title: "Normal", value: "normal" },
         { title: "H2", value: "h2" },
@@ -19,7 +19,7 @@ export default defineType({
         { title: "Bullet", value: "bullet" },
         { title: "Numbered", value: "number" },
       ],
-       marks: {
+      marks: {
         annotations: [
           {
             name: "link",
@@ -32,19 +32,22 @@ export default defineType({
                 validation: (r) =>
                   r.uri({ scheme: ["http", "https", "mailto", "tel"] }),
               },
-              { name: "nofollow", type: "boolean", title: "nofollow/sponsored" },
+              {
+                name: "nofollow",
+                type: "boolean",
+                title: "nofollow/sponsored",
+              },
             ],
           },
-          
         ],
       },
-      
     }),
-
     defineArrayMember({
-      type: "amazonEmbed",
+      type: "amazonProduct",
+      components: {
+        input: AmazonInput,
+      },
     }),
-
     defineArrayMember({
       type: "image",
       options: { hotspot: true },
