@@ -33,6 +33,7 @@ export default function AmazonInput(props: ObjectInputProps) {
           product: data.product,
         })
       );
+      /* eslint-disable @typescript-eslint/no-explicit-any */
     } catch (e: any) {
       setErr(e.message ?? "Failed to fetch");
     } finally {
