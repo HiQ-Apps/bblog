@@ -28,12 +28,6 @@ const AboutPage = () => {
           choices, little by little.
         </p>
         <p>
-          You&apos;ll find seasonal guides, product roundups, and simple rituals
-          for a healthier home. When we recommend products, it&apos;s because
-          they align with our criteria: natural or recycled materials where
-          possible, transparent sourcing, and design that&apos;s built to last.
-        </p>
-        <p>
           On The Good Standard, you&apos;ll find simple
           upgrades for your home, lifestyle, and daily routines. Some are as
           small as reusing what you already have in new ways; others involve
