@@ -10,13 +10,13 @@ const path = process.env.NEXT_PUBLIC_SANITY_ORIGIN!;
 function corsHeaders() {
   const allowedOrigins = [
     "http://localhost:3000",
-    "http://localhost:3333", // Common Sanity Studio port
-    path, // If hosted separately
+    "http://localhost:3333",
+    path,
     ,
   ];
 
   return {
-    "Access-Control-Allow-Origin": allowedOrigins[0], // Or check request origin
+    "Access-Control-Allow-Origin": allowedOrigins[0],
     "Access-Control-Allow-Methods": "GET, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
   };
@@ -34,7 +34,7 @@ export default function AmazonInput(props: ObjectInputProps) {
     try {
       const asin = extractAsin(raw);
       const res = await fetch(
-        `${API_BASE}/api/amazon-search?asin=${encodeURIComponent(asin)}`
+        `https://thegoodstandard.org/api/amazon-search?asin=${encodeURIComponent(asin)}`
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Fetch failed");
