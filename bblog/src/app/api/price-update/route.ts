@@ -24,6 +24,7 @@ const MAX_RETRIES = 3;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function fetchPrice(asin: string, marketplace = "www.amazon.com") {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   let lastErr: any;
   for (let i = 0; i < MAX_RETRIES; i++) {
     try {
@@ -41,6 +42,7 @@ async function fetchPrice(asin: string, marketplace = "www.amazon.com") {
         };
       }
       throw new Error("No price in PA-API response");
+      /* eslint-disable @typescript-eslint/no-explicit-any */
     } catch (e: any) {
       lastErr = e;
       // backoff on throttle
@@ -59,7 +61,7 @@ async function fetchPrice(asin: string, marketplace = "www.amazon.com") {
   }
   throw lastErr;
 }
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 async function patchBothVariants(id: string, patch: any) {
   const tx = sanity.transaction();
   tx.patch(id, (p) => p.set(patch));
@@ -139,6 +141,7 @@ export async function POST(req: Request) {
           ids: docs.map((d) => d._id),
           ok: true,
         });
+        /* eslint-disable @typescript-eslint/no-explicit-any */
       } catch (e: any) {
         processed.push({
           asin,
@@ -160,6 +163,7 @@ export async function POST(req: Request) {
       uniqueItems: groups.size,
       processed,
     });
+    /* eslint-disable @typescript-eslint/no-explicit-any */
   } catch (e: any) {
     return NextResponse.json(
       { error: e?.message ?? "Refresh failed" },
