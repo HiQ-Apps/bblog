@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 import { Montserrat, Playfair_Display, Lora } from "next/font/google";
@@ -72,6 +73,7 @@ export default async function RootLayout({
             gtag('config', 'G-8FK103BLYZ');
           `}
         </Script>
+        <Analytics />
       </head>
       <body
         className={`${montserrat.variable} ${playfair.variable} ${lora.variable} bg-primary antialiased`}
