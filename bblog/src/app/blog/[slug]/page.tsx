@@ -239,7 +239,11 @@ export default async function PostPage({ params }: PageProps) {
   let post;
 
   if (isEnabled) {
-    post = await client.fetch(postBySlugDraftQuery, { slug });
+    post = await client.fetch(
+      postBySlugDraftQuery,
+      { slug },
+      { cache: "no-store" }
+    );
   } else {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/by-slug/${slug}`
