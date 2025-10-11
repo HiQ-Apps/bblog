@@ -116,7 +116,7 @@ const ptComponents: PortableTextComponents = {
   },
   block: {
     normal: ({ children }) => (
-      <p className="font-mont text-xl my-4">{children}</p>
+      <p className="font-mont text-bas my-4">{children}</p>
     ),
     h2: ({ children }) => (
       <h2 className="font-lora text-3xl font-bold mt-8">{children}</h2>
@@ -132,7 +132,7 @@ const ptComponents: PortableTextComponents = {
   },
   list: {
     bullet: ({ children }) => (
-      <ul className="list-disc list-inside font-mont text-xl">{children}</ul>
+      <ul className="list-disc list-inside font-mont text-base">{children}</ul>
     ),
     number: ({ children }) => (
       <ol className="list-decimal list-inside font-mont text-xl">{children}</ol>
