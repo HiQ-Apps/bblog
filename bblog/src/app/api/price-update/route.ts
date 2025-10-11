@@ -3,14 +3,72 @@ import { createClient } from "@sanity/client";
 import { paapiFetch } from "@/lib/paapi";
 import groq from "groq";
 
+/** ----------------- CORS + Auth ----------------- **/
+const ALLOWED_ORIGINS = (process.env.CORS_ORIGINS ?? "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+// Example env:
+// CORS_ORIGINS=https://<your>.sanity.studio,http://localhost:3333,https://thegoodstandard.co
+
+const ADMIN_TOKEN = process.env.PRICE_UPDATE_SECRET;
+
+function isAllowedOrigin(origin: string) {
+  if (!origin) return false;
+  return ALLOWED_ORIGINS.includes("*") || ALLOWED_ORIGINS.includes(origin);
+}
+
+function buildCorsHeaders(origin: string) {
+  const h = new Headers();
+  if (isAllowedOrigin(origin)) {
+    h.set("Access-Control-Allow-Origin", origin); // echo origin for credentials-compat
+    h.set("Vary", "Origin");
+  }
+  h.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+  h.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Requested-With"
+  );
+  h.set("Access-Control-Max-Age", "86400");
+  // If you ever need cookies across origins, also set:
+  // h.set("Access-Control-Allow-Credentials", "true");
+  return h;
+}
+
+function withCors(req: Request, res: NextResponse) {
+  const origin = req.headers.get("origin") ?? "";
+  const cors = buildCorsHeaders(origin);
+  cors.forEach((v, k) => res.headers.set(k, v));
+  return res;
+}
+
+function assertAdmin(req: Request) {
+  if (!ADMIN_TOKEN) return; // allow open if you really want in dev
+  const auth = req.headers.get("authorization") || "";
+  if (auth !== `Bearer ${ADMIN_TOKEN}`) {
+    throw new Error("Unauthorized");
+  }
+}
+
+export async function OPTIONS(req: Request) {
+  const origin = req.headers.get("origin") ?? "";
+  return new NextResponse(null, {
+    status: 204,
+    headers: buildCorsHeaders(origin),
+  });
+}
+/** --------------- End CORS + Auth --------------- **/
+
+/** ----------------- Sanity client ---------------- **/
 const sanity = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-  token: process.env.SANITY_WRITE_TOKEN!,
+  token: process.env.SANITY_WRITE_TOKEN!, // server-side write token
   apiVersion: "2025-01-01",
   useCdn: false,
 });
 
+/** ----------------- Types & utils ---------------- **/
 type Prod = {
   _id: string;
   asin: string;
@@ -18,7 +76,7 @@ type Prod = {
   capturedAt?: string;
 };
 
-const SLEEP_MS = 1100;
+const SLEEP_MS = 1100; // throttle between unique PA-API calls
 const MAX_RETRIES = 3;
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -42,10 +100,10 @@ async function fetchPrice(asin: string, marketplace = "www.amazon.com") {
         };
       }
       throw new Error("No price in PA-API response");
+
       /* eslint-disable @typescript-eslint/no-explicit-any */
     } catch (e: any) {
       lastErr = e;
-      // backoff on throttle
       const msg = String(e?.message || "");
       const backoff = i * 1000;
       if (
@@ -61,6 +119,7 @@ async function fetchPrice(asin: string, marketplace = "www.amazon.com") {
   }
   throw lastErr;
 }
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 async function patchBothVariants(id: string, patch: any) {
   const tx = sanity.transaction();
@@ -78,11 +137,43 @@ async function patchBothVariants(id: string, patch: any) {
   }
 }
 
+/** --------------- Main POST handler --------------- **/
 export async function POST(req: Request) {
+  // Auth first
+  try {
+    assertAdmin(req);
+
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+  } catch (e: any) {
+    return withCors(
+      req,
+      NextResponse.json(
+        { error: e?.message || "Unauthorized" },
+        { status: 401 }
+      )
+    );
+  }
+
+  // Accept params from either query string or JSON body
   const url = new URL(req.url);
-  const limit = Number(url.searchParams.get("limit") || "0");
-  const dryRun = url.searchParams.get("dryRun") === "1";
-  const since = url.searchParams.get("since");
+  const qsLimit = url.searchParams.get("limit");
+  const qsDryRun = url.searchParams.get("dryRun");
+  const qsSince = url.searchParams.get("since");
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  let body: any = null;
+  try {
+    if (req.headers.get("content-type")?.includes("application/json")) {
+      body = await req.json();
+    }
+  } catch {
+    // ignore invalid JSON
+  }
+
+  const limit = Number((body?.limit ?? qsLimit) || "0");
+  const dryRun =
+    String(body?.dryRun ?? qsDryRun ?? "") === "1" || body?.dryRun === true;
+  const since = (body?.since ?? qsSince) as string | undefined;
 
   try {
     const query = groq`
@@ -96,10 +187,8 @@ export async function POST(req: Request) {
     `;
     const all: Prod[] = await sanity.fetch(query, { since });
 
-    // Optional cap
     const targets = limit > 0 ? all.slice(0, limit) : all;
 
-    // Dedupe by asin+marketplace so we call PA-API once per unique product
     const uniqKey = (p: Prod) =>
       `${p.asin}::${p.marketplace || "www.amazon.com"}`;
     const groups = new Map<string, Prod[]>();
@@ -130,8 +219,6 @@ export async function POST(req: Request) {
               capturedAt: new Date().toISOString(),
             },
           };
-
-          // patch every doc that shares this ASIN+marketplace (draft + published)
           await Promise.all(docs.map((d) => patchBothVariants(d._id, patch)));
         }
 
@@ -141,6 +228,7 @@ export async function POST(req: Request) {
           ids: docs.map((d) => d._id),
           ok: true,
         });
+
         /* eslint-disable @typescript-eslint/no-explicit-any */
       } catch (e: any) {
         processed.push({
@@ -152,22 +240,27 @@ export async function POST(req: Request) {
         });
       }
 
-      // throttle between unique PA-API calls
       await sleep(SLEEP_MS);
     }
 
-    return NextResponse.json({
-      ok: true,
-      dryRun,
-      totalDocs: targets.length,
-      uniqueItems: groups.size,
-      processed,
-    });
+    return withCors(
+      req,
+      NextResponse.json({
+        ok: true,
+        dryRun,
+        totalDocs: targets.length,
+        uniqueItems: groups.size,
+        processed,
+      })
+    );
     /* eslint-disable @typescript-eslint/no-explicit-any */
   } catch (e: any) {
-    return NextResponse.json(
-      { error: e?.message ?? "Refresh failed" },
-      { status: 500 }
+    return withCors(
+      req,
+      NextResponse.json(
+        { error: e?.message ?? "Refresh failed" },
+        { status: 500 }
+      )
     );
   }
 }

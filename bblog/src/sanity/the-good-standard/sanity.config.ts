@@ -5,6 +5,7 @@ import { visionTool } from "@sanity/vision";
 import { schema } from "./schemaTypes";
 import resolveProductionUrl from "./lib/resolveProductionUrl";
 import { SanityDocument } from "next-sanity";
+import { priceUpdaterTool } from "./plugins/price-updater";
 
 export default defineConfig({
   name: "default",
@@ -13,7 +14,7 @@ export default defineConfig({
   projectId: process.env.SANITY_STUDIO_PROJECT_ID as string,
   dataset: process.env.SANITY_STUDIO_DATASET as string,
   basePath: "/studio",
-  plugins: [structureTool(), visionTool()],
+  plugins: [structureTool(), visionTool(), priceUpdaterTool()],
   schema: { types: schema.types },
 
   document: {
