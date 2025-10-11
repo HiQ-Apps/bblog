@@ -26,6 +26,7 @@
     "@sanity/vision": "^4.10.0",
     "@sanity/visual-editing": "^3.0.5",
     "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.6.0",
