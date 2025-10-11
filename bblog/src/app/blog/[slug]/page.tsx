@@ -7,12 +7,7 @@ import type { Metadata } from "next";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
 import Disclosure from "@/components/composite/disclosureCard";
 import { Post } from "@/types/Post";
-import {
-  SITE_URL,
-  DEFAULT_DESCRIPTION,
-  DEFAULT_OG_IMAGE,
-  SITE_NAME,
-} from "@/lib/seo";
+import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo";
 import { draftMode } from "next/headers";
 import AmazonProductCard from "@/components/composite/amazonProductCard";
 
