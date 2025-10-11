@@ -91,6 +91,8 @@ async function fetchPrice(asin: string, marketplace = "www.amazon.com") {
         ItemIds: [asin],
         Marketplace: marketplace,
         Resources: ["Offers.Listings.Price"],
+        PartnerTag: process.env.NEXT_PUBLIC_AMAZON_PARTNER_TAG!,
+        PartnerType: "Associates",
       });
       const item = data?.ItemsResult?.Items?.[0];
       const price = item?.Offers?.Listings?.[0]?.Price;
