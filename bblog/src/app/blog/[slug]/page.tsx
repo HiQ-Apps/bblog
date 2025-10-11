@@ -1,7 +1,7 @@
 // app/post/[id]/page.tsx
 import { notFound } from "next/navigation";
 import { client } from "@/sanity/the-good-standard/lib/live";
-import { postBySlugDraftQuery } from "@/lib/queries";
+import { postBySlugDraftQuery, postBySlugQuery } from "@/lib/queries";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
@@ -13,23 +13,22 @@ import AmazonProductCard from "@/components/composite/amazonProductCard";
 
 export const revalidate = 120;
 
-async function fetchPost(slug: string): Promise<Post | null> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/by-slug/${slug}`,
-    {
-      next: { revalidate },
-    }
+async function fetchPostSSR(slug: string) {
+  const { isEnabled } = await draftMode();
+  // Query Sanity directly; cache only when not in draft
+  return client.fetch(
+    isEnabled ? postBySlugDraftQuery : postBySlugQuery,
+    { slug },
+    isEnabled ? { cache: "no-store" } : { next: { revalidate } }
   );
-  if (!res.ok) return null;
-  return res.json();
 }
-
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const post = await fetchPost((await params).slug);
+  const { slug } = await params;
+  const post = await fetchPostSSR(slug);
   if (!post) return {};
 
   const title = post.seoTitle?.trim() || post.title;
@@ -234,24 +233,7 @@ type PageProps = {
 
 export default async function PostPage({ params }: PageProps) {
   const { slug } = await params;
-  const { isEnabled } = await draftMode();
-
-  let post;
-
-  if (isEnabled) {
-    post = await client.fetch(
-      postBySlugDraftQuery,
-      { slug },
-      { cache: "no-store" }
-    );
-  } else {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/by-slug/${slug}`
-    );
-    if (!response.ok) return notFound();
-    post = await response.json();
-  }
-
+  const post = await fetchPostSSR(slug);
   if (!post) return notFound();
 
   return <View post={post} />;
