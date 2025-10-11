@@ -37,6 +37,7 @@ function imgUrl(
 ): string | null {
   if (!u) return null;
   if (typeof u === "string") return u;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   if ("asset" in (u as any)) return (u as any).asset?.url ?? null;
   const s = u as ImgSet;
   return s[want] ?? s.large ?? s.medium ?? s.small ?? null;
