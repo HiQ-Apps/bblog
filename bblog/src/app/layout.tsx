@@ -73,7 +73,6 @@ export default async function RootLayout({
             gtag('config', 'G-8FK103BLYZ');
           `}
         </Script>
-        <Analytics />
       </head>
       <body
         className={`${montserrat.variable} ${playfair.variable} ${lora.variable} bg-primary antialiased`}
@@ -127,6 +126,7 @@ export default async function RootLayout({
             }),
           }}
         />
+        <Analytics />
       </body>
     </html>
   );
