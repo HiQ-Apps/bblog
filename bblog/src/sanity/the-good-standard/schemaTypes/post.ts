@@ -1,6 +1,5 @@
 // sanity/schemas/post.ts
 import { defineType, defineField } from "sanity";
-import AmazonInput from "../components/amazonInput";
 
 export default defineType({
   name: "post",

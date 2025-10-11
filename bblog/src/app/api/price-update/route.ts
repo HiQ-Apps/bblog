@@ -1,27 +1,29 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@sanity/client";
-import { paapiFetch } from "@/lib/paapi";
 import groq from "groq";
+import { paapiFetch } from "@/lib/paapi";
 
 /** ----------------- CORS + Auth ----------------- **/
 const ALLOWED_ORIGINS = (process.env.CORS_ORIGINS ?? "")
   .split(",")
   .map((s) => s.trim())
   .filter(Boolean);
-// Example env:
-// CORS_ORIGINS=https://<your>.sanity.studio,http://localhost:3333,https://thegoodstandard.co
 
 const ADMIN_TOKEN = process.env.PRICE_UPDATE_SECRET;
 
 function isAllowedOrigin(origin: string) {
   if (!origin) return false;
-  return ALLOWED_ORIGINS.includes("*") || ALLOWED_ORIGINS.includes(origin);
+  const o = origin.trim().toLowerCase();
+  return (
+    ALLOWED_ORIGINS.includes("*") ||
+    ALLOWED_ORIGINS.some((a) => a.trim().toLowerCase() === o)
+  );
 }
 
 function buildCorsHeaders(origin: string) {
   const h = new Headers();
   if (isAllowedOrigin(origin)) {
-    h.set("Access-Control-Allow-Origin", origin); // echo origin for credentials-compat
+    h.set("Access-Control-Allow-Origin", origin);
     h.set("Vary", "Origin");
   }
   h.set("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -43,7 +45,7 @@ function withCors(req: Request, res: NextResponse) {
 }
 
 function assertAdmin(req: Request) {
-  if (!ADMIN_TOKEN) return; // allow open if you really want in dev
+  if (!ADMIN_TOKEN) return; // allow open in dev if you remove the secret
   const auth = req.headers.get("authorization") || "";
   if (auth !== `Bearer ${ADMIN_TOKEN}`) {
     throw new Error("Unauthorized");
@@ -69,11 +71,11 @@ const sanity = createClient({
 });
 
 /** ----------------- Types & utils ---------------- **/
-type Prod = {
-  _id: string;
+type BlockTarget = {
+  postId: string;
+  blockKey: string;
   asin: string;
-  marketplace?: string;
-  capturedAt?: string;
+  marketplace: string;
 };
 
 const SLEEP_MS = 1100; // throttle between unique PA-API calls
@@ -82,7 +84,6 @@ const MAX_RETRIES = 3;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function fetchPrice(asin: string, marketplace = "www.amazon.com") {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   let lastErr: any;
   for (let i = 0; i < MAX_RETRIES; i++) {
     try {
@@ -100,8 +101,6 @@ async function fetchPrice(asin: string, marketplace = "www.amazon.com") {
         };
       }
       throw new Error("No price in PA-API response");
-
-      /* eslint-disable @typescript-eslint/no-explicit-any */
     } catch (e: any) {
       lastErr = e;
       const msg = String(e?.message || "");
@@ -120,19 +119,19 @@ async function fetchPrice(asin: string, marketplace = "www.amazon.com") {
   throw lastErr;
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-async function patchBothVariants(id: string, patch: any) {
+async function patchNestedPath(id: string, path: string, value: unknown) {
+  const setObj = { [path]: value } as Record<string, unknown>;
   const tx = sanity.transaction();
-  tx.patch(id, (p) => p.set(patch));
-  tx.patch(`drafts.${id}`, (p) => p.set(patch));
+  tx.patch(id, (p) => p.set(setObj));
+  tx.patch(`drafts.${id}`, (p) => p.set(setObj));
   try {
     await tx.commit();
   } catch {
     try {
-      await sanity.patch(id).set(patch).commit();
+      await sanity.patch(id).set(setObj).commit();
     } catch {}
     try {
-      await sanity.patch(`drafts.${id}`).set(patch).commit();
+      await sanity.patch(`drafts.${id}`).set(setObj).commit();
     } catch {}
   }
 }
@@ -142,8 +141,6 @@ export async function POST(req: Request) {
   // Auth first
   try {
     assertAdmin(req);
-
-    /* eslint-disable @typescript-eslint/no-explicit-any */
   } catch (e: any) {
     return withCors(
       req,
@@ -154,13 +151,12 @@ export async function POST(req: Request) {
     );
   }
 
-  // Accept params from either query string or JSON body
+  // Accept params from query OR JSON body
   const url = new URL(req.url);
   const qsLimit = url.searchParams.get("limit");
   const qsDryRun = url.searchParams.get("dryRun");
   const qsSince = url.searchParams.get("since");
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   let body: any = null;
   try {
     if (req.headers.get("content-type")?.includes("application/json")) {
@@ -176,33 +172,60 @@ export async function POST(req: Request) {
   const since = (body?.since ?? qsSince) as string | undefined;
 
   try {
+    // 1) Query parent posts with embedded amazonProduct blocks
     const query = groq`
-      *[_type == "amazonProduct"${
-        since
-          ? ` && ( !defined(priceSnapshot.capturedAt) || priceSnapshot.capturedAt < $since )`
-          : ""
-      }]{
-        _id, asin, marketplace, "capturedAt": priceSnapshot.capturedAt
+      *[_type == "post"]{
+        _id,
+        "items": content[
+          _type == "amazonProduct"${
+            since
+              ? ` && ( !defined(product.priceSnapshot.retrievedAt)
+                       || product.priceSnapshot.retrievedAt < $since )`
+              : ""
+          }
+        ]{
+          _key,
+          asin,
+          "marketplace": coalesce(marketplace, "www.amazon.com")
+        }
       } | order(_updatedAt desc)
     `;
-    const all: Prod[] = await sanity.fetch(query, { since });
 
-    const targets = limit > 0 ? all.slice(0, limit) : all;
+    const posts: Array<{
+      _id: string;
+      items?: Array<{ _key: string; asin: string; marketplace?: string }>;
+    }> = await sanity.fetch(query, { since });
 
-    const uniqKey = (p: Prod) =>
-      `${p.asin}::${p.marketplace || "www.amazon.com"}`;
-    const groups = new Map<string, Prod[]>();
-    for (const p of targets) {
-      if (!p.asin) continue;
-      const k = uniqKey(p);
-      if (!groups.has(k)) groups.set(k, []);
-      groups.get(k)!.push(p);
+    // Flatten blocks
+    const blocks: BlockTarget[] = [];
+    for (const post of posts) {
+      for (const it of post.items ?? []) {
+        if (!it?.asin) continue;
+        blocks.push({
+          postId: post._id,
+          blockKey: it._key,
+          asin: it.asin,
+          marketplace: it.marketplace || "www.amazon.com",
+        });
+      }
     }
 
+    // Optional cap
+    const targets = limit > 0 ? blocks.slice(0, limit) : blocks;
+
+    // Group by asin+marketplace
+    const groups = new Map<string, BlockTarget[]>();
+    for (const t of targets) {
+      const k = `${t.asin}::${t.marketplace}`;
+      if (!groups.has(k)) groups.set(k, []);
+      groups.get(k)!.push(t);
+    }
+
+    // 2) Process per unique item
     const processed: Array<{
       asin: string;
       marketplace: string;
-      ids: string[];
+      targets: Array<{ postId: string; blockKey: string }>;
       ok: boolean;
       error?: string;
     }> = [];
@@ -212,29 +235,39 @@ export async function POST(req: Request) {
       try {
         if (!dryRun) {
           const price = await fetchPrice(asin, marketplace);
-          const patch = {
-            priceSnapshot: {
-              amount: price.amount,
-              currency: price.currency,
-              capturedAt: new Date().toISOString(),
-            },
+          const value = {
+            amount: price.amount,
+            currency: price.currency,
+            retrievedAt: new Date().toISOString(),
           };
-          await Promise.all(docs.map((d) => patchBothVariants(d._id, patch)));
+          await Promise.all(
+            docs.map((t) =>
+              patchNestedPath(
+                t.postId,
+                `content[_key=="${t.blockKey}"].product.priceSnapshot`,
+                value
+              )
+            )
+          );
         }
 
         processed.push({
           asin,
           marketplace,
-          ids: docs.map((d) => d._id),
+          targets: docs.map((d) => ({
+            postId: d.postId,
+            blockKey: d.blockKey,
+          })),
           ok: true,
         });
-
-        /* eslint-disable @typescript-eslint/no-explicit-any */
       } catch (e: any) {
         processed.push({
           asin,
           marketplace,
-          ids: docs.map((d) => d._id),
+          targets: docs.map((d) => ({
+            postId: d.postId,
+            blockKey: d.blockKey,
+          })),
           ok: false,
           error: e?.message ?? "Failed",
         });
@@ -248,12 +281,11 @@ export async function POST(req: Request) {
       NextResponse.json({
         ok: true,
         dryRun,
-        totalDocs: targets.length,
+        totalBlocks: targets.length,
         uniqueItems: groups.size,
         processed,
       })
     );
-    /* eslint-disable @typescript-eslint/no-explicit-any */
   } catch (e: any) {
     return withCors(
       req,
