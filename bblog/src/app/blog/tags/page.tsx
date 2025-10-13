@@ -1,5 +1,6 @@
 import { getAllTags } from "@/queries/Post";
 import PostsByTagsBrowser from "@/components/composite/postsByTagsBrowser";
+import HorizontalAd from "@/components/composite/horizontalAd";
 
 const BlogTagsPage = async () => {
   const tags = await getAllTags();
@@ -11,6 +12,7 @@ const BlogTagsPage = async () => {
   return (
     <div className="w-full py-2 px-8">
       <PostsByTagsBrowser availableTags={tags} />
+      <HorizontalAd className="my-8" />
     </div>
   );
 };
