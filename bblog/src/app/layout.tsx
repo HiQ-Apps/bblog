@@ -75,7 +75,8 @@ export default async function RootLayout({
           `}
         </Script>
         <Script
-          async
+          id="adsense-init"
+          strategy="afterInteractive"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3628542699195263"
           crossOrigin="anonymous"
         />
