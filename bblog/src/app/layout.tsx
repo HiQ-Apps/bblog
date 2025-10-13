@@ -79,6 +79,7 @@ export default async function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3628542699195263"
           crossOrigin="anonymous"
         ></script>
+        <meta name="fo-verify" content="6337d716-9792-4f87-b1bd-7c2886f3c118" />
       </head>
       <body
         className={`${montserrat.variable} ${playfair.variable} ${lora.variable} bg-primary antialiased`}
