@@ -1,6 +1,6 @@
 "use client";
 
-import AdUnit from "./adUnit";
+import AdUnit from "./AdUnit";
 
 type HorizontalAdProps = {
   slot?: string;
