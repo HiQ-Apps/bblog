@@ -24,7 +24,6 @@ export default function AdUnit({
   useEffect(() => {
     if (pushedRef.current) return;
     try {
-      // @ts-ignore
       (window.adsbygoogle = window.adsbygoogle || []).push({});
       pushedRef.current = true;
     } catch (e) {
