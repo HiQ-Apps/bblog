@@ -6,10 +6,10 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
 import Disclosure from "@/components/composite/disclosureCard";
-import { Post } from "@/types/Post";
 import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo";
 import { draftMode } from "next/headers";
 import AmazonProductCard from "@/components/composite/amazonProductCard";
+import HorizontalAd from "@/components/composite/horizontalAd";
 
 export const revalidate = 120;
 
@@ -222,6 +222,7 @@ function View({ post }: { post: any }) {
           </p>
         </section>
       )}
+      <HorizontalAd className="my-8" />
     </main>
   );
 }

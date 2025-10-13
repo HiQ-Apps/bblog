@@ -5,6 +5,7 @@ import Image from "next/image";
 import { type PostCard } from "@/types/Post";
 import { notFound } from "next/navigation";
 import { getAllPostsPaginated } from "@/queries/Post";
+import HorizontalAd from "@/components/composite/horizontalAd";
 
 const revalidate = 120;
 
@@ -132,6 +133,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           Next →
         </Link>
       </nav>
+      <HorizontalAd className="my-8" />
     </div>
   );
 }
