@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { getAllPostsPaginated } from "@/queries/Post";
 import HorizontalAd from "@/components/composite/horizontalAd";
 
-const revalidate = 120;
+export const dynamic = "force-dynamic";
 
 type BlogPageProps = {
   searchParams?: Promise<{ page?: string }>;
