@@ -14,8 +14,6 @@ import {
 import BlogCard from "./blogCard";
 import type { PostCard } from "@/types/Post";
 
-export const dynamic = "force-dynamic";
-
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const parent: Variants = {
