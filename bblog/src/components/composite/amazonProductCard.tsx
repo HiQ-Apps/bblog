@@ -87,7 +87,7 @@ export default function AmazonProductCard({ value }: AmazonProductProps) {
       itemType="https://schema.org/Product"
       className="group relative"
     >
-      <div className="border border-accent bg-white rounded-xl">
+      <div className="border-3 border-accent bg-white rounded-xl my-3">
         <div className="p-6 md:p-7 lg:p-8">
           <div className="grid items-stretch gap-4 md:gap-6 lg:grid-cols-[300px_1fr]">
             <div className="relative h-64 md:h-72 lg:h-72 overflow-hidden rounded-xl bg-white">
@@ -109,7 +109,7 @@ export default function AmazonProductCard({ value }: AmazonProductProps) {
             <div className="h-full flex flex-col justify-center items-start text-left px-2 md:px-4">
               <div className="flex flex-col items-center text-center w-full">
                 <div className="max-w-[32ch] flex flex-col items-center">
-                  <h3 className="font-lora text-xl md:text-2xl font-semibold leading-snug">
+                  <h3 className="font-lora text-2xl md:text-2xl font-bold leading-snug">
                     {product.title}
                   </h3>
 
