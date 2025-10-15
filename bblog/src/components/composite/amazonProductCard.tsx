@@ -88,11 +88,11 @@ export default function AmazonProductCard({ value }: AmazonProductProps) {
       className="group relative"
     >
       {/* Gradient frame with subtle lift-on-hover */}
-      <div className="rounded-2xl bg-gradient-to-br from-amber-200 via-rose-200 to-emerald-200 p-[1.5px] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.25)] transition-transform duration-300 group-hover:-translate-y-0.5">
-        <div className="rounded-[calc(theme(borderRadius.2xl)-2px)] bg-[#fffaf6] border border-[#e7d7cc]">
+      <div className="border border-6 border-accent">
+        <div className="bg-white">
           {/* Body */}
           <div className="p-8">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,320px)_1fr] md:items-center">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,320px)_1fr] md:items-center">
               {/* Image (animated via motion wrapper) */}
               <MotionImageFrame className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-black/5 bg-neutral-50 ring-1 ring-black/5">
                 {img ? (
@@ -115,15 +115,15 @@ export default function AmazonProductCard({ value }: AmazonProductProps) {
               </MotionImageFrame>
 
               {/* Content */}
-              <div className="min-w-0 flex flex-col gap-2">
-                <h3 className="text-2xl md:text-3xl font-bold leading-snug [font-family:var(--font-lora)] text-[#2b2b2b] line-clamp-2">
+              <div className="min-w-0 flex flex-col justify-around h-full">
+                <h3 className="text-2xl md:text-3xl font-lora font-bold leading-snug line-clamp-2">
                   {product.title}
                 </h3>
 
                 {product.description && (
                   <p
                     itemProp="description"
-                    className="text-sm md:text-[0.95rem] text-neutral-700 line-clamp-3"
+                    className="text-md font-mont text-neutral-700 line-clamp-3"
                   >
                     {product.description}
                   </p>
@@ -142,7 +142,7 @@ export default function AmazonProductCard({ value }: AmazonProductProps) {
                   )}
 
                 {/* Price/meta row */}
-                <div className="mt-1 flex flex-wrap items-end gap-3">
+                <div className="mt-1 flex flex-wrap justify-center items-end font-mont gap-3">
                   {prettyPrice ? (
                     <div
                       className="flex flex-col"
@@ -150,19 +150,6 @@ export default function AmazonProductCard({ value }: AmazonProductProps) {
                       itemScope
                       itemType="https://schema.org/Offer"
                     >
-                      <span
-                        className="text-lg md:text-xl font-semibold text-emerald-700"
-                        aria-label={`Current price ${prettyPrice}${asOf ? ` as of ${asOf}` : ""}`}
-                        itemProp="price"
-                        content={String(product.priceSnapshot?.amount ?? "")}
-                      >
-                        {prettyPrice}
-                      </span>
-                      {asOf && (
-                        <span className="text-[11px] text-neutral-500">
-                          as of {asOf}
-                        </span>
-                      )}
                       <meta
                         itemProp="priceCurrency"
                         content={product.priceSnapshot?.currency ?? "USD"}
@@ -177,29 +164,31 @@ export default function AmazonProductCard({ value }: AmazonProductProps) {
                       Check price on Amazon
                     </span>
                   )}
-
-                  {/* ASIN chip */}
-                  <span className="ml-auto rounded-full border border-black/10 bg-white px-2.5 py-1 text-[11px] text-neutral-500">
-                    ASIN: {asin}
-                  </span>
+                  {/* Footer CTA band (animated via motion wrapper) */}
+                  {product.detailPageUrl && (
+                    <MotionCTA
+                      href={product.detailPageUrl}
+                      label={`View ${product.title} on Amazon`}
+                    >
+                      <AmazonOutlinedIcon
+                        className="h-8 w-8 inline md:hidden"
+                        aria-hidden
+                      />
+                      <span
+                        className="text-md font-semibold text-black"
+                        aria-label={`Current price ${prettyPrice}${asOf ? ` as of ${asOf}` : ""}`}
+                        itemProp="price"
+                        content={String(product.priceSnapshot?.amount ?? "")}
+                      >
+                        {prettyPrice}
+                      </span>
+                      <span className="hidden md:inline"> on {site}</span>
+                    </MotionCTA>
+                  )}
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Footer CTA band (animated via motion wrapper) */}
-          {product.detailPageUrl && (
-            <MotionCTA
-              href={product.detailPageUrl}
-              label={`View ${product.title} on Amazon`}
-            >
-              <AmazonOutlinedIcon
-                className="h-8 w-8 inline md:hidden"
-                aria-hidden
-              />
-              <span className="hidden md:inline mb-2">View on {site}</span>
-            </MotionCTA>
-          )}
         </div>
       </div>
     </article>
