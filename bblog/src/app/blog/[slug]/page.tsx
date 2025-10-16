@@ -10,6 +10,9 @@ import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo";
 import { draftMode } from "next/headers";
 import AmazonProductCard from "@/components/composite/amazonProductCard";
 import HorizontalAd from "@/components/composite/horizontalAd";
+import ProductCard, {
+  GenericProduct,
+} from "@/components/composite/productCard";
 
 export const revalidate = 120;
 
@@ -84,11 +87,26 @@ const ptComponents: PortableTextComponents = {
   },
   types: {
     image: ({ value }) => {
-      const url: string | undefined = value?.asset?.url;
-      if (!url) return null;
-      const w = value?.asset?.metadata?.dimensions?.width ?? 1200;
-      const h = value?.asset?.metadata?.dimensions?.height ?? 700;
+      // bail if no asset
+      if (!value?.asset?.url) return null;
+
       const alt = value?.alt || "";
+
+      // Intrinsic dimensions from Sanity (good fallback)
+      const metaW = value?.asset?.metadata?.dimensions?.width;
+      const metaH = value?.asset?.metadata?.dimensions?.height;
+
+      // Author-set overrides (your custom fields)
+      const setW = typeof value?.width === "number" ? value.width : undefined;
+      const setH = typeof value?.height === "number" ? value.height : undefined;
+
+      // Choose width/height with sensible fallbacks and AR preservation
+      const w = setW ?? metaW ?? 1200;
+      const h =
+        setH ?? (metaW && metaH ? Math.round(w * (metaH / metaW)) : 700);
+
+      const url = value.asset.url;
+
       const img = (
         <Image
           src={url}
@@ -96,8 +114,12 @@ const ptComponents: PortableTextComponents = {
           width={w}
           height={h}
           className="rounded-lg my-4"
+          sizes="(min-width: 1024px) 900px, 100vw"
+          loading="lazy"
+          decoding="async"
         />
       );
+
       return value?.link ? (
         <a href={value.link} target="_blank" rel="noopener">
           {img}
@@ -106,11 +128,27 @@ const ptComponents: PortableTextComponents = {
         img
       );
     },
-    amazonProduct: AmazonProductCard,
+    amazonProduct: ({ value }) => <AmazonProductCard value={value} />,
+    productCard: ({ value }) => {
+      // Map your custom Sanity "productCard" object -> GenericProduct
+      const gp: GenericProduct = {
+        title: value?.title ?? value?.image?.alt ?? "Product",
+        url: value?.link ?? undefined,
+        image: value?.image ?? value,
+        description: value?.description ?? null,
+        priceSnapshot: value?.priceSnapshot ?? null,
+        retailer: value?.retailer ?? null,
+        features: value?.features ?? [],
+      };
+      return <ProductCard product={gp} />;
+    },
   },
   block: {
     normal: ({ children }) => (
-      <p className="font-mont text-bas my-4">{children}</p>
+      <p className="font-mont text-base my-4">{children}</p>
+    ),
+    h1: ({ children }) => (
+      <h1 className="font-lora text-4xl font-bold mt-8">{children}</h1>
     ),
     h2: ({ children }) => (
       <h2 className="font-lora text-3xl font-bold mt-8">{children}</h2>
