@@ -130,13 +130,11 @@ const ptComponents: PortableTextComponents = {
     },
     amazonProduct: ({ value }) => <AmazonProductCard value={value} />,
     productCard: ({ value }) => {
-      // Map your custom Sanity "productCard" object -> GenericProduct
       const gp: GenericProduct = {
-        title: value?.title ?? value?.image?.alt ?? "Product",
+        title: value?.productName ?? value?.image?.alt ?? "Product",
         url: value?.link ?? undefined,
         image: value?.image ?? null,
         description: value?.description ?? null,
-        priceSnapshot: value?.priceSnapshot ?? null,
         retailer: value?.retailer ?? null,
         features: value?.features ?? [],
       };

@@ -60,20 +60,6 @@ export default defineType({
         { name: "height", type: "number", title: "Height (px)" },
       ],
     }),
-    defineArrayMember({
-      name: "productCard",
-      title: "Product Card",
-      type: "image",
-      options: { hotspot: true },
-      fields: [
-        { name: "alt", type: "string", title: "Alt text" },
-        { name: "productName", type: "string", title: "Product Name" },
-        { name: "caption", type: "string", title: "Caption" },
-        { name: "link", type: "url", title: "Product Link" },
-        { name: "price", type: "string", title: "Price (e.g. $19.99)" },
-        { name: "retailer", type: "string", title: "Retailer (e.g. Etsy)" },
-        { name: "description", type: "text", title: "Description" },
-      ],
-    }),
+    defineArrayMember({ type: "productCard", title: "Product Card" }),
   ],
 });
