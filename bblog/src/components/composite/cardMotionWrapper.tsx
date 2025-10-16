@@ -1,4 +1,4 @@
-// components/client/AmazonCardMotion.tsx
+// components/client/cardMotionWrapper.tsx
 "use client";
 import * as React from "react";
 import { motion } from "framer-motion";
