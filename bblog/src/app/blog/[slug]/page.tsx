@@ -134,7 +134,7 @@ const ptComponents: PortableTextComponents = {
       const gp: GenericProduct = {
         title: value?.title ?? value?.image?.alt ?? "Product",
         url: value?.link ?? undefined,
-        image: value?.image ?? value,
+        image: value?.image ?? null,
         description: value?.description ?? null,
         priceSnapshot: value?.priceSnapshot ?? null,
         retailer: value?.retailer ?? null,

@@ -12,22 +12,75 @@ export const postBySlugQuery = groq`
   "slug": slug.current,
   publishedAt,
   preview,
+
   heroImage{
     asset->{ url, metadata{ dimensions{ width, height } } },
     alt,
-    caption
+    caption,
+    // include custom size fields if you added them on hero too
+    width,
+    height,
+    link
   },
+
   content[]{
     ...,
+
+    // Plain editorial images (includes your custom width/height fields)
     _type == "image" => {
+      _type,
       asset->{ url, metadata{ dimensions{ width, height } } },
       alt,
-      link
+      caption,
+      link,
+      width,
+      height
+    },
+
+    // Your custom product card object (generic affiliates)
+    _type == "productCard" => {
+      _type,
+      title,
+      link,
+      description,
+      retailer,
+      features,
+      priceSnapshot,
+      image{
+        asset->{ url, metadata{ dimensions{ width, height } } },
+        alt,
+        caption
+      }
+    },
+
+    // Amazon product block (shape must match your schema)
+    _type == "amazonProduct" => {
+      _type,
+      asin,
+      product{
+        title,
+        description,
+        detailPageUrl,
+        priceSnapshot,
+        features,
+        imageUrl
+      }
     }
   },
+
   tags,
   canonicalUrl,
-  metaImage{ asset->{ url, metadata{ dimensions{ width, height } } } },
+
+  metaImage{
+    asset->{ url, metadata{ dimensions{ width, height } } },
+    // optional extras if you use them
+    alt,
+    caption,
+    width,
+    height,
+    link
+  },
+
   sources[]{ name, url }
 }
 `;
