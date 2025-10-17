@@ -182,6 +182,7 @@ function View({ post }: { post: any }) {
 
   const heroUrl: string | null =
     post.heroImage?.asset?.url ?? post.thumbnailUrl ?? null;
+  const heroDescription = post.heroImage?.caption ?? "";
 
   return (
     <main className="font-mont max-w-4xl text-lg mx-auto p-6 prose">
@@ -191,7 +192,7 @@ function View({ post }: { post: any }) {
       )}
       {post.preview && <p className="text-neutral-600 mt-2">{post.preview}</p>}
 
-      <div className="flex w-full justify-center">
+      <div className="flex flex-col w-full justify-center">
         {heroUrl && (
           <Image
             src={heroUrl}
@@ -202,6 +203,9 @@ function View({ post }: { post: any }) {
             priority
           />
         )}
+        <div className="font-mont text-xs italic text-gray-500">
+          {heroDescription}
+        </div>
       </div>
 
       {post.content?.length ? (
