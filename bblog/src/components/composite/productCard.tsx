@@ -140,13 +140,9 @@ export default function ProductCard({
                       {prettyPrice
                         ? `${prettyPrice} on ${site}`
                         : `View on ${site}`}
-                      {asOf ? (
-                        <span className="ml-1 text-xs opacity-70">
-                          (as of {asOf})
-                        </span>
-                      ) : null}
                     </MotionCTA>
                   )}
+                  <span className="my-4 text-xs opacity-70">as of {asOf}</span>
                 </div>
               </div>
             </div>
