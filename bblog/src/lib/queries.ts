@@ -44,12 +44,10 @@ export const postBySlugQuery = groq`
       link,
       description,
       retailer,
-      features,
-      priceSnapshot,
+      price,
       image{
         asset->{ url, metadata{ dimensions{ width, height } } },
-        alt,
-        caption
+        alt
       }
     },
 
