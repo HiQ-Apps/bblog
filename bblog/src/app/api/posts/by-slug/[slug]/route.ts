@@ -3,6 +3,8 @@ import { NextRequest } from "next/server";
 import { getPostBySlug } from "@/queries/Post";
 import { draftMode } from "next/headers";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(
   _req: NextRequest,
   ctx: { params: Promise<{ slug: string }> }
