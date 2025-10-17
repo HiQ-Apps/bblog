@@ -75,12 +75,6 @@ export default function ProductCard({
 
   const img = imgUrl(image);
   const prettyPrice = fmtPrice(priceSnapshot);
-  const asOf = product.priceSnapshot?.retrievedAt
-    ? new Date(product.priceSnapshot.retrievedAt).toLocaleDateString(
-        undefined,
-        { month: "short", day: "numeric" }
-      )
-    : null;
 
   const site = retailer ?? domain(url) ?? "shop";
 
@@ -109,8 +103,6 @@ export default function ProductCard({
                 <div className="h-full w-full bg-white" aria-hidden />
               )}
             </MotionImageFrame>
-
-            {/* Text / CTA */}
             <div className="h-full flex flex-col justify-center items-start text-left px-2 md:px-4">
               <div className="flex flex-col items-center text-center w-full">
                 <div className="max-w-[32ch] flex flex-col items-center">
@@ -142,7 +134,6 @@ export default function ProductCard({
                         : `View on ${site}`}
                     </MotionCTA>
                   )}
-                  <span className="my-4 text-xs opacity-70">as of {asOf}</span>
                 </div>
               </div>
             </div>

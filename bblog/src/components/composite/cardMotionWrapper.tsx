@@ -37,7 +37,7 @@ export function MotionCTA({
       target="_blank"
       rel="nofollow sponsored noopener"
       aria-label={label}
-      className="group/btn relative block overflow-hidden px-8 pt-2 md:py-4 rounded-md bg-accent text-center font-semibold text-white"
+      className="group/btn relative block overflow-hidden px-8 py-2 md:py-4 rounded-md bg-accent text-center font-semibold text-white"
       initial={{ y: 0 }}
       whileHover={{ y: -1 }}
       transition={{ type: "spring", stiffness: 300, damping: 22 }}

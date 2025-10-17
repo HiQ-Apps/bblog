@@ -113,7 +113,7 @@ const ptComponents: PortableTextComponents = {
           alt={alt}
           width={w}
           height={h}
-          className="rounded-lg my-4"
+          className="rounded-lg mt-4"
           sizes="(min-width: 1024px) 900px, 100vw"
           loading="lazy"
           decoding="async"
@@ -121,11 +121,17 @@ const ptComponents: PortableTextComponents = {
       );
 
       return value?.link ? (
-        <a href={value.link} target="_blank" rel="noopener">
-          {img}
-        </a>
+        <div className="my-4">
+          <a href={value.link} target="_blank" rel="noopener">
+            {img}
+          </a>
+          <p className="text-sm italic text-gray-500">{value.caption}</p>
+        </div>
       ) : (
-        img
+        <div className="my-4">
+          {img}
+          <p className="text-sm italic text-gray-500 mt-2">{value.caption}</p>
+        </div>
       );
     },
     amazonProduct: ({ value }) => <AmazonProductCard value={value} />,
