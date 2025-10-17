@@ -135,6 +135,7 @@ const ptComponents: PortableTextComponents = {
         url: value?.link ?? undefined,
         image: value?.image ?? null,
         description: value?.description ?? null,
+        priceSnapshot: value.price,
         retailer: value?.retailer ?? null,
         features: value?.features ?? [],
       };
