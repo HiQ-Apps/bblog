@@ -14,7 +14,7 @@ type BlogPageProps = {
 };
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
-  const PAGE_SIZE = 8;
+  const PAGE_SIZE = 12;
 
   const params = (await searchParams) ?? {};
   const rawPage = params.page;
