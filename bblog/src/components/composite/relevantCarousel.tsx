@@ -11,6 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import type { PostResponse } from "@/types/Post";
 
 export type RelevantCarouselProps = {
   tags: string[];
@@ -20,22 +21,8 @@ export type RelevantCarouselProps = {
   heading?: string;
 };
 
-export type RelatedApiItem = {
-  _id: string;
-  title: string;
-  slug: string;
-  preview?: string | null;
-  publishedAt: string;
-  heroImage?: {
-    asset?: { url?: string };
-    alt?: string;
-    caption?: string;
-  } | null;
-  tags?: string[];
-};
-
 export type RelatedApiRes =
-  | { ok: true; items: RelatedApiItem[]; hasMore: boolean }
+  | { ok: true; items: PostResponse[]; hasMore: boolean }
   | { ok: false; error: string };
 
 export default function RelevantCarousel({
@@ -45,7 +32,7 @@ export default function RelevantCarousel({
   className,
   heading = "Related Posts",
 }: RelevantCarouselProps) {
-  const [relatedPosts, setRelatedPosts] = useState<RelatedApiItem[]>([]);
+  const [relatedPosts, setRelatedPosts] = useState<PostResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 

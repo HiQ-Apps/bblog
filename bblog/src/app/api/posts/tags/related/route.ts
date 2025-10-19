@@ -17,9 +17,6 @@ export async function GET(req: Request) {
 
     const currentSlug = url.searchParams.get("currentSlug");
 
-    const offsetRaw = Number(url.searchParams.get("offset") ?? 0);
-    const offset = Math.max(0, isNaN(offsetRaw) ? 0 : offsetRaw);
-
     const limitRaw = Number(url.searchParams.get("limit") ?? 6);
     const limit = Math.min(Math.max(1, isNaN(limitRaw) ? 6 : limitRaw), 24);
 

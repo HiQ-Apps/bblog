@@ -270,7 +270,7 @@ function View({ post }: { post: any }) {
           </p>
         </section>
       )}
-      <HorizontalAd className="my-4" />
+      <HorizontalAd className="my-2" />
       {post.tags?.length > 0 && (
         <RelevantCarousel tags={post.tags ?? []} currentSlug={post.slug} />
       )}

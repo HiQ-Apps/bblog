@@ -181,6 +181,22 @@ export const postsRelatedByTagQuery = groq`
 }
 `;
 
+export const highlightedPostsQuery = groq`
+*[
+  _type == "post" &&
+  coalesce(highlighted, false) == true
+]
+| order(coalesce(publishedAt, _createdAt) desc){
+  _id,
+  title,
+  "slug": slug.current,
+  preview,
+  "publishedAt": coalesce(publishedAt, _createdAt),
+  "heroImage": heroImage{ asset->{ url }, alt },
+  tags
+}
+`;
+
 export const allPostSlugsQuery = groq`
 *[_type == "post" && defined(slug.current)]{
   "slug": slug.current,

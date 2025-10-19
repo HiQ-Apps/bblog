@@ -11,6 +11,7 @@ import {
   postsByTagsQuery,
   postBySlugDraftQuery,
   postsRelatedByTagQuery,
+  highlightedPostsQuery,
 } from "@/lib/queries";
 import { QueryParams } from "next-sanity";
 
@@ -139,5 +140,14 @@ export async function getPostsByTags(
     stega: false,
   });
 
+  return data;
+}
+
+export async function getHighlightedPosts() {
+  const { data } = await sanityFetch({
+    query: highlightedPostsQuery,
+    perspective: "published",
+    stega: false,
+  });
   return data;
 }

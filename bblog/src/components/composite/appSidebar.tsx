@@ -75,11 +75,6 @@ const AppSidebar = () => {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <SimpleNavLink href="/about">About</SimpleNavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
               {/* Disclaimer */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>

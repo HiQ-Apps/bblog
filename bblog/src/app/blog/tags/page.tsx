@@ -12,7 +12,7 @@ const BlogTagsPage = async () => {
   return (
     <div className="w-full py-2 px-8">
       <PostsByTagsBrowser availableTags={tags} />
-      <HorizontalAd className="my-8" />
+      <HorizontalAd className="my-2" />
     </div>
   );
 };

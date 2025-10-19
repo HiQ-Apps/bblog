@@ -10,6 +10,20 @@ export type PostCard = {
   tags?: string[];
 };
 
+export type PostResponse = {
+  _id: string;
+  title: string;
+  slug: string;
+  preview?: string | null;
+  publishedAt: string;
+  heroImage?: {
+    asset?: { url?: string };
+    alt?: string;
+    caption?: string;
+  } | null;
+  tags?: string[];
+};
+
 export type Post = {
   _id: string;
   id: string;
