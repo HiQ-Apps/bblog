@@ -13,6 +13,7 @@ import HorizontalAd from "@/components/composite/horizontalAd";
 import ProductCard, {
   GenericProduct,
 } from "@/components/composite/productCard";
+import RelevantCarousel from "@/components/composite/relevantCarousel";
 
 export const revalidate = 120;
 
@@ -269,7 +270,10 @@ function View({ post }: { post: any }) {
           </p>
         </section>
       )}
-      <HorizontalAd className="my-8" />
+      <HorizontalAd className="my-4" />
+      {post.tags?.length > 0 && (
+        <RelevantCarousel tags={post.tags ?? []} currentSlug={post.slug} />
+      )}
     </main>
   );
 }

@@ -10,6 +10,7 @@ import {
   postsByTagQuery,
   postsByTagsQuery,
   postBySlugDraftQuery,
+  postsRelatedByTagQuery,
 } from "@/lib/queries";
 import { QueryParams } from "next-sanity";
 
@@ -93,6 +94,27 @@ export async function getPostsByTag(tag: string, offset = 0, limit = 24) {
     stega: false,
   });
   return data;
+}
+
+export async function getPostsRelatedByTags(
+  tags: string[],
+  limit = 6,
+  currentSlug?: string | null
+) {
+  const excludeSlugs = currentSlug ? [currentSlug] : [];
+  const fetchLimit = limit + 1;
+
+  const { data: fetched } = await sanityFetch({
+    query: postsRelatedByTagQuery,
+    params: { tags, excludeSlugs, fetchLimit },
+    perspective: "published",
+    stega: false,
+  });
+
+  const items = (fetched ?? []).slice(0, limit);
+  const hasMore = (fetched ?? []).length > limit;
+
+  return { items, hasMore };
 }
 
 export async function getPostsByTags(
