@@ -8,11 +8,9 @@ import HighlightedCarousel from "@/components/composite/highlightedCarousel";
 import AboutCard from "@/components/composite/aboutCard";
 
 export default function Home() {
-  const [heroReady, setHeroReady] = useState(false);
-
   return (
     <main className="flex w-full flex-col items-center space-y-6 md:space-y-10">
-      <HeroVideo onIntroDone={() => setHeroReady(true)} />
+      <HeroVideo />
       <AboutCard />
       <RecentPostsCarousel limit={6} />
       <HighlightedCarousel />

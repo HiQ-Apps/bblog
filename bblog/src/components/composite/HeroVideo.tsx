@@ -10,11 +10,7 @@ import {
   HERO_READY_BUFFER_MS,
 } from "@/utils/anim";
 
-export default function HeroVideo({
-  onIntroDone,
-}: {
-  onIntroDone?: () => void;
-}) {
+export default function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const hasReady = useRef(false);
   const headline = useAnimationControls();
@@ -32,7 +28,6 @@ export default function HeroVideo({
       scaleX: 1,
       transition: { duration: 0.8, delay: HERO_UNDERLINE_DELAY, ease: EASE },
     });
-    onIntroDone?.();
   };
 
   const handleCanPlay = () => {
