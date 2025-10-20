@@ -78,17 +78,17 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
                       {post.tags?.length ? (
                         <ul className="mt-2 flex flex-wrap justify-center gap-2">
-                          {post.tags.slice(0, 8).map((tag: string) => (
+                          {post.tags.slice(0, 3).map((tag: string) => (
                             <li key={tag}>
-                              <span className="inline-flex items-center rounded-full bg-gray-900/80 text-white px-2.5 py-0.5 text-[11px] leading-5">
+                              <span className="font-mont inline-flex items-center rounded-full bg-secondary text-black px-2.5 py-0.5 text-xs leading-5">
                                 {tag}
                               </span>
                             </li>
                           ))}
-                          {post.tags.length > 8 && (
+                          {post.tags.length > 3 && (
                             <li>
-                              <span className="inline-flex items-center rounded-full bg-gray-300 text-gray-800 px-2.5 py-0.5 text-[11px] leading-5">
-                                +{post.tags.length - 8} more
+                              <span className="font-mont inline-flex items-center rounded-full bg-accent text-primary px-2.5 py-0.5 text-xs leading-5">
+                                +{post.tags.length - 3} more
                               </span>
                             </li>
                           )}
