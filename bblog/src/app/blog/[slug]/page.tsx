@@ -271,9 +271,11 @@ function View({ post }: { post: any }) {
         </section>
       )}
       <HorizontalAd className="my-2" />
-      {post.tags?.length > 0 && (
-        <RelevantCarousel tags={post.tags ?? []} currentSlug={post.slug} />
-      )}
+      <div className="w-full flex">
+        {/* {post.tags?.length > 0 && (
+          <RelevantCarousel tags={post.tags ?? []} currentSlug={post.slug} />
+        )} */}
+      </div>
     </main>
   );
 }
