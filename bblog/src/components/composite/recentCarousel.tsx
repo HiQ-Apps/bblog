@@ -28,13 +28,7 @@ const child: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
 };
 
-export default function RecentPostsCarousel({
-  heroReady,
-  limit = 6,
-}: {
-  heroReady: boolean;
-  limit?: number;
-}) {
+export default function RecentPostsCarousel({ limit = 6 }: { limit?: number }) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const inView = useInView(sectionRef, { once: true, amount: 0.4 });
 
@@ -75,7 +69,7 @@ export default function RecentPostsCarousel({
   useEffect(() => {
     if (!api) return;
 
-    const enabled = heroReady && inView;
+    const enabled = inView;
     let paused = false;
     let id: number | undefined;
 
@@ -102,7 +96,7 @@ export default function RecentPostsCarousel({
       api.off("pointerDown", onPointerDown);
       api.off("pointerUp", onPointerUp);
     };
-  }, [api, heroReady, inView]);
+  }, [api, inView]);
 
   return (
     <section ref={sectionRef} className="w-full h-auto mb-4">

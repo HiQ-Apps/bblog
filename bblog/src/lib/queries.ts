@@ -158,6 +158,45 @@ export const mostRecentPostsQuery = groq`
 }
 `;
 
+export const postsRelatedByTagQuery = groq`
+*[
+  _type == "post" &&
+  !(slug.current in $excludeSlugs) &&
+  count(tags[@ in $tags]) > 0 &&
+  coalesce(publishedAt, _createdAt) <= now()
+]
+| order(coalesce(publishedAt, _createdAt) desc)
+[0...$fetchLimit]{
+  _id,
+  title,
+  "slug": slug.current,
+  preview,
+  "publishedAt": coalesce(publishedAt, _createdAt),
+  heroImage{
+    asset->{ url, metadata{ dimensions } },
+    alt,
+    caption
+  },
+  tags
+}
+`;
+
+export const highlightedPostsQuery = groq`
+*[
+  _type == "post" &&
+  coalesce(highlighted, false) == true
+]
+| order(coalesce(publishedAt, _createdAt) desc){
+  _id,
+  title,
+  "slug": slug.current,
+  preview,
+  "publishedAt": coalesce(publishedAt, _createdAt),
+  "heroImage": heroImage{ asset->{ url }, alt },
+  tags
+}
+`;
+
 export const allPostSlugsQuery = groq`
 *[_type == "post" && defined(slug.current)]{
   "slug": slug.current,

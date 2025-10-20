@@ -1,21 +1,6 @@
 import { NextResponse } from "next/server";
 import { getPostsByTags } from "@/queries/Post";
-
-function parseTags(url: URL): string[] {
-  // accepts ?tags=foo,bar and/or repeated ?tags=foo&tags=bar; also allows ?tag=foo
-  const list = [
-    ...url.searchParams.getAll("tags"),
-    url.searchParams.get("tag") ?? "",
-  ];
-  return Array.from(
-    new Set(
-      list
-        .flatMap((s) => s.split(","))
-        .map((s) => decodeURIComponent(s.trim()))
-        .filter(Boolean)
-    )
-  );
-}
+import { parseTags } from "@/lib/utils";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);

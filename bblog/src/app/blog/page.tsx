@@ -133,7 +133,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           Next →
         </Link>
       </nav>
-      <HorizontalAd className="my-8" />
+      <HorizontalAd className="my-2" />
     </div>
   );
 }

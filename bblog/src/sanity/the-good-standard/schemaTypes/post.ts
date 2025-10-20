@@ -24,6 +24,12 @@ export default defineType({
       title: "Publish Date",
       type: "datetime",
     }),
+    defineField({
+      name: "highlighted",
+      title: "Highlighted Post",
+      type: "boolean",
+      description: "If true, this post may be featured in special sections.",
+    }),
 
     // SEO
     defineField({ name: "metaTitle", title: "Meta Title", type: "string" }),
