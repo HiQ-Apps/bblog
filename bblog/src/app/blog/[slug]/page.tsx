@@ -13,7 +13,7 @@ import HorizontalAd from "@/components/composite/horizontalAd";
 import ProductCard, {
   GenericProduct,
 } from "@/components/composite/productCard";
-import RelevantCarousel from "@/components/composite/relevantCarousel";
+import RelevantList from "@/components/composite/relevantList";
 
 export const revalidate = 120;
 
@@ -272,9 +272,9 @@ function View({ post }: { post: any }) {
       )}
       <HorizontalAd className="my-2" />
       <div className="w-full flex">
-        {/* {post.tags?.length > 0 && (
-          <RelevantCarousel tags={post.tags ?? []} currentSlug={post.slug} />
-        )} */}
+        {post.tags?.length > 0 && (
+          <RelevantList tags={post.tags ?? []} currentSlug={post.slug} />
+        )}
       </div>
     </main>
   );
