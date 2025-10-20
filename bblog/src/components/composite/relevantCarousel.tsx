@@ -10,7 +10,6 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 import type { PostResponse } from "@/types/Post";
 
 export type RelevantCarouselProps = {
@@ -45,7 +44,6 @@ export default function RelevantCarousel({
     async function run() {
       setLoading(true);
       setError(null);
-
       try {
         const qs = new URLSearchParams();
         qs.set("tags", tags.join(","));
@@ -59,9 +57,7 @@ export default function RelevantCarousel({
         if (!res.ok) throw new Error(`Request failed with ${res.status}`);
 
         const data: RelatedApiRes = await res.json();
-
         if (!data.ok) throw new Error(data.error);
-
         setRelatedPosts(data.items);
       } catch (e: any) {
         if (e?.name !== "AbortError")
@@ -78,9 +74,7 @@ export default function RelevantCarousel({
   if (!canLoad) return null;
 
   return (
-    <section
-      className={cn?.("relative", className) ?? `relative ${className ?? ""}`}
-    >
+    <section className={className + " w-full"}>
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">{heading}</h2>
         <Link
@@ -92,7 +86,7 @@ export default function RelevantCarousel({
       </div>
 
       {loading && (
-        <div className="flex gap-4 py-4">
+        <div className="flex gap-4 py-4 overflow-x-auto">
           {Array.from({ length: Math.min(3, limit) }).map((_, i) => (
             <div key={i} className="w-64 shrink-0">
               <div className="h-36 w-full animate-pulse rounded-lg bg-muted" />
@@ -114,46 +108,59 @@ export default function RelevantCarousel({
       )}
 
       {!loading && !error && relatedPosts.length > 0 && (
-        <Carousel className="mt-3">
-          <CarouselContent>
-            {relatedPosts.map((p) => (
-              <CarouselItem
-                key={p._id}
-                className="basis-4/5 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
-              >
-                <Link href={`/blog/${p.slug}`} className="block">
-                  <article className="rounded-2xl border bg-card p-3 shadow-sm transition hover:shadow-md">
-                    {p.heroImage?.asset?.url ? (
-                      <Image
-                        src={p.heroImage.asset.url}
-                        alt={p.heroImage.alt || p.title}
-                        width={270}
-                        height={270}
-                        className="h-40 w-full rounded-lg object-cover"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <div className="h-40 w-full rounded-lg bg-muted" />
-                    )}
-                    <h3 className="mt-2 line-clamp-2 text-base font-semibold">
-                      {p.title}
-                    </h3>
-                    {p.preview && (
-                      <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                        {p.preview}
-                      </p>
-                    )}
-                  </article>
-                </Link>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="w-full flex justify-center mt-2">
-            <CarouselPrevious />
-            <CarouselNext />
-          </div>
-        </Carousel>
+        <div className="mt-3 w-full overflow-hidden">
+          <Carousel
+            opts={{
+              align: "center",
+              loop: false,
+              containScroll: "trimSnaps",
+              skipSnaps: false,
+              dragFree: false,
+              slidesToScroll: 2,
+            }}
+          >
+            {/* stable gutters: negative margin matches item padding */}
+            <CarouselContent>
+              {relatedPosts.map((p) => (
+                <CarouselItem key={p._id} className="w-64 pl-3 lg:basis-1/2">
+                  <Link href={`/blog/${p.slug}`} className="block">
+                    <article className="rounded-2xl flex flex-col justify-center items-center w-96 border bg-card p-3 shadow-sm transition hover:shadow-md">
+                      {p.heroImage?.asset?.url ? (
+                        <Image
+                          src={p.heroImage.asset.url}
+                          alt={p.heroImage.alt || p.title}
+                          width={320} /* match w-[18rem] */
+                          height={320}
+                          className="rounded-lg object-cover"
+                          loading="lazy"
+                          decoding="async"
+                          sizes="1080px" /* always render at fixed width */
+                          draggable={false}
+                        />
+                      ) : (
+                        <div className="h-40 w-full rounded-lg bg-muted" />
+                      )}
+                      <h3 className="mt-2 line-clamp-2 text-base font-semibold">
+                        {p.title}
+                      </h3>
+                      {p.preview && (
+                        <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                          {p.preview}
+                        </p>
+                      )}
+                    </article>
+                  </Link>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+
+            {/* keep controls inside bounds and centered below */}
+            <div className="my-3 flex w-full justify-center gap-3">
+              <CarouselPrevious />
+              <CarouselNext />
+            </div>
+          </Carousel>
+        </div>
       )}
     </section>
   );
