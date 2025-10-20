@@ -39,7 +39,7 @@ const AboutCard = ({ revealDelayMs = 0 }: AboutCardProps) => {
   const inView = useInView(ref, { once: true, amount: 0.35 });
   const reduceMotion = useReducedMotion();
 
-  // Convert ms to s for transition delay
+  // Convert ms to seconds for motion transition API
   const delayS = reduceMotion ? 0 : revealDelayMs / 1000;
 
   return (
@@ -86,9 +86,10 @@ const AboutCard = ({ revealDelayMs = 0 }: AboutCardProps) => {
         <motion.p variants={item} custom={reduceMotion}>
           On The Good Standard, you&apos;ll find simple upgrades for your home,
           lifestyle, and daily routines. Some are as small as reusing what you
-          already have in new ways; others involve finding eco-friendly, "buy it
-          for life" products that actually last. None of it is about being
-          perfect — it&apos;s about choosing better, little by little.
+          already have in new ways; others involve finding eco-friendly,{" "}
+          <q>buy it for life</q> products that actually last. None of it is
+          about being perfect — it&apos;s about choosing better, little by
+          little.
         </motion.p>
 
         <motion.p variants={item} custom={reduceMotion}>
