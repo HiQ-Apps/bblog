@@ -81,11 +81,6 @@ const AppSidebar = () => {
                   <SimpleNavLink href="/disclaimer">Disclaimer</SimpleNavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <SimpleNavLink href="/free">Free</SimpleNavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -5,6 +5,7 @@ import amazonEmbed from "./amazonEmbed";
 import amazonProduct from "./amazonProduct";
 import productCard from "./productCard";
 import downloadLink from "./downloadLink";
+import downloadGroup from "./downloadGroup";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -14,5 +15,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     amazonProduct,
     productCard,
     downloadLink,
+    downloadGroup,
   ],
 };

@@ -51,22 +51,6 @@ export const postBySlugQuery = groq`
       }
     },
 
-    // Your custom download link object (PDFs etc)
-    _type == "downloadLink" => {
-      _key,
-      _type,
-      label,
-      forceDownload,
-      downloadName,
-      "url": file.asset->url,
-      "filename": coalesce(downloadName, file.asset->originalFilename),
-      // optional extras if you want to show file details
-      "size": file.asset->size,
-      "mimeType": file.asset->mimeType,
-      "extension": file.asset->extension,
-      "originalFilename": file.asset->originalFilename
-    },
-
     // Amazon product block (shape must match your schema)
     _type == "amazonProduct" => {
       _type,
@@ -79,9 +63,25 @@ export const postBySlugQuery = groq`
         features,
         imageUrl
       }
-    }
-  },
+    },
 
+    _type == "downloadGroup" => {
+      _key,
+      _type,
+      items[]{
+        _key,
+        label,
+        forceDownload,
+        downloadName,
+        "url": file.asset->url,
+        "filename": coalesce(downloadName, file.asset->originalFilename),
+        // optional extras
+        "size": file.asset->size,
+        "mimeType": file.asset->mimeType,
+        "extension": file.asset->extension
+      }
+    },
+  },
   tags,
   canonicalUrl,
 
