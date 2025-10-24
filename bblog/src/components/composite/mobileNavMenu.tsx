@@ -48,11 +48,6 @@ const MobileNavMenu = () => {
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/resources">Resources</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
           <NavigationMenuTrigger className="p-2">Contact</NavigationMenuTrigger>
           <NavigationMenuContent className="p-0 z-20 flex bg-primary">
             <ContactCard />

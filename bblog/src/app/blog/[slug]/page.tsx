@@ -5,6 +5,7 @@ import { postBySlugDraftQuery, postBySlugQuery } from "@/lib/queries";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
+import PreviewPdf from "@/components/composite/previewPdf";
 import Disclosure from "@/components/composite/disclosureCard";
 import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo";
 import { draftMode } from "next/headers";
@@ -148,30 +149,19 @@ const ptComponents: PortableTextComponents = {
       };
       return <ProductCard product={gp} />;
     },
-    downloadLink: ({ value }) => {
-      if (!value?.url) return null;
-
-      const name = value.filename ?? "download.pdf";
-      const href = value.forceDownload
-        ? `${value.url}?dl=${encodeURIComponent(name)}`
-        : value.url;
-
-      return (
-        <div className="my-4">
-          <a
-            href={href}
-            {...(!value.forceDownload && {
-              target: "_blank",
-              rel: "noopener noreferrer",
-            })}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 hover:bg-accent/20 text-accent font-medium rounded-lg transition"
-          >
-            {value.label ??
-              (value.forceDownload ? "Download PDF" : "Preview PDF")}
-          </a>
-        </div>
-      );
-    },
+    downloadGroup: ({ value }: any) => (
+      <div className="my-4 flex flex-wrap justify-center gap-2">
+        {value.items?.map((it: any) => (
+          <PreviewPdf
+            key={it._key}
+            url={it.url}
+            filename={it.filename ?? "download.pdf"}
+            label={it.label ?? "Preview PDF"}
+            className="cursor-pointer"
+          />
+        ))}
+      </div>
+    ),
   },
   block: {
     normal: ({ children }) => (
