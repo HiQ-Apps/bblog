@@ -61,5 +61,6 @@ export default defineType({
       ],
     }),
     defineArrayMember({ type: "productCard", title: "Product Card" }),
+    defineArrayMember({ type: "downloadLink", title: "Download (PDF)" }),
   ],
 });

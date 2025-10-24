@@ -85,7 +85,7 @@ export default async function RootLayout({
         className={`${montserrat.variable} ${playfair.variable} ${lora.variable} bg-primary antialiased`}
       >
         <SidebarProvider defaultOpen>
-          <div className="flex w-full flex-col items-center">
+          <div className="flex min-h-screen w-full flex-col items-center">
             <HomeBanner />
 
             {/* Mobile nav only on screens < md */}
@@ -102,7 +102,9 @@ export default async function RootLayout({
               <div className="hidden md:block">
                 <AppSidebar />
               </div>
-              {children}
+              <div className="flex-1 flex justify-center w-full">
+                {children}
+              </div>
             </main>
           </div>
         </SidebarProvider>

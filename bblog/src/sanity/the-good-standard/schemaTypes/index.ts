@@ -4,7 +4,15 @@ import blockContent from "./blockContent";
 import amazonEmbed from "./amazonEmbed";
 import amazonProduct from "./amazonProduct";
 import productCard from "./productCard";
+import downloadLink from "./downloadLink";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [post, blockContent, amazonEmbed, amazonProduct, productCard],
+  types: [
+    post,
+    blockContent,
+    amazonEmbed,
+    amazonProduct,
+    productCard,
+    downloadLink,
+  ],
 };
