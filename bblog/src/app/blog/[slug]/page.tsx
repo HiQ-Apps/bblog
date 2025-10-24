@@ -148,6 +148,30 @@ const ptComponents: PortableTextComponents = {
       };
       return <ProductCard product={gp} />;
     },
+    downloadLink: ({ value }) => {
+      if (!value?.url) return null;
+
+      const name = value.filename ?? "download.pdf";
+      const href = value.forceDownload
+        ? `${value.url}?dl=${encodeURIComponent(name)}`
+        : value.url;
+
+      return (
+        <div className="my-4">
+          <a
+            href={href}
+            {...(!value.forceDownload && {
+              target: "_blank",
+              rel: "noopener noreferrer",
+            })}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 hover:bg-accent/20 text-accent font-medium rounded-lg transition"
+          >
+            {value.label ??
+              (value.forceDownload ? "Download PDF" : "Preview PDF")}
+          </a>
+        </div>
+      );
+    },
   },
   block: {
     normal: ({ children }) => (
@@ -192,7 +216,7 @@ function View({ post }: { post: any }) {
   const heroDescription = post.heroImage?.caption ?? "";
 
   return (
-    <main className="font-mont max-w-4xl text-lg mx-auto p-6 prose">
+    <main className="font-mont max-w-4xl text-lg mx-auto p-6">
       <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
       {dateStr && (
         <p className="font-mont text-sm">Date Published: {dateStr}</p>
