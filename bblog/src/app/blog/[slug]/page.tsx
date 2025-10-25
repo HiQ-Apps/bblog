@@ -115,25 +115,31 @@ const ptComponents: PortableTextComponents = {
           alt={alt}
           width={w}
           height={h}
-          className="rounded-lg mt-4"
+          className="rounded-lg mt-4 block mx-auto"
           sizes="(min-width: 1024px) 900px, 100vw"
           loading="lazy"
           decoding="async"
+          style={{ maxWidth: "100%", height: "auto" }}
         />
       );
 
-      return value?.link ? (
-        <div className="my-4">
-          <a href={value.link} target="_blank" rel="noopener">
-            {img}
-          </a>
-          <p className="text-sm italic text-gray-500">{value.caption}</p>
-        </div>
-      ) : (
-        <div className="my-4">
+      const figure = (
+        <div className="my-4 w-full flex flex-col items-center">
           {img}
-          <p className="text-sm italic text-gray-500 mt-2">{value.caption}</p>
+          {value.caption && (
+            <p className="text-sm italic text-gray-500 mt-2 text-center">
+              {value.caption}
+            </p>
+          )}
         </div>
+      );
+
+      return value?.link ? (
+        <a href={value.link} target="_blank" rel="noopener">
+          {figure}
+        </a>
+      ) : (
+        figure
       );
     },
     amazonProduct: ({ value }) => <AmazonProductCard value={value} />,
@@ -206,7 +212,7 @@ function View({ post }: { post: any }) {
   const heroDescription = post.heroImage?.caption ?? "";
 
   return (
-    <main className="font-mont max-w-4xl text-lg mx-auto p-6">
+    <main className="font-mont text-lg p-6">
       <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
       {dateStr && (
         <p className="font-mont text-sm">Date Published: {dateStr}</p>
