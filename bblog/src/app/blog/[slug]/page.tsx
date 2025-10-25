@@ -212,7 +212,7 @@ function View({ post }: { post: any }) {
   const heroDescription = post.heroImage?.caption ?? "";
 
   return (
-    <main className="font-mont text-lg p-6">
+    <main className="font-mont text-lg py-6 px-96">
       <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
       {dateStr && (
         <p className="font-mont text-sm">Date Published: {dateStr}</p>
