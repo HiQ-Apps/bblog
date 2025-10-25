@@ -40,7 +40,7 @@ const BlogCard = ({
           <h3 className="font-lora text-lg md:text-xl leading-tight">
             {title}
           </h3>
-          <div className="font-mont text-sm text-black/80">{body}</div>
+          <div className="font-poppins text-sm text-black/80">{body}</div>
         </div>
       </div>
     </div>

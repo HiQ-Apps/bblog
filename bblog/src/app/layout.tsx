@@ -3,7 +3,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
-import { Montserrat, Playfair_Display, Lora } from "next/font/google";
+import { Montserrat, Playfair_Display, Lora, Poppins } from "next/font/google";
 import "./globals.css";
 
 import {
@@ -24,13 +24,19 @@ const playfair = Playfair_Display({
 });
 const montserrat = Montserrat({
   subsets: ["latin"],
-  variable: "--font-montserrat",
+  variable: "--font-poppinsserrat",
   display: "swap",
   weight: ["400", "700"],
 });
 const lora = Lora({
   subsets: ["latin"],
   variable: "--font-lora",
+  display: "swap",
+  weight: ["400", "700"],
+});
+const poppins = Poppins({
+  subsets: ["latin"],
+  variable: "--font-poppins",
   display: "swap",
   weight: ["400", "700"],
 });
@@ -82,7 +88,7 @@ export default async function RootLayout({
         <meta name="fo-verify" content="6337d716-9792-4f87-b1bd-7c2886f3c118" />
       </head>
       <body
-        className={`${montserrat.variable} ${playfair.variable} ${lora.variable} bg-primary antialiased`}
+        className={`${montserrat.variable} ${poppins.variable} ${playfair.variable} ${lora.variable} bg-primary antialiased`}
       >
         <SidebarProvider defaultOpen>
           <div className="flex min-h-screen w-full flex-col items-center">

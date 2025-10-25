@@ -60,7 +60,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                         {post.title}
                       </h2>
 
-                      <CardDescription className="font-mont text-black/80">
+                      <CardDescription className="font-poppins text-black/80">
                         {post.date && (
                           <p className="mt-1 text-xs text-gray-600">
                             Published on{" "}
@@ -80,14 +80,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                         <ul className="mt-2 flex flex-wrap justify-center gap-2">
                           {post.tags.slice(0, 3).map((tag: string) => (
                             <li key={tag}>
-                              <span className="font-mont inline-flex items-center rounded-full bg-secondary text-black px-2.5 py-0.5 text-xs leading-5">
+                              <span className="font-poppins inline-flex items-center rounded-full bg-secondary text-black px-2.5 py-0.5 text-xs leading-5">
                                 {tag}
                               </span>
                             </li>
                           ))}
                           {post.tags.length > 3 && (
                             <li>
-                              <span className="font-mont inline-flex items-center rounded-full bg-accent text-primary px-2.5 py-0.5 text-xs leading-5">
+                              <span className="font-poppins inline-flex items-center rounded-full bg-accent text-primary px-2.5 py-0.5 text-xs leading-5">
                                 +{post.tags.length - 3} more
                               </span>
                             </li>

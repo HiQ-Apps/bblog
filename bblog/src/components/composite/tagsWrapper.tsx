@@ -16,7 +16,7 @@ type TagProps = {
 
 const Tag = ({ tag, selected, onToggle }: TagProps) => (
   <div
-    className={`transition-all duration-200 ease-in-out transform hover:scale-105 cursor-pointer px-3 py-1 text-sm font-mont rounded-sm
+    className={`transition-all duration-200 ease-in-out transform hover:scale-105 cursor-pointer px-3 py-1 text-sm font-poppins rounded-sm
       ${selected ? "bg-accent text-primary scale-105" : "bg-secondary text-black"}
     `}
     onClick={() => onToggle(tag)}
@@ -55,7 +55,7 @@ export const TagsWrapper = ({ tags, selected, onChange }: TagsWrapperProps) => {
         </div>
       </ScrollArea>
 
-      <div className="flex flex-row flex-wrap gap-2 mt-2 text-sm font-mont items-center p-4">
+      <div className="flex flex-row flex-wrap gap-2 mt-2 text-sm font-poppins items-center p-4">
         <span className="mr-2">Selected:</span>
         {selected.length > 0 ? (
           selected.map((tag) => (

@@ -171,7 +171,7 @@ const ptComponents: PortableTextComponents = {
   },
   block: {
     normal: ({ children }) => (
-      <p className="font-mont text-base my-4">{children}</p>
+      <p className="font-poppins text-lg/8 my-4">{children}</p>
     ),
     h1: ({ children }) => (
       <h1 className="font-lora text-4xl font-bold mt-8">{children}</h1>
@@ -183,17 +183,21 @@ const ptComponents: PortableTextComponents = {
       <h3 className="font-lora text-2xl font-bold mt-6">{children}</h3>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="font-mont text-xl border-l-4 pl-4 italic my-4">
+      <blockquote className="font-poppins text-xl border-l-4 pl-4 italic my-4">
         {children}
       </blockquote>
     ),
   },
   list: {
     bullet: ({ children }) => (
-      <ul className="list-disc list-inside font-mont text-base">{children}</ul>
+      <ul className="list-disc list-inside font-poppins text-lg/8 my-4">
+        {children}
+      </ul>
     ),
     number: ({ children }) => (
-      <ol className="list-decimal list-inside font-mont text-xl">{children}</ol>
+      <ol className="list-decimal list-inside font-poppins text-lg/8 my-4">
+        {children}
+      </ol>
     ),
   },
 };
@@ -212,11 +216,11 @@ function View({ post }: { post: any }) {
   const heroDescription = post.heroImage?.caption ?? "";
 
   return (
-    <main className="font-mont text-lg py-6 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
+    <main className="font-poppins text-lg py-6 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
       <article className="mx-auto w-full max-w-[60ch] break-words">
         <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
         {dateStr && (
-          <p className="font-mont text-sm">Date Published: {dateStr}</p>
+          <p className="font-poppins text-sm">Date Published: {dateStr}</p>
         )}
         {post.preview && (
           <p className="text-neutral-600 mt-2">{post.preview}</p>
@@ -234,7 +238,7 @@ function View({ post }: { post: any }) {
               sizes="(min-width: 1024px) 66ch, 100vw"
             />
           )}
-          <div className="font-mont text-xs italic text-gray-500">
+          <div className="font-poppins text-xs italic text-gray-500">
             {heroDescription}
           </div>
         </div>
@@ -253,7 +257,7 @@ function View({ post }: { post: any }) {
                   <h2 className="font-lora text-2xl font-bold">
                     {section.heading}
                   </h2>
-                  <p className="font-mont whitespace-pre-line">
+                  <p className="font-poppins whitespace-pre-line">
                     {section.content}
                   </p>
                 </section>

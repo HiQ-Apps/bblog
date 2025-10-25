@@ -42,7 +42,7 @@ export function MotionCTA({
       whileHover={{ y: -1 }}
       transition={{ type: "spring", stiffness: 300, damping: 22 }}
     >
-      <span className="relative z-10 inline-flex items-center justify-center gap-2">
+      <span className="relative z-10 inline-flex text-sm lg:text-base items-center justify-center gap-2">
         {children}
       </span>
       {/* sweep shine */}

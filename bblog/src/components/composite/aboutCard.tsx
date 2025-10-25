@@ -64,7 +64,7 @@ const AboutCard = ({ revealDelayMs = 0 }: AboutCardProps) => {
       </motion.h1>
 
       <motion.div
-        className="font-mont space-y-5 text-lg leading-relaxed text-gray-800"
+        className="font-poppins space-y-5 text-lg leading-relaxed text-gray-800"
         variants={container}
         custom={reduceMotion}
       >

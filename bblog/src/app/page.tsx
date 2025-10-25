@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import HeroVideo from "@/components/composite/HeroVideo";
 import RecentPostsCarousel from "@/components/composite/recentCarousel";
 import HorizontalAd from "@/components/composite/horizontalAd";

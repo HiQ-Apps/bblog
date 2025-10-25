@@ -85,28 +85,30 @@ export default function ProductCard({
       className={`group relative ${className ?? ""}`}
     >
       <div className="border-3 border-accent bg-white rounded-xl my-3 w-full">
-        {/* Padding scales down on small screens */}
         <div className="p-4 sm:p-5 md:p-6">
-          {/* Stack on mobile, split at md; right col can shrink, text can wrap */}
-          <div className="grid grid-cols-1 md:grid-cols-[280px,minmax(0,1fr)] gap-4 md:gap-6 items-stretch">
-            {/* Image */}
+          {/* wrapper inside the card */}
+          <div
+            className="
+              grid grid-cols-1
+              lg:[grid-template-columns:280px_minmax(0,1fr)]
+              gap-4 md:gap-6
+              items-start md:items-center   /* ⬅ top on mobile, centered on md+ */
+            "
+          >
+            {/* Left: image */}
             <MotionImageFrame className="relative overflow-hidden rounded-xl bg-white aspect-[4/3] md:aspect-auto md:h-72">
-              {img ? (
-                <Image
-                  src={img}
-                  alt={title || "Product image"}
-                  fill
-                  className="object-contain"
-                  sizes="(min-width:1024px) 320px, (min-width:768px) 50vw, 100vw"
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <div className="h-full w-full bg-white" aria-hidden />
-              )}
+              <Image
+                src={img}
+                alt={title || "Product image"}
+                fill
+                className="object-contain object-center"
+                sizes="(min-width:1024px) 320px, (min-width:768px) 50vw, 100vw"
+                loading="lazy"
+                decoding="async"
+              />
             </MotionImageFrame>
 
-            {/* Content */}
+            {/* Right: text */}
             <div className="min-w-0 flex flex-col justify-center items-center text-center md:items-start md:text-left px-1 sm:px-2">
               <div className="w-full max-w-[38ch] md:max-w-none">
                 <h3 className="font-lora text-xl sm:text-2xl font-bold leading-snug break-words">
@@ -122,13 +124,13 @@ export default function ProductCard({
                   </p>
                 )}
 
-                {features && features.length > 0 && (
+                {features?.length ? (
                   <ul className="mt-1 mb-4 list-disc list-inside text-left text-sm text-neutral-700 space-y-1 break-words">
                     {features.slice(0, 5).map((f, i) => (
                       <li key={i}>{f}</li>
                     ))}
                   </ul>
-                )}
+                ) : null}
 
                 {url && (
                   <div className="w-full">
@@ -141,7 +143,6 @@ export default function ProductCard({
                 )}
               </div>
             </div>
-            {/* /Content */}
           </div>
         </div>
       </div>

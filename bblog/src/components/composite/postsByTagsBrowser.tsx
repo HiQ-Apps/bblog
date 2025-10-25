@@ -443,7 +443,7 @@ export default function PostsByTagsBrowser({
                   disabled={selected.length === 0}
                   className="
                     w-full sm:w-auto whitespace-nowrap
-                    font-mont px-3 py-1 rounded text-black transition-colors
+                    font-poppins px-3 py-1 rounded text-black transition-colors
                     bg-secondary hover:bg-accent hover:text-white
                     disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer
                   "
@@ -455,20 +455,20 @@ export default function PostsByTagsBrowser({
 
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle className="font-mont">
+                  <DialogTitle className="font-poppins">
                     Save this selection
                   </DialogTitle>
-                  <DialogDescription className="font-mont">
+                  <DialogDescription className="font-poppins">
                     Name your current tags and mode to reuse later.
                   </DialogDescription>
                 </DialogHeader>
 
                 <div className="grid gap-2 py-2">
-                  <Label htmlFor="saveName" className="font-mont">
+                  <Label htmlFor="saveName" className="font-poppins">
                     Name
                   </Label>
                   <Input
-                    className="font-mont selection:bg-secondary selection:text-secondary-foreground"
+                    className="font-poppins selection:bg-secondary selection:text-secondary-foreground"
                     id="saveName"
                     value={saveName}
                     onChange={(e) => setSaveName(e.target.value)}
