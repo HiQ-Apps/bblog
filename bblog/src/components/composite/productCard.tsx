@@ -84,18 +84,20 @@ export default function ProductCard({
       itemType="https://schema.org/Product"
       className={`group relative ${className ?? ""}`}
     >
-      <div className="border-3 border-accent bg-white rounded-xl my-3">
-        <div className="p-6 md:p-7 lg:p-8">
-          <div className="grid items-stretch gap-4 md:gap-6 lg:grid-cols-[300px_1fr]">
+      <div className="border-3 border-accent bg-white rounded-xl my-3 w-full">
+        {/* Padding scales down on small screens */}
+        <div className="p-4 sm:p-5 md:p-6">
+          {/* Stack on mobile, split at md; right col can shrink, text can wrap */}
+          <div className="grid grid-cols-1 md:grid-cols-[280px,minmax(0,1fr)] gap-4 md:gap-6 items-stretch">
             {/* Image */}
-            <MotionImageFrame className="relative h-64 md:h-72 lg:h-72 overflow-hidden rounded-xl bg-white">
+            <MotionImageFrame className="relative overflow-hidden rounded-xl bg-white aspect-[4/3] md:aspect-auto md:h-72">
               {img ? (
                 <Image
                   src={img}
                   alt={title || "Product image"}
                   fill
-                  className="object-contain p-4"
-                  sizes="(min-width:1024px) 320px, 100vw"
+                  className="object-contain"
+                  sizes="(min-width:1024px) 320px, (min-width:768px) 50vw, 100vw"
                   loading="lazy"
                   decoding="async"
                 />
@@ -103,40 +105,43 @@ export default function ProductCard({
                 <div className="h-full w-full bg-white" aria-hidden />
               )}
             </MotionImageFrame>
-            <div className="h-full flex flex-col justify-center items-start text-left px-2 md:px-4">
-              <div className="flex flex-col items-center text-center w-full">
-                <div className="max-w-[32ch] flex flex-col items-center">
-                  <h3 className="font-lora text-2xl md:text-2xl font-bold leading-snug">
-                    {title}
-                  </h3>
 
-                  {description && (
-                    <p
-                      itemProp="description"
-                      className="mt-2 mb-2 text-sm md:text-base leading-relaxed text-neutral-700 text-center"
-                    >
-                      {description}
-                    </p>
-                  )}
+            {/* Content */}
+            <div className="min-w-0 flex flex-col justify-center items-center text-center md:items-start md:text-left px-1 sm:px-2">
+              <div className="w-full max-w-[38ch] md:max-w-none">
+                <h3 className="font-lora text-xl sm:text-2xl font-bold leading-snug break-words">
+                  {title}
+                </h3>
 
-                  {features && features.length > 0 && (
-                    <ul className="mt-2 mb-4 list-disc list-inside text-left text-sm text-neutral-700">
-                      {features.slice(0, 5).map((f, i) => (
-                        <li key={i}>{f}</li>
-                      ))}
-                    </ul>
-                  )}
+                {description && (
+                  <p
+                    itemProp="description"
+                    className="mt-2 mb-3 text-sm md:text-base leading-relaxed text-neutral-700 break-words"
+                  >
+                    {description}
+                  </p>
+                )}
 
-                  {url && (
+                {features && features.length > 0 && (
+                  <ul className="mt-1 mb-4 list-disc list-inside text-left text-sm text-neutral-700 space-y-1 break-words">
+                    {features.slice(0, 5).map((f, i) => (
+                      <li key={i}>{f}</li>
+                    ))}
+                  </ul>
+                )}
+
+                {url && (
+                  <div className="w-full">
                     <MotionCTA href={url} label={`View ${title} on ${site}`}>
                       {prettyPrice
                         ? `${prettyPrice} on ${site}`
                         : `View on ${site}`}
                     </MotionCTA>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
+            {/* /Content */}
           </div>
         </div>
       </div>

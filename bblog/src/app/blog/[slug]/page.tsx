@@ -212,8 +212,8 @@ function View({ post }: { post: any }) {
   const heroDescription = post.heroImage?.caption ?? "";
 
   return (
-    <main className="font-mont text-lg py-6 px-4 sm:px-6">
-      <article className="mx-auto w-full max-w-[60ch] sm:max-w-[62ch] lg:max-w-[66ch]">
+    <main className="font-mont text-lg py-6 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
+      <article className="mx-auto w-full max-w-[60ch] break-words">
         <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
         {dateStr && (
           <p className="font-mont text-sm">Date Published: {dateStr}</p>
@@ -227,10 +227,11 @@ function View({ post }: { post: any }) {
             <Image
               src={heroUrl}
               alt={post.heroImage?.alt || `Hero for ${post.title}`}
-              className="mt-4 mb-2 rounded-lg"
+              className="mt-4 mb-2 rounded-lg block mx-auto max-w-full h-auto"
               width={1200}
               height={600}
               priority
+              sizes="(min-width: 1024px) 66ch, 100vw"
             />
           )}
           <div className="font-mont text-xs italic text-gray-500">
@@ -293,8 +294,8 @@ function View({ post }: { post: any }) {
             </p>
           </section>
         )}
-        <HorizontalAd className="my-2" />
-        <div className="w-full flex">
+        <HorizontalAd className="my-2 max-w-full overflow-hidden" />
+        <div className="w-full flex max-w-full overflow-hidden">
           {post.tags?.length > 0 && (
             <RelevantList tags={post.tags ?? []} currentSlug={post.slug} />
           )}
