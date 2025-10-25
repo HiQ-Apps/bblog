@@ -212,90 +212,94 @@ function View({ post }: { post: any }) {
   const heroDescription = post.heroImage?.caption ?? "";
 
   return (
-    <main className="font-mont text-lg py-6 px-96">
-      <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
-      {dateStr && (
-        <p className="font-mont text-sm">Date Published: {dateStr}</p>
-      )}
-      {post.preview && <p className="text-neutral-600 mt-2">{post.preview}</p>}
-
-      <div className="flex flex-col w-full justify-center">
-        {heroUrl && (
-          <Image
-            src={heroUrl}
-            alt={post.heroImage?.alt || `Hero for ${post.title}`}
-            className="mt-4 mb-2 rounded-lg"
-            width={1200}
-            height={600}
-            priority
-          />
+    <main className="font-mont text-lg py-6 px-4 sm:px-6">
+      <article className="mx-auto w-full max-w-[60ch] sm:max-w-[62ch] lg:max-w-[66ch]">
+        <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
+        {dateStr && (
+          <p className="font-mont text-sm">Date Published: {dateStr}</p>
         )}
-        <div className="font-mont text-xs italic text-gray-500">
-          {heroDescription}
+        {post.preview && (
+          <p className="text-neutral-600 mt-2">{post.preview}</p>
+        )}
+
+        <div className="flex flex-col w-full justify-center">
+          {heroUrl && (
+            <Image
+              src={heroUrl}
+              alt={post.heroImage?.alt || `Hero for ${post.title}`}
+              className="mt-4 mb-2 rounded-lg"
+              width={1200}
+              height={600}
+              priority
+            />
+          )}
+          <div className="font-mont text-xs italic text-gray-500">
+            {heroDescription}
+          </div>
         </div>
-      </div>
 
-      {post.content?.length ? (
-        <section className="mt-6">
-          <Disclosure />
-          <PortableText value={post.content} components={ptComponents} />
-        </section>
-      ) : (
-        <>
-          {post.intro && <p className="mt-4">{post.intro}</p>}
-          {post.sections?.length > 0 &&
-            post.sections.map((section: any, idx: number) => (
-              <section key={idx} className="mt-8">
-                <h2 className="font-lora text-2xl font-bold">
-                  {section.heading}
-                </h2>
-                <p className="font-mont whitespace-pre-line">
-                  {section.content}
-                </p>
-              </section>
-            ))}
-        </>
-      )}
-
-      {post.sources?.length > 0 && (
-        <section className="mt-8">
-          <h2 className="font-lora text-2xl font-bold">Sources</h2>
-          <ul>
-            {post.sources.map((src: any, idx: number) => (
-              <li key={idx}>
-                <a
-                  href={src.url}
-                  target="_blank"
-                  rel="noopener"
-                  className="text-blue-600 underline"
-                >
-                  {src.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {post.tags?.length > 0 && (
-        <section className="mt-8">
-          <p className="text-sm">Tags: {post.tags.join(", ")}</p>
-        </section>
-      )}
-
-      {post.canonicalUrl && (
-        <section className="mt-2">
-          <p className="text-xs text-neutral-500">
-            Canonical: {post.canonicalUrl}
-          </p>
-        </section>
-      )}
-      <HorizontalAd className="my-2" />
-      <div className="w-full flex">
-        {post.tags?.length > 0 && (
-          <RelevantList tags={post.tags ?? []} currentSlug={post.slug} />
+        {post.content?.length ? (
+          <section className="mt-6">
+            <Disclosure />
+            <PortableText value={post.content} components={ptComponents} />
+          </section>
+        ) : (
+          <>
+            {post.intro && <p className="mt-4">{post.intro}</p>}
+            {post.sections?.length > 0 &&
+              post.sections.map((section: any, idx: number) => (
+                <section key={idx} className="mt-8">
+                  <h2 className="font-lora text-2xl font-bold">
+                    {section.heading}
+                  </h2>
+                  <p className="font-mont whitespace-pre-line">
+                    {section.content}
+                  </p>
+                </section>
+              ))}
+          </>
         )}
-      </div>
+
+        {post.sources?.length > 0 && (
+          <section className="mt-8">
+            <h2 className="font-lora text-2xl font-bold">Sources</h2>
+            <ul>
+              {post.sources.map((src: any, idx: number) => (
+                <li key={idx}>
+                  <a
+                    href={src.url}
+                    target="_blank"
+                    rel="noopener"
+                    className="text-blue-600 underline"
+                  >
+                    {src.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {post.tags?.length > 0 && (
+          <section className="mt-8">
+            <p className="text-sm">Tags: {post.tags.join(", ")}</p>
+          </section>
+        )}
+
+        {post.canonicalUrl && (
+          <section className="mt-2">
+            <p className="text-xs text-neutral-500">
+              Canonical: {post.canonicalUrl}
+            </p>
+          </section>
+        )}
+        <HorizontalAd className="my-2" />
+        <div className="w-full flex">
+          {post.tags?.length > 0 && (
+            <RelevantList tags={post.tags ?? []} currentSlug={post.slug} />
+          )}
+        </div>
+      </article>
     </main>
   );
 }
