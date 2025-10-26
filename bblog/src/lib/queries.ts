@@ -135,7 +135,7 @@ export const allPostPaginatedQuery = groq`
     _type == "post" &&
     defined(slug.current) &&
     !(_id in path("drafts.**")) &&
-    coalesce(publishedAt, _createdAt) <= now()
+    coalesce(publishedAt, dateTime(date), _createdAt) <= now()
   ]
   | order(coalesce(publishedAt, dateTime(date), _createdAt) desc, _createdAt desc)
   [$offset...$end]{
@@ -144,14 +144,14 @@ export const allPostPaginatedQuery = groq`
     "id": slug.current,
     "date": coalesce(publishedAt, dateTime(date), _createdAt),
     "intro": coalesce(preview, ""),
-    "thumbnailUrl": heroImage.asset->url,
-    tags
+    "thumbnailUrl": select(defined(heroImage.asset->url) => heroImage.asset->url, null),
+    "tags": coalesce(tags, [])
   },
   "total": count(*[
     _type == "post" &&
     defined(slug.current) &&
     !(_id in path("drafts.**")) &&
-    coalesce(publishedAt, _createdAt) <= now()
+    coalesce(publishedAt, dateTime(date), _createdAt) <= now()
   ])
 }
 `;

@@ -22,12 +22,7 @@ const playfair = Playfair_Display({
   display: "swap",
   weight: ["400", "700"],
 });
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-poppinsserrat",
-  display: "swap",
-  weight: ["400", "700"],
-});
+
 const lora = Lora({
   subsets: ["latin"],
   variable: "--font-lora",
@@ -88,27 +83,28 @@ export default async function RootLayout({
         <meta name="fo-verify" content="6337d716-9792-4f87-b1bd-7c2886f3c118" />
       </head>
       <body
-        className={`${montserrat.variable} ${poppins.variable} ${playfair.variable} ${lora.variable} bg-primary antialiased`}
+        className={`${poppins.variable} ${playfair.variable} ${lora.variable} bg-primary antialiased w-full overflow-x-hidden`}
       >
         <SidebarProvider defaultOpen>
           <div className="flex min-h-screen w-full flex-col items-center">
             <HomeBanner />
 
             {/* Mobile nav only on screens < md */}
-            <div className="w-full flex justify-center items-center md:hidden">
+            <div className="w-full flex justify-center items-center xl:hidden">
               <MobileNavbar />
             </div>
 
             <main
               id="main-content"
-              className="flex w-full flex-row relative"
+              className="flex w-full flex-row relative min-w-0 min-h-0 overflow-x-hidden"
               role="main"
             >
-              {/* Hide sidebar on small screens, show ≥ md */}
-              <div className="hidden md:block">
+              <div className="hidden xl:block shrink-0">
                 <AppSidebar />
               </div>
-              <div className="flex-1 flex justify-center w-full">
+
+              {/* This is the column that was getting a nested scrollbar */}
+              <div className="flex-1 min-w-0 min-h-0 flex justify-center w-full overflow-visible">
                 {children}
               </div>
             </main>
