@@ -16,7 +16,7 @@ type Props = {
 
 export default function PostsFeed({ initialItems, total, pageSize }: Props) {
   const [items, setItems] = useState<PostCard[]>(initialItems);
-  const [page, setPage] = useState(1); // 1 = already rendered first page
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(initialItems.length >= total);
 
@@ -34,7 +34,7 @@ export default function PostsFeed({ initialItems, total, pageSize }: Props) {
 
     try {
       const nextPage = page + 1;
-      const offset = page * pageSize; // page is 1-based for what we’ve already loaded
+      const offset = page * pageSize;
       const res = await fetch(
         `/api/posts/paginated?offset=${offset}&limit=${pageSize}`,
         {
@@ -82,8 +82,6 @@ export default function PostsFeed({ initialItems, total, pageSize }: Props) {
       <ul className="grid gap-8 w-full min-w-0">
         {items.map((post, idx) => {
           const intro = post.intro?.trim() ?? "";
-          const wordCount = intro ? intro.split(/\s+/).length : 0;
-          const readMins = Math.max(1, Math.round(wordCount / 180));
 
           return (
             <motion.li
@@ -139,8 +137,6 @@ export default function PostsFeed({ initialItems, total, pageSize }: Props) {
                         })}
                       </time>
                     )}
-                    {intro && <span aria-hidden>•</span>}
-                    {intro && <span>{readMins} min read</span>}
                   </div>
 
                   {/* Title */}
