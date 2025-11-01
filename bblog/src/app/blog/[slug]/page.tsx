@@ -218,18 +218,6 @@ function createPtComponents(tocItems: TocItem[]): PortableTextComponents {
           ))}
         </div>
       ),
-      tableOfContents: ({ value }) => (
-        // Only render inline TOC on small screens (lg screens use sidebar)
-        <div className="lg:hidden">
-          <TableOfContents
-            items={tocItems}
-            title={value?.title}
-            numbered={value?.numbered ?? true}
-            scrollSpy={false}
-            className="my-6"
-          />
-        </div>
-      ),
     },
     block: {
       normal: ({ children }) => (
@@ -307,123 +295,145 @@ function View({ post }: { post: any }) {
   // Extract TOC items from content and create components
   const tocItems = extractTocItems(post.content || []);
   const ptComponents = createPtComponents(tocItems);
-  const hasToc = tocItems.length > 0;
+  const hasToc = post.showToc === true && tocItems.length > 0;
 
   return (
     <main className="font-poppins text-lg py-6 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
-      <div
-        className={`mx-auto w-full ${hasToc ? "lg:max-w-7xl" : "max-w-[60ch]"} ${hasToc ? "lg:relative" : ""}`}
-      >
-        <div
-          className={hasToc ? "lg:grid lg:grid-cols-[1fr_200px] lg:gap-8" : ""}
-        >
-          <article
-            className={`break-words ${hasToc ? "lg:max-w-[60ch] lg:mx-auto" : "mx-auto max-w-[60ch]"}`}
-          >
-            <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
-            {dateStr && (
-              <p className="font-poppins text-sm">Date Published: {dateStr}</p>
-            )}
-            {post.preview && (
-              <p className="text-neutral-600 mt-2">{post.preview}</p>
-            )}
-
-            <div className="flex flex-col w-full justify-center">
-              {heroUrl && (
-                <Image
-                  src={heroUrl}
-                  alt={post.heroImage?.alt || `Hero for ${post.title}`}
-                  className="mt-4 mb-2 rounded-lg block mx-auto max-w-full h-auto"
-                  width={1200}
-                  height={600}
-                  priority
-                  sizes="(min-width: 1024px) 66ch, 100vw"
-                />
-              )}
-              <div className="font-poppins text-xs italic text-gray-500">
-                {heroDescription}
-              </div>
-            </div>
-
-            {post.content?.length ? (
-              <section className="mt-6">
-                <Disclosure />
-                <PortableText value={post.content} components={ptComponents} />
-              </section>
-            ) : (
-              <>
-                {post.intro && <p className="mt-4">{post.intro}</p>}
-                {post.sections?.length > 0 &&
-                  post.sections.map((section: any, idx: number) => (
-                    <section key={idx} className="mt-8">
-                      <h2 className="font-lora text-2xl font-bold">
-                        {section.heading}
-                      </h2>
-                      <p className="font-poppins whitespace-pre-line">
-                        {section.content}
-                      </p>
-                    </section>
-                  ))}
-              </>
-            )}
-
-            {post.sources?.length > 0 && (
-              <section className="mt-8">
-                <h2 className="font-lora text-2xl font-bold">Sources</h2>
-                <ul>
-                  {post.sources.map((src: any, idx: number) => (
-                    <li key={idx}>
-                      <a
-                        href={src.url}
-                        target="_blank"
-                        rel="noopener"
-                        className="text-blue-600 underline"
-                      >
-                        {src.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-
-            {post.tags?.length > 0 && (
-              <section className="mt-8">
-                <p className="text-sm">Tags: {post.tags.join(", ")}</p>
-              </section>
-            )}
-
-            {post.canonicalUrl && (
-              <section className="mt-2">
-                <p className="text-xs text-neutral-500">
-                  Canonical: {post.canonicalUrl}
-                </p>
-              </section>
-            )}
-            <HorizontalAd className="my-2 max-w-full overflow-hidden" />
-            <div className="w-full flex max-w-full overflow-hidden">
-              {post.tags?.length > 0 && (
-                <RelevantList tags={post.tags ?? []} currentSlug={post.slug} />
-              )}
-            </div>
-          </article>
-
-          {/* Fixed Timeline TOC - Right side, full height minus navbar */}
-          {hasToc && (
-            <aside className="hidden lg:block">
-              <div className="fixed top-[var(--navbar-height,4rem)] right-[max(1rem,calc((100vw-80rem)/2+1rem))] h-[calc(100vh-var(--navbar-height,4rem))] flex items-center py-8">
-                <TableOfContents
-                  items={tocItems}
-                  title="On this page"
-                  numbered={true}
-                  scrollSpy={true}
-                  className="max-w-[200px]"
-                />
-              </div>
-            </aside>
+      {/* Reserve space for fixed right TOC on lg+ */}
+      <div className="mx-auto w-full lg:max-w-7xl lg:pr-[260px]">
+        {/* ARTICLE */}
+        <article className="mx-auto w-full max-w-[60ch] break-words">
+          <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
+          {dateStr && (
+            <p className="font-poppins text-sm">Date Published: {dateStr}</p>
           )}
-        </div>
+          {post.preview && (
+            <p className="text-neutral-600 mt-2">{post.preview}</p>
+          )}
+
+          {/* Hero */}
+          <div className="flex flex-col w-full justify-center">
+            {heroUrl && (
+              <Image
+                src={heroUrl}
+                alt={post.heroImage?.alt || `Hero for ${post.title}`}
+                className="mt-4 mb-2 rounded-lg block mx-auto max-w-full h-auto"
+                width={1200}
+                height={600}
+                priority
+                sizes="(min-width: 1024px) 66ch, 100vw"
+              />
+            )}
+            <div className="font-poppins text-xs italic text-gray-500">
+              {heroDescription}
+            </div>
+          </div>
+
+          {/* MOBILE inline TOC (< lg) */}
+          {tocItems.length > 0 && (
+            <div className="mt-6 lg:hidden">
+              <TableOfContents
+                items={tocItems}
+                title="On this page"
+                numbered
+                scrollSpy={false}
+              />
+            </div>
+          )}
+
+          {/* Body */}
+          {post.content?.length ? (
+            <section className="mt-6">
+              <Disclosure />
+              <PortableText value={post.content} components={ptComponents} />
+            </section>
+          ) : (
+            <>
+              {post.intro && <p className="mt-4">{post.intro}</p>}
+              {post.sections?.length > 0 &&
+                post.sections.map((section: any, idx: number) => (
+                  <section key={idx} className="mt-8">
+                    <h2 className="font-lora text-2xl font-bold">
+                      {section.heading}
+                    </h2>
+                    <p className="font-poppins whitespace-pre-line">
+                      {section.content}
+                    </p>
+                  </section>
+                ))}
+            </>
+          )}
+
+          {/* Sources */}
+          {post.sources?.length > 0 && (
+            <section className="mt-8">
+              <h2 className="font-lora text-2xl font-bold">Sources</h2>
+              <ul>
+                {post.sources.map((src: any, idx: number) => (
+                  <li key={idx}>
+                    <a
+                      href={src.url}
+                      target="_blank"
+                      rel="noopener"
+                      className="text-blue-600 underline"
+                    >
+                      {src.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {/* Tags */}
+          {post.tags?.length > 0 && (
+            <section className="mt-8">
+              <p className="text-sm">Tags: {post.tags.join(", ")}</p>
+            </section>
+          )}
+
+          {/* Canonical */}
+          {post.canonicalUrl && (
+            <section className="mt-2">
+              <p className="text-xs text-neutral-500">
+                Canonical: {post.canonicalUrl}
+              </p>
+            </section>
+          )}
+
+          <HorizontalAd className="my-2 max-w-full overflow-hidden" />
+          <div className="w-full flex max-w-full overflow-hidden">
+            {post.tags?.length > 0 && (
+              <RelevantList tags={post.tags ?? []} currentSlug={post.slug} />
+            )}
+          </div>
+        </article>
       </div>
+
+      {/* FIXED RIGHT TOC (lg+) — fills viewport height */}
+      {tocItems.length > 0 && (
+        <div className="hidden lg:block">
+          <div
+            className="
+            fixed
+            top-[var(--navbar-height,4rem)]
+            right-[max(1rem,calc((100vw-80rem)/2+1rem))]  /* aligns with centered 7xl container */
+            h-[calc(100vh-var(--navbar-height,4rem))]
+            w-[240px]
+            overflow-auto
+            py-6
+          "
+          >
+            <TableOfContents
+              items={tocItems}
+              title="On this page"
+              numbered
+              scrollSpy
+              className="h-full"
+            />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
