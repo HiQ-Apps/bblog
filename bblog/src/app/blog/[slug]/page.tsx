@@ -15,18 +15,21 @@ import ProductCard, {
   GenericProduct,
 } from "@/components/composite/productCard";
 import RelevantList from "@/components/composite/relevantList";
+import TableOfContents, {
+  type TocItem,
+} from "@/components/composite/tableOfContents";
 
 export const revalidate = 120;
 
 async function fetchPostSSR(slug: string) {
   const { isEnabled } = await draftMode();
-  // Query Sanity directly; cache only when not in draft
   return client.fetch(
     isEnabled ? postBySlugDraftQuery : postBySlugQuery,
     { slug },
     isEnabled ? { cache: "no-store" } : { next: { revalidate } }
   );
 }
+
 export async function generateMetadata({
   params,
 }: {
@@ -71,138 +74,224 @@ export async function generateMetadata({
   };
 }
 
-const ptComponents: PortableTextComponents = {
-  marks: {
-    link: ({ children, value }) => {
-      const rel = value?.nofollow ? "nofollow sponsored" : "noopener";
-      return (
-        <a
-          className="text-mont text-accent underline underline-accent"
-          href={value?.href}
-          target="_blank"
-          rel={rel}
-        >
-          {children}
-        </a>
-      );
+// Helper: Generate URL-safe ID from heading text
+function generateHeadingId(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "") // Remove special chars
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-") // Replace multiple hyphens with single
+    .trim();
+}
+
+// Helper: Extract text content from PortableText children
+function extractTextFromChildren(children: any): string {
+  if (typeof children === "string") return children;
+  if (Array.isArray(children)) {
+    return children.map(extractTextFromChildren).join("");
+  }
+  if (children?.props?.children) {
+    return extractTextFromChildren(children.props.children);
+  }
+  return "";
+}
+
+// Helper: Extract TOC items from Portable Text content
+function extractTocItems(content: any[]): TocItem[] {
+  if (!content?.length) return [];
+
+  const items: TocItem[] = [];
+
+  content.forEach((block) => {
+    if (
+      block._type === "block" &&
+      (block.style === "h2" || block.style === "h3")
+    ) {
+      const text = block.children
+        ?.map((child: any) => child.text)
+        .join("")
+        .trim();
+
+      if (text) {
+        items.push({
+          id: generateHeadingId(text),
+          text,
+          level: block.style === "h2" ? 2 : 3,
+        });
+      }
+    }
+  });
+
+  return items;
+}
+
+// Create PortableText components with TOC items injected
+function createPtComponents(tocItems: TocItem[]): PortableTextComponents {
+  return {
+    marks: {
+      link: ({ children, value }) => {
+        const rel = value?.nofollow ? "nofollow sponsored" : "noopener";
+        return (
+          <a
+            className="text-mont text-accent underline underline-accent"
+            href={value?.href}
+            target="_blank"
+            rel={rel}
+          >
+            {children}
+          </a>
+        );
+      },
     },
-  },
-  types: {
-    image: ({ value }) => {
-      // bail if no asset
-      if (!value?.asset?.url) return null;
+    types: {
+      image: ({ value }) => {
+        if (!value?.asset?.url) return null;
 
-      const alt = value?.alt || "";
+        const alt = value?.alt || "";
+        const metaW = value?.asset?.metadata?.dimensions?.width;
+        const metaH = value?.asset?.metadata?.dimensions?.height;
+        const setW = typeof value?.width === "number" ? value.width : undefined;
+        const setH =
+          typeof value?.height === "number" ? value.height : undefined;
 
-      // Intrinsic dimensions from Sanity (good fallback)
-      const metaW = value?.asset?.metadata?.dimensions?.width;
-      const metaH = value?.asset?.metadata?.dimensions?.height;
+        const w = setW ?? metaW ?? 1200;
+        const h =
+          setH ?? (metaW && metaH ? Math.round(w * (metaH / metaW)) : 700);
+        const url = value.asset.url;
 
-      // Author-set overrides (your custom fields)
-      const setW = typeof value?.width === "number" ? value.width : undefined;
-      const setH = typeof value?.height === "number" ? value.height : undefined;
-
-      // Choose width/height with sensible fallbacks and AR preservation
-      const w = setW ?? metaW ?? 1200;
-      const h =
-        setH ?? (metaW && metaH ? Math.round(w * (metaH / metaW)) : 700);
-
-      const url = value.asset.url;
-
-      const img = (
-        <Image
-          src={url}
-          alt={alt}
-          width={w}
-          height={h}
-          className="rounded-lg mt-4 block mx-auto"
-          sizes="(min-width: 1024px) 900px, 100vw"
-          loading="lazy"
-          decoding="async"
-          style={{ maxWidth: "100%", height: "auto" }}
-        />
-      );
-
-      const figure = (
-        <div className="my-4 w-full flex flex-col items-center">
-          {img}
-          {value.caption && (
-            <p className="text-sm italic text-gray-500 mt-2 text-center">
-              {value.caption}
-            </p>
-          )}
-        </div>
-      );
-
-      return value?.link ? (
-        <a href={value.link} target="_blank" rel="noopener">
-          {figure}
-        </a>
-      ) : (
-        figure
-      );
-    },
-    amazonProduct: ({ value }) => <AmazonProductCard value={value} />,
-    productCard: ({ value }) => {
-      const gp: GenericProduct = {
-        title: value?.productName ?? value?.image?.alt ?? "Product",
-        url: value?.link ?? undefined,
-        image: value?.image ?? null,
-        description: value?.description ?? null,
-        priceSnapshot: value.price,
-        retailer: value?.retailer ?? null,
-        features: value?.features ?? [],
-      };
-      return <ProductCard product={gp} />;
-    },
-    downloadGroup: ({ value }: any) => (
-      <div className="my-4 flex flex-wrap justify-center gap-2">
-        {value.items?.map((it: any) => (
-          <PreviewPdf
-            key={it._key}
-            url={it.url}
-            filename={it.filename ?? "download.pdf"}
-            label={it.label ?? "Preview PDF"}
-            className="cursor-pointer"
+        const img = (
+          <Image
+            src={url}
+            alt={alt}
+            width={w}
+            height={h}
+            className="rounded-lg mt-4 block mx-auto"
+            sizes="(min-width: 1024px) 900px, 100vw"
+            loading="lazy"
+            decoding="async"
+            style={{ maxWidth: "100%", height: "auto" }}
           />
-        ))}
-      </div>
-    ),
-  },
-  block: {
-    normal: ({ children }) => (
-      <p className="font-poppins text-lg/8 my-4">{children}</p>
-    ),
-    h1: ({ children }) => (
-      <h1 className="font-lora text-4xl font-bold mt-8">{children}</h1>
-    ),
-    h2: ({ children }) => (
-      <h2 className="font-lora text-3xl font-bold mt-8">{children}</h2>
-    ),
-    h3: ({ children }) => (
-      <h3 className="font-lora text-2xl font-bold mt-6">{children}</h3>
-    ),
-    blockquote: ({ children }) => (
-      <blockquote className="font-poppins text-xl border-l-4 pl-4 italic my-4">
-        {children}
-      </blockquote>
-    ),
-  },
-  list: {
-    bullet: ({ children }) => (
-      <ul className="list-disc list-inside font-poppins text-lg/8 my-4">
-        {children}
-      </ul>
-    ),
-    number: ({ children }) => (
-      <ol className="list-decimal list-inside font-poppins text-lg/8 my-4">
-        {children}
-      </ol>
-    ),
-  },
-};
+        );
 
-// Reusable view (works for both Sanity docs and local POSTS shape)
+        const figure = (
+          <div className="my-4 w-full flex flex-col items-center">
+            {img}
+            {value.caption && (
+              <p className="text-sm italic text-gray-500 mt-2 text-center">
+                {value.caption}
+              </p>
+            )}
+          </div>
+        );
+
+        return value?.link ? (
+          <a href={value.link} target="_blank" rel="noopener">
+            {figure}
+          </a>
+        ) : (
+          figure
+        );
+      },
+      amazonProduct: ({ value }) => <AmazonProductCard value={value} />,
+      productCard: ({ value }) => {
+        const gp: GenericProduct = {
+          title: value?.productName ?? value?.image?.alt ?? "Product",
+          url: value?.link ?? undefined,
+          image: value?.image ?? null,
+          description: value?.description ?? null,
+          priceSnapshot: value.price,
+          retailer: value?.retailer ?? null,
+          features: value?.features ?? [],
+        };
+        return <ProductCard product={gp} />;
+      },
+      downloadGroup: ({ value }: any) => (
+        <div className="my-4 flex flex-wrap justify-center gap-2">
+          {value.items?.map((it: any) => (
+            <PreviewPdf
+              key={it._key}
+              url={it.url}
+              filename={it.filename ?? "download.pdf"}
+              label={it.label ?? "Preview PDF"}
+              className="cursor-pointer"
+            />
+          ))}
+        </div>
+      ),
+      tableOfContents: ({ value }) => (
+        // Only render inline TOC on small screens (lg screens use sidebar)
+        <div className="lg:hidden">
+          <TableOfContents
+            items={tocItems}
+            title={value?.title}
+            numbered={value?.numbered ?? true}
+            scrollSpy={false}
+            className="my-6"
+          />
+        </div>
+      ),
+    },
+    block: {
+      normal: ({ children }) => (
+        <p className="font-poppins text-lg/8 my-4">{children}</p>
+      ),
+      h1: ({ children }) => {
+        const text = extractTextFromChildren(children);
+        const id = generateHeadingId(text);
+        return (
+          <h1
+            id={id}
+            className="font-lora text-4xl font-bold mt-8 scroll-mt-20"
+          >
+            {children}
+          </h1>
+        );
+      },
+      h2: ({ children }) => {
+        const text = extractTextFromChildren(children);
+        const id = generateHeadingId(text);
+        return (
+          <h2
+            id={id}
+            className="font-lora text-3xl font-bold mt-8 scroll-mt-20"
+          >
+            {children}
+          </h2>
+        );
+      },
+      h3: ({ children }) => {
+        const text = extractTextFromChildren(children);
+        const id = generateHeadingId(text);
+        return (
+          <h3
+            id={id}
+            className="font-lora text-2xl font-bold mt-6 scroll-mt-20"
+          >
+            {children}
+          </h3>
+        );
+      },
+      blockquote: ({ children }) => (
+        <blockquote className="font-poppins text-xl border-l-4 pl-4 italic my-4">
+          {children}
+        </blockquote>
+      ),
+    },
+    list: {
+      bullet: ({ children }) => (
+        <ul className="list-disc list-inside font-poppins text-lg/8 my-4">
+          {children}
+        </ul>
+      ),
+      number: ({ children }) => (
+        <ol className="list-decimal list-inside font-poppins text-lg/8 my-4">
+          {children}
+        </ol>
+      ),
+    },
+  };
+}
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function View({ post }: { post: any }) {
   if (!post) return notFound();
@@ -215,96 +304,126 @@ function View({ post }: { post: any }) {
     post.heroImage?.asset?.url ?? post.thumbnailUrl ?? null;
   const heroDescription = post.heroImage?.caption ?? "";
 
+  // Extract TOC items from content and create components
+  const tocItems = extractTocItems(post.content || []);
+  const ptComponents = createPtComponents(tocItems);
+  const hasToc = tocItems.length > 0;
+
   return (
     <main className="font-poppins text-lg py-6 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
-      <article className="mx-auto w-full max-w-[60ch] break-words">
-        <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
-        {dateStr && (
-          <p className="font-poppins text-sm">Date Published: {dateStr}</p>
-        )}
-        {post.preview && (
-          <p className="text-neutral-600 mt-2">{post.preview}</p>
-        )}
+      <div
+        className={`mx-auto w-full ${hasToc ? "lg:max-w-7xl" : "max-w-[60ch]"} ${hasToc ? "lg:relative" : ""}`}
+      >
+        <div
+          className={hasToc ? "lg:grid lg:grid-cols-[1fr_200px] lg:gap-8" : ""}
+        >
+          <article
+            className={`break-words ${hasToc ? "lg:max-w-[60ch] lg:mx-auto" : "mx-auto max-w-[60ch]"}`}
+          >
+            <h1 className="font-lora text-5xl font-bold mb-2">{post.title}</h1>
+            {dateStr && (
+              <p className="font-poppins text-sm">Date Published: {dateStr}</p>
+            )}
+            {post.preview && (
+              <p className="text-neutral-600 mt-2">{post.preview}</p>
+            )}
 
-        <div className="flex flex-col w-full justify-center">
-          {heroUrl && (
-            <Image
-              src={heroUrl}
-              alt={post.heroImage?.alt || `Hero for ${post.title}`}
-              className="mt-4 mb-2 rounded-lg block mx-auto max-w-full h-auto"
-              width={1200}
-              height={600}
-              priority
-              sizes="(min-width: 1024px) 66ch, 100vw"
-            />
+            <div className="flex flex-col w-full justify-center">
+              {heroUrl && (
+                <Image
+                  src={heroUrl}
+                  alt={post.heroImage?.alt || `Hero for ${post.title}`}
+                  className="mt-4 mb-2 rounded-lg block mx-auto max-w-full h-auto"
+                  width={1200}
+                  height={600}
+                  priority
+                  sizes="(min-width: 1024px) 66ch, 100vw"
+                />
+              )}
+              <div className="font-poppins text-xs italic text-gray-500">
+                {heroDescription}
+              </div>
+            </div>
+
+            {post.content?.length ? (
+              <section className="mt-6">
+                <Disclosure />
+                <PortableText value={post.content} components={ptComponents} />
+              </section>
+            ) : (
+              <>
+                {post.intro && <p className="mt-4">{post.intro}</p>}
+                {post.sections?.length > 0 &&
+                  post.sections.map((section: any, idx: number) => (
+                    <section key={idx} className="mt-8">
+                      <h2 className="font-lora text-2xl font-bold">
+                        {section.heading}
+                      </h2>
+                      <p className="font-poppins whitespace-pre-line">
+                        {section.content}
+                      </p>
+                    </section>
+                  ))}
+              </>
+            )}
+
+            {post.sources?.length > 0 && (
+              <section className="mt-8">
+                <h2 className="font-lora text-2xl font-bold">Sources</h2>
+                <ul>
+                  {post.sources.map((src: any, idx: number) => (
+                    <li key={idx}>
+                      <a
+                        href={src.url}
+                        target="_blank"
+                        rel="noopener"
+                        className="text-blue-600 underline"
+                      >
+                        {src.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {post.tags?.length > 0 && (
+              <section className="mt-8">
+                <p className="text-sm">Tags: {post.tags.join(", ")}</p>
+              </section>
+            )}
+
+            {post.canonicalUrl && (
+              <section className="mt-2">
+                <p className="text-xs text-neutral-500">
+                  Canonical: {post.canonicalUrl}
+                </p>
+              </section>
+            )}
+            <HorizontalAd className="my-2 max-w-full overflow-hidden" />
+            <div className="w-full flex max-w-full overflow-hidden">
+              {post.tags?.length > 0 && (
+                <RelevantList tags={post.tags ?? []} currentSlug={post.slug} />
+              )}
+            </div>
+          </article>
+
+          {/* Fixed Timeline TOC - Right side, full height minus navbar */}
+          {hasToc && (
+            <aside className="hidden lg:block">
+              <div className="fixed top-[var(--navbar-height,4rem)] right-[max(1rem,calc((100vw-80rem)/2+1rem))] h-[calc(100vh-var(--navbar-height,4rem))] flex items-center py-8">
+                <TableOfContents
+                  items={tocItems}
+                  title="On this page"
+                  numbered={true}
+                  scrollSpy={true}
+                  className="max-w-[200px]"
+                />
+              </div>
+            </aside>
           )}
-          <div className="font-poppins text-xs italic text-gray-500">
-            {heroDescription}
-          </div>
         </div>
-
-        {post.content?.length ? (
-          <section className="mt-6">
-            <Disclosure />
-            <PortableText value={post.content} components={ptComponents} />
-          </section>
-        ) : (
-          <>
-            {post.intro && <p className="mt-4">{post.intro}</p>}
-            {post.sections?.length > 0 &&
-              post.sections.map((section: any, idx: number) => (
-                <section key={idx} className="mt-8">
-                  <h2 className="font-lora text-2xl font-bold">
-                    {section.heading}
-                  </h2>
-                  <p className="font-poppins whitespace-pre-line">
-                    {section.content}
-                  </p>
-                </section>
-              ))}
-          </>
-        )}
-
-        {post.sources?.length > 0 && (
-          <section className="mt-8">
-            <h2 className="font-lora text-2xl font-bold">Sources</h2>
-            <ul>
-              {post.sources.map((src: any, idx: number) => (
-                <li key={idx}>
-                  <a
-                    href={src.url}
-                    target="_blank"
-                    rel="noopener"
-                    className="text-blue-600 underline"
-                  >
-                    {src.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        {post.tags?.length > 0 && (
-          <section className="mt-8">
-            <p className="text-sm">Tags: {post.tags.join(", ")}</p>
-          </section>
-        )}
-
-        {post.canonicalUrl && (
-          <section className="mt-2">
-            <p className="text-xs text-neutral-500">
-              Canonical: {post.canonicalUrl}
-            </p>
-          </section>
-        )}
-        <HorizontalAd className="my-2 max-w-full overflow-hidden" />
-        <div className="w-full flex max-w-full overflow-hidden">
-          {post.tags?.length > 0 && (
-            <RelevantList tags={post.tags ?? []} currentSlug={post.slug} />
-          )}
-        </div>
-      </article>
+      </div>
     </main>
   );
 }

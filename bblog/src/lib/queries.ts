@@ -81,6 +81,21 @@ export const postBySlugQuery = groq`
         "extension": file.asset->extension
       }
     },
+
+    _type == "tableOfContents" =>{
+      _key,
+      title,
+      mode,
+      depth,
+      showNumbers,
+      items[]{
+        _key,
+        title,
+        anchorId,
+        level,
+        icon
+      }
+    }
   },
   tags,
   canonicalUrl,
