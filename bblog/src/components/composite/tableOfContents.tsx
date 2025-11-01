@@ -61,7 +61,7 @@ export default function TableOfContents({
   return (
     <nav
       aria-label="Table of contents"
-      className={`relative h-full flex flex-col pt-12 ${className}`}
+      className={`relative h-full flex flex-col pt-0 lg:pt-12 ${className}`}
     >
       {/* Vertical timeline line */}
       <div className="absolute left-0 top-12 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-neutral-300 to-transparent" />

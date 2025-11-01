@@ -43,7 +43,6 @@ export default defineType({
         ],
       },
     }),
-    defineArrayMember({ type: "tableOfContents", title: "Table of contents" }),
     defineArrayMember({
       type: "amazonProduct",
       components: {

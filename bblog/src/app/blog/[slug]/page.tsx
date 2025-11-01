@@ -18,6 +18,7 @@ import RelevantList from "@/components/composite/relevantList";
 import TableOfContents, {
   type TocItem,
 } from "@/components/composite/tableOfContents";
+import { Separator } from "@/components/ui/separator";
 
 export const revalidate = 120;
 
@@ -331,13 +332,17 @@ function View({ post }: { post: any }) {
 
           {/* MOBILE inline TOC (< lg) */}
           {tocItems.length > 0 && (
-            <div className="mt-6 lg:hidden">
-              <TableOfContents
-                items={tocItems}
-                title="On this page"
-                numbered
-                scrollSpy={false}
-              />
+            <div className="w-full">
+              <Separator className="my-6 bg-black/40 lg:hidden" />
+              <div className="mt-6 lg:hidden">
+                <TableOfContents
+                  items={tocItems}
+                  title="On this page"
+                  numbered
+                  scrollSpy={false}
+                />
+              </div>
+              <Separator className="my-6 bg-black/40 lg:hidden" />
             </div>
           )}
 
