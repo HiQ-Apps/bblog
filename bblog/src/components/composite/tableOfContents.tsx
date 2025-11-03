@@ -20,11 +20,15 @@ export default function TableOfContents({
   className = "",
   scrollSpy = true,
 }: Props) {
+  // ✅ Only H2s
+  const h2Items = (items ?? []).filter((i) => i.level === 2);
+
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!scrollSpy || !items?.length) return;
-    const heads = items
+    if (!scrollSpy || h2Items.length === 0) return;
+
+    const heads = h2Items
       .map((i) => document.getElementById(i.id))
       .filter(Boolean) as HTMLElement[];
     if (heads.length === 0) return;
@@ -34,34 +38,35 @@ export default function TableOfContents({
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        // Prefer the first visible heading; fallback to the one nearest to top
+
         if (visible[0]?.target?.id) {
           setActiveId(visible[0].target.id);
           return;
         }
-        // Fallback: pick the first heading above the fold
+
         const above = entries
           .filter((e) => e.boundingClientRect.top < 100)
           .sort((a, b) => b.boundingClientRect.top - a.boundingClientRect.top);
+
         if (above[0]?.target?.id) setActiveId(above[0].target.id);
       },
       {
         root: null,
-        // Top margin helps switch earlier; bottom negative keeps it stable
         rootMargin: "0px 0px -70% 0px",
         threshold: [0, 0.25, 0.5, 0.75, 1],
       }
     );
+
     heads.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
-  }, [items, scrollSpy]);
+  }, [h2Items, scrollSpy]);
 
-  if (!items?.length) return null;
+  if (h2Items.length === 0) return null;
 
   return (
     <nav
       aria-label="Table of contents"
-      className={`relative h-full flex flex-col pt-0 lg:pt-12 ${className}`}
+      className={`relative h-full flex flex-col pt-0 lg:pt-12 max-w-full overflow-x-hidden ${className}`}
     >
       {/* Vertical timeline line */}
       <div className="absolute left-0 top-12 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-neutral-300 to-transparent" />
@@ -70,15 +75,13 @@ export default function TableOfContents({
         {title}
       </div>
 
-      <ul className="space-y-6 relative flex-1">
-        {items.map((it, idx) => {
+      <ul className="space-y-6 relative flex-1 min-w-0 pr-2">
+        {h2Items.map((it, idx) => {
           const isActive = activeId === it.id;
           return (
             <li
               key={it.id}
-              className={`relative transition-all duration-300 ${
-                it.level === 3 ? "pl-8" : "pl-6"
-              }`}
+              className={`relative transition-all duration-300 ${it.level === 3 ? "pl-8" : "pl-6"} min-w-0 overflow-x-hidden`}
             >
               {/* Timeline dot */}
               <div
@@ -88,10 +91,9 @@ export default function TableOfContents({
                     : "bg-neutral-300 scale-100"
                 }`}
               />
-
               <Link
                 href={`#${it.id}`}
-                className={`block text-xs leading-relaxed transition-all duration-300 ${
+                className={`block text-xs leading-relaxed transition-all duration-300 break-words max-w-full ${
                   isActive
                     ? "text-accent font-semibold translate-x-1"
                     : "text-neutral-600 hover:text-accent hover:translate-x-1"
