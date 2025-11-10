@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { client } from "@/sanity/the-good-standard/lib/live";
 import { postBySlugDraftQuery, postBySlugQuery } from "@/lib/queries";
 import Image from "next/image";
+import DiscountCodes from "@/components/composite/discountCodes";
 import type { Metadata } from "next";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
 import PreviewPdf from "@/components/composite/previewPdf";
@@ -95,6 +96,14 @@ function extractTextFromChildren(children: any): string {
     return extractTextFromChildren(children.props.children);
   }
   return "";
+}
+
+function copyToClipboard(text: string) {
+  if (typeof navigator !== "undefined" && navigator.clipboard) {
+    navigator.clipboard.writeText(text).catch((err) => {
+      console.error("Failed to copy text: ", err);
+    });
+  }
 }
 
 // Helper: Extract TOC items from Portable Text content
@@ -219,6 +228,20 @@ function createPtComponents(tocItems: TocItem[]): PortableTextComponents {
           ))}
         </div>
       ),
+      discountCode: ({ value }: any) => {
+        if (!value || !Array.isArray(value)) return null;
+
+        return (
+          <div className="my-4 flex flex-wrap justify-center gap-2">
+            {value.map((code: any) => (
+              <div key={code._key} className="border p-2 rounded">
+                <p className="font-bold">{code.code}</p>
+                <p className="text-sm">{code.description}</p>
+              </div>
+            ))}
+          </div>
+        );
+      },
     },
     block: {
       normal: ({ children }) => (
@@ -344,6 +367,11 @@ function View({ post }: { post: any }) {
               </div>
               <Separator className="my-6 bg-black/40 lg:hidden" />
             </div>
+          )}
+
+          {/* Discount Codes */}
+          {post.discountCodes?.length > 0 && (
+            <DiscountCodes codes={post.discountCodes} />
           )}
 
           {/* Body */}

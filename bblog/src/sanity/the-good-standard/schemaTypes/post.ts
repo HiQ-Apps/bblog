@@ -72,6 +72,21 @@ export default defineType({
     }),
 
     defineField({
+      name: "discountCodes",
+      title: "Discount Codes",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            { name: "code", title: "Code", type: "string" },
+            { name: "description", title: "Description", type: "string" },
+          ],
+        },
+      ],
+    }),
+
+    defineField({
       name: "metaImage",
       title: "Social share image",
       type: "image",

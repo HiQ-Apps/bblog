@@ -23,6 +23,13 @@ export const postBySlugQuery = groq`
     link
   },
 
+  discountCodes[]{
+    _key,
+    _type,
+    code,
+    description
+  },
+
   content[]{
     ...,
 
