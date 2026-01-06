@@ -242,6 +242,17 @@ function createPtComponents(tocItems: TocItem[]): PortableTextComponents {
           </div>
         );
       },
+      quoteBlock: ({ value }) => {
+        if (!value) return null;
+        return (
+          <div className="font-poppins text-2xl border-l-4 border-secondary pl-4 italic my-4">
+            “{value.quote}”
+            {value.author && (
+              <span className="block mt-2">— {value.author}</span>
+            )}
+          </div>
+        );
+      },
     },
     block: {
       normal: ({ children }) => (
